@@ -1,0 +1,78 @@
+server:
+  port: 8009
+  # 解决获取不到真实IP的问题，但可能导致请求头中出现多个IP
+  forward-headers-strategy: none
+  servlet:
+    context-path: /
+  tomcat:
+    accept-count: 100
+    keep-alive-timeout: 20000  # 设置保持活跃时间为20秒（20000毫秒）
+    connection-timeout: 20000  # 设置请求响应超时时间为20秒（20000毫秒）
+    threads:
+      max: 200
+
+spring:
+  cache:
+    jcache:
+      config: classpath:/ehcache.xml
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://119.28.214.138:3306/cod-oa?serverTimezone=Asia/Shanghai&useUnicode=true&zeroDateTimeBehavior=convertToNull&allowPublicKeyRetrieval=true&useSSL=false
+    #url: jdbc:mysql://127.00.0.1:3306/cod-oa?serverTimezone=Asia/Shanghai&useUnicode=true&zeroDateTimeBehavior=convertToNull&allowPublicKeyRetrieval=true&useSSL=false
+    username: root
+    #password: 123456
+    password: 3.141592653589793#Zz-^T[
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      stat-view-servlet:
+        enabled: true
+        url-pattern: /druid/*
+        login-username: admin
+        login-password: admin
+      max-wait: 60000
+      min-idle: 5
+      initial-size: 5
+      max-active: 30
+
+
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+    serialization:
+      write-dates-as-timestamps: false
+
+  mvc:
+    async:
+      request-timeout: 60000  # 设置请求超时时间为60秒
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+  servlet:
+    multipart:
+      enabled: true
+      file-size-threshold: 2KB
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true  # 将数据库表字段名中的下划线自动映射到Java对象属性的驼峰命名法
+    auto-mapping-behavior: full  # 启用全自动映射，将数据库字段自动映射到Java对象
+    #log-impl: org.apache.ibatis.logging.stdout.StdOutImpl  # 配置日志实现，使用标准输出打印SQL
+  mapper-locations: classpath*:mapper/*.xml  # 指定MyBatis Mapper XML文件的位置
+  global-config:
+    db-config:
+      logic-not-delete-value: 1  # 配置逻辑删除，未删除的值为1
+      logic-delete-value: 0  # 配置逻辑删除，删除的值为0
+      field-strategy: NOT_NULL  # 配置字段策略，忽略字段策略
+
+  type-enums-package: com.ent.codoa.common.constant.enums  # 指定枚举类型所在的包路径
+
+logging:
+  config: classpath:log/logback.xml
+
+# 初始化配置
+init:
+  create:
+    bot: false  # 创建机器人开关
