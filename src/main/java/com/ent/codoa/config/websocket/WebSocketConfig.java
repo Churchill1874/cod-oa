@@ -1,5 +1,6 @@
 package com.ent.codoa.config.websocket;
 
+import com.ent.codoa.service.EhcacheService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.TaskExecutor;
