@@ -1,5 +1,5 @@
 server:
-  port: 8009
+  port: 8010
   # 解决获取不到真实IP的问题，但可能导致请求头中出现多个IP
   forward-headers-strategy: none
   servlet:

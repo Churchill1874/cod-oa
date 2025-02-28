@@ -14,7 +14,7 @@
         </resources>
     </cache>
 
-    <cache alias="admin_token">
+<!--    <cache alias="admin_token">
         <key-type>java.lang.String</key-type>
         <value-type>com.ent.codoa.pojo.resp.admin.AdminTokenResp</value-type>
         <expiry>
@@ -23,7 +23,7 @@
         <resources>
             <heap unit="entries">50</heap>
         </resources>
-    </cache>
+    </cache>-->
 
 
     <cache alias="lock_3_Second">

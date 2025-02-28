@@ -5,25 +5,25 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 
 /**
- * 文件类型枚举
+ * 系统用户状态枚举
  */
-public enum FileTypeEnum {
+public enum SystemClientStatusEnum {
 
-    IMAGE(1, "image"),
-    AUDIO(2,"audio"),
-    VIDEO(3, "video");
+    EXPIRED("到期",0),
+    NORMAL("正常",1),
+    DISABLE("禁用",2);
 
     @Getter
     @EnumValue
     @JsonValue
-    private int code;
+    private Integer code;
 
     @Getter
     private String name;
 
-    FileTypeEnum(int code, String name) {
-        this.code = code;
+    SystemClientStatusEnum(String name, Integer code){
         this.name = name;
+        this.code = code;
     }
 
     @Override

@@ -9,8 +9,8 @@ import lombok.Getter;
  * @author admin
  */
 public enum ManageRoleEnum {
-    ADMIN(1, "管理员"),
-    SUPER_ADMIN(2, "超级管理员");
+    SUPER_ADMIN(1, "超级管理员"),
+    ADMIN(2, "管理员");
 
     @Getter
     @EnumValue
