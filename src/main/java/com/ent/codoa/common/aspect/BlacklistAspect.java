@@ -20,7 +20,7 @@ public class BlacklistAspect {
     @Autowired
     private BlacklistService blacklistService;
 
-    @Pointcut("execution(* com.ent.codoa.controller.manage.*.*(..))")
+    @Pointcut("execution(* com.ent.codoa.controller.admin.*.*(..))")
     public void blacklistPointCut() {
     }
 

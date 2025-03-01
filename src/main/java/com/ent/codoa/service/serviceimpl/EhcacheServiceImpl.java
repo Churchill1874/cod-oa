@@ -1,6 +1,6 @@
 package com.ent.codoa.service.serviceimpl;
 
-import com.ent.codoa.pojo.resp.token.AdminToken;
+import com.ent.codoa.pojo.resp.token.AdminTokenResp;
 import com.ent.codoa.service.EhcacheService;
 import com.ent.codoa.common.exception.DataException;
 import com.ent.codoa.common.tools.GenerateTools;
@@ -19,7 +19,7 @@ import java.io.IOException;
 @Service
 public class EhcacheServiceImpl implements EhcacheService {
     //验证码
-    final String VERIFICATION_CODE = "verification_code";
+    final String VERIFICATION_CODE = "captcha_code";
     //管理员登录token
     final String ADMIN_TOKEN = "admin_token";
     
@@ -28,7 +28,7 @@ public class EhcacheServiceImpl implements EhcacheService {
 
 
     @Override
-    public Cache<String, String> verificationCache() {
+    public Cache<String, String> captchaCodeCache() {
         return cacheManager.getCache(VERIFICATION_CODE, String.class, String.class);
     }
 
@@ -50,14 +50,14 @@ public class EhcacheServiceImpl implements EhcacheService {
             throw new DataException(e.getMessage());
         }
 
-        verificationCache().put(key, code);
+        captchaCodeCache().put(key, code);
         return codeImageStream;
     }
 
 
     @Override
-    public Cache<String, AdminToken> adminTokenCache() {
-        return cacheManager.getCache(ADMIN_TOKEN, String.class, AdminToken.class);
+    public Cache<String, AdminTokenResp> adminTokenCache() {
+        return cacheManager.getCache(ADMIN_TOKEN, String.class, AdminTokenResp.class);
     }
 
 

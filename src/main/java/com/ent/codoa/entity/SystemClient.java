@@ -50,4 +50,8 @@ public class SystemClient extends BaseInfo implements Serializable {
     @ApiModelProperty("角色")
     private AdminRoleEnum role;
 
+    @TableField("salt")
+    @ApiModelProperty("盐")
+    private String salt;
+
 }

@@ -5,9 +5,10 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Data
-public class AdminToken implements Serializable {
+public class AdminTokenResp implements Serializable {
     private static final long serialVersionUID = 5130986957455861652L;
 
     @ApiModelProperty("id")
@@ -20,5 +21,7 @@ public class AdminToken implements Serializable {
     private String name;
     @ApiModelProperty("角色")
     private AdminRoleEnum role;
+    @ApiModelProperty("登录时间")
+    private LocalDateTime loginTime;
 
 }

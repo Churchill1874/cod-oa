@@ -67,4 +67,11 @@ public class SystemClientServiceImpl extends ServiceImpl<SystemClientMapper, Sys
         removeById(id);
     }
 
+    @Override
+    public SystemClient findByAccount(String account) {
+        QueryWrapper<SystemClient> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().eq(SystemClient::getAccount, account);
+        return getOne(queryWrapper);
+    }
+
 }

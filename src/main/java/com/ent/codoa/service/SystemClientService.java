@@ -35,4 +35,11 @@ public interface SystemClientService extends IService<SystemClient> {
      */
     void delete(Long id);
 
+    /**
+     * 根据账号查找
+     * @param account
+     * @return
+     */
+    SystemClient findByAccount(String account);
+
 }

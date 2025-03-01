@@ -44,7 +44,7 @@ public class SwaggerConfig {
                 //.globalOperationParameters(setRequestHeaders())
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.ent.codoa.controller.manage"))
+                .apis(RequestHandlerSelectors.basePackage("com.ent.codoa.controller.admin"))
                 .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
                 .paths(PathSelectors.any())
                 .build()
