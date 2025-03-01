@@ -34,9 +34,9 @@ public class SystemClient extends BaseInfo implements Serializable {
     @ApiModelProperty("状态")
     private SystemClientStatusEnum status;
 
-    @TableField("describe")
+    @TableField("introduce")
     @ApiModelProperty("描述")
-    private String describe;
+    private String introduce;
 
     @TableField("expired_time")
     @ApiModelProperty("到期时间")

@@ -46,8 +46,13 @@ public class SystemClientServiceImpl extends ServiceImpl<SystemClientMapper, Sys
 
     @Override
     public void add(SystemClient dto) {
-        dto.setCreateName(TokenTools.getAdminName());
-        dto.setCreateTime(LocalDateTime.now());
+        if (StringUtils.isBlank(dto.getCreateName())){
+            dto.setCreateName(TokenTools.getAdminName());
+        }
+        if (dto.getCreateTime() == null){
+            dto.setCreateTime(LocalDateTime.now());
+        }
+
         save(dto);
     }
 
@@ -56,7 +61,7 @@ public class SystemClientServiceImpl extends ServiceImpl<SystemClientMapper, Sys
         UpdateWrapper<SystemClient> updateWrapper = new UpdateWrapper<>();
         updateWrapper.lambda()
             .set(SystemClient::getName, dto.getName())
-            .set(SystemClient::getDescribe, dto.getDescribe())
+            .set(SystemClient::getIntroduce, dto.getIntroduce())
             .set(SystemClient::getExpiredTime, dto.getExpiredTime())
             .eq(SystemClient::getId, dto.getId());
         update(updateWrapper);

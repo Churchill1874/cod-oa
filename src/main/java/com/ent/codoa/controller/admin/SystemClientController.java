@@ -50,11 +50,11 @@ public class SystemClientController {
     public R<AdminTokenResp> login(@RequestBody @Valid AdminLoginReq req) {
         log.info("登录接口入参:{}", JSONUtil.toJsonStr(req));
         //校验验证码
-        String verificationCode = ehcacheService.captchaCodeCache().get(HttpTools.getIp());
-        if (verificationCode == null) {
+        String captchaCode = ehcacheService.captchaCodeCache().get(HttpTools.getIp());
+        if (captchaCode == null) {
             return R.failed("验证码有误或已过期");
         }
-        if (!verificationCode.equals(req.getVerificationCode())){
+        if (!captchaCode.equals(req.getVerificationCode())){
             return R.failed("验证码错误");
         }
 

@@ -19,7 +19,7 @@ import java.io.IOException;
 @Service
 public class EhcacheServiceImpl implements EhcacheService {
     //验证码
-    final String VERIFICATION_CODE = "captcha_code";
+    final String CAPTCHA_CODE = "captcha_code";
     //管理员登录token
     final String ADMIN_TOKEN = "admin_token";
     
@@ -29,7 +29,7 @@ public class EhcacheServiceImpl implements EhcacheService {
 
     @Override
     public Cache<String, String> captchaCodeCache() {
-        return cacheManager.getCache(VERIFICATION_CODE, String.class, String.class);
+        return cacheManager.getCache(CAPTCHA_CODE, String.class, String.class);
     }
 
 
