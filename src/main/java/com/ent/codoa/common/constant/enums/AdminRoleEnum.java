@@ -8,7 +8,7 @@ import lombok.Getter;
  * 角色枚举
  * @author admin
  */
-public enum ManageRoleEnum {
+public enum AdminRoleEnum {
     SUPER_ADMIN(1, "超级管理员"),
     ADMIN(2, "管理员");
 
@@ -20,7 +20,7 @@ public enum ManageRoleEnum {
     @Getter
     private String name;
 
-    ManageRoleEnum(int code, String name) {
+    AdminRoleEnum(int code, String name) {
         this.code = code;
         this.name = name;
     }

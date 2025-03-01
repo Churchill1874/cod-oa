@@ -1,11 +1,9 @@
 package com.ent.codoa.service.serviceimpl;
 
+import com.ent.codoa.pojo.resp.token.AdminToken;
 import com.ent.codoa.service.EhcacheService;
-import com.ent.codoa.common.constant.CacheKeyConstant;
 import com.ent.codoa.common.exception.DataException;
-import com.ent.codoa.common.exception.IpException;
 import com.ent.codoa.common.tools.GenerateTools;
-import com.ent.codoa.common.tools.HttpTools;
 import lombok.extern.slf4j.Slf4j;
 import org.ehcache.Cache;
 import org.ehcache.CacheManager;
@@ -13,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.util.Set;
 
 /**
  * 该类对ehcache.xml配置文件里面已经配置的缓存容器进行实现获取，方便使用
@@ -22,6 +18,10 @@ import java.util.Set;
 @Slf4j
 @Service
 public class EhcacheServiceImpl implements EhcacheService {
+    //验证码
+    final String VERIFICATION_CODE = "verification_code";
+    //管理员登录token
+    final String ADMIN_TOKEN = "admin_token";
     
     @Autowired
     private CacheManager cacheManager;
@@ -29,9 +29,8 @@ public class EhcacheServiceImpl implements EhcacheService {
 
     @Override
     public Cache<String, String> verificationCache() {
-        return cacheManager.getCache(CacheKeyConstant.VERIFICATION_CODE, String.class, String.class);
+        return cacheManager.getCache(VERIFICATION_CODE, String.class, String.class);
     }
-
 
 
     @Override
@@ -53,6 +52,12 @@ public class EhcacheServiceImpl implements EhcacheService {
 
         verificationCache().put(key, code);
         return codeImageStream;
+    }
+
+
+    @Override
+    public Cache<String, AdminToken> adminTokenCache() {
+        return cacheManager.getCache(ADMIN_TOKEN, String.class, AdminToken.class);
     }
 
 

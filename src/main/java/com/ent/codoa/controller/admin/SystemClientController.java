@@ -1,4 +1,4 @@
-package com.ent.codoa.controller.manage;
+package com.ent.codoa.controller.admin;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
@@ -29,6 +29,10 @@ public class SystemClientController {
         IPage<SystemClient> iPage = systemClientService.queryPage(req);
         return R.ok(iPage);
     }
+
+
+
+
 
 
 }

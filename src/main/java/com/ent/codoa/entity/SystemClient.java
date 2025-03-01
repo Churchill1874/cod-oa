@@ -2,7 +2,7 @@ package com.ent.codoa.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.ent.codoa.common.constant.enums.ManageRoleEnum;
+import com.ent.codoa.common.constant.enums.AdminRoleEnum;
 import com.ent.codoa.common.constant.enums.SystemClientStatusEnum;
 import com.ent.codoa.entity.base.BaseInfo;
 import io.swagger.annotations.ApiModelProperty;
@@ -48,6 +48,6 @@ public class SystemClient extends BaseInfo implements Serializable {
 
     @TableField("role")
     @ApiModelProperty("角色")
-    private ManageRoleEnum role;
+    private AdminRoleEnum role;
 
 }

@@ -12,11 +12,27 @@ public interface SystemClientService extends IService<SystemClient> {
 
     /**
      * 分页查询系统用户数据
-     * @param po
+     * @param dto
      * @return
      */
-    IPage<SystemClient> queryPage(SystemClientPage po);
+    IPage<SystemClient> queryPage(SystemClientPage dto);
 
+    /**
+     * 添加系统用户
+     * @param dto
+     */
+    void add(SystemClient dto);
 
+    /**
+     * 更新系统用户信息
+     * @param dto
+     */
+    void editBaseInfo(SystemClient dto);
+
+    /**
+     * 删除系统用户
+     * @param id
+     */
+    void delete(Long id);
 
 }

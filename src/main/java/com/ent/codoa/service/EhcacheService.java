@@ -1,6 +1,7 @@
 package com.ent.codoa.service;
 
 
+import com.ent.codoa.pojo.resp.token.AdminToken;
 import org.ehcache.Cache;
 
 /**
@@ -15,8 +16,6 @@ public interface EhcacheService {
      */
     Cache<String, String> verificationCache();
 
-
-
     /**
      * 获取验证码 并设置每3秒的限制请求次数 和提示语
      * @param limitCount
@@ -24,6 +23,13 @@ public interface EhcacheService {
      * @return
      */
     String getVC(String key, Integer limitCount, String remarks);
+
+    /**
+     * 管理员登录token
+     * @return
+     */
+    Cache<String, AdminToken> adminTokenCache();
+
 
 
 }

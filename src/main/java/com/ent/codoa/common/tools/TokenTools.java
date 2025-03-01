@@ -1,5 +1,10 @@
 package com.ent.codoa.common.tools;
 
+import com.ent.codoa.common.exception.TokenException;
+import com.ent.codoa.pojo.resp.token.AdminToken;
+import com.ent.codoa.service.EhcacheService;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -7,7 +12,6 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class TokenTools {
-/*
 
     private static EhcacheService ehcacheService;
 
@@ -17,13 +21,12 @@ public class TokenTools {
         TokenTools.ehcacheService = ehcacheService;
     }
 
-    */
-/**
+
+    /**
      * 获取管理员登录信息
      * @return
-     *//*
-
-    public static AdminTokenResp getAdminToken(boolean needCheck) {
+     */
+    public static AdminToken getAdminToken(boolean needCheck) {
         String headerToken = HttpTools.getHeaderToken();
         if (StringUtils.isBlank(headerToken)){
             //如果要求在请求头里的token_id不能为空 要校验令牌
@@ -34,17 +37,22 @@ public class TokenTools {
             }
         }
 
-        AdminTokenResp adminTokenResp = ehcacheService.adminTokenCache().get(headerToken);
-        if (adminTokenResp == null) {
+        AdminToken adminToken = ehcacheService.adminTokenCache().get(headerToken);
+        if (adminToken == null) {
             throw new TokenException();
         }
-        return adminTokenResp;
+        return adminToken;
     }
 
+
+    /**
+     * 获取管理员名称
+     * @return
+     */
     public static String getAdminName () {
         return getAdminToken(true).getName();
     }
-*/
+
 
 
 }
