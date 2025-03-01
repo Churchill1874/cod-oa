@@ -1,6 +1,6 @@
 package com.ent.codoa.service.serviceimpl;
 
-import com.ent.codoa.pojo.resp.token.AdminTokenResp;
+import com.ent.codoa.pojo.resp.token.AdminToken;
 import com.ent.codoa.service.EhcacheService;
 import com.ent.codoa.common.exception.DataException;
 import com.ent.codoa.common.tools.GenerateTools;
@@ -56,8 +56,8 @@ public class EhcacheServiceImpl implements EhcacheService {
 
 
     @Override
-    public Cache<String, AdminTokenResp> adminTokenCache() {
-        return cacheManager.getCache(ADMIN_TOKEN, String.class, AdminTokenResp.class);
+    public Cache<String, AdminToken> adminTokenCache() {
+        return cacheManager.getCache(ADMIN_TOKEN, String.class, AdminToken.class);
     }
 
 

@@ -6,7 +6,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 @Data
-public class BooleanResp implements Serializable {
+public class BooleanBase implements Serializable {
     private static final long serialVersionUID = -710621387885755428L;
 
     @ApiModelProperty("结果值")

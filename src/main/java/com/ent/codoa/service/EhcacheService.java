@@ -1,7 +1,7 @@
 package com.ent.codoa.service;
 
 
-import com.ent.codoa.pojo.resp.token.AdminTokenResp;
+import com.ent.codoa.pojo.resp.token.AdminToken;
 import org.ehcache.Cache;
 
 /**
@@ -28,7 +28,7 @@ public interface EhcacheService {
      * 管理员登录token
      * @return
      */
-    Cache<String, AdminTokenResp> adminTokenCache();
+    Cache<String, AdminToken> adminTokenCache();
 
 
 

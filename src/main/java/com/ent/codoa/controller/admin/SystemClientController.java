@@ -1,5 +1,6 @@
 package com.ent.codoa.controller.admin;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
@@ -9,10 +10,9 @@ import com.ent.codoa.common.tools.GenerateTools;
 import com.ent.codoa.common.tools.HttpTools;
 import com.ent.codoa.common.tools.TokenTools;
 import com.ent.codoa.entity.SystemClient;
-import com.ent.codoa.pojo.req.systemclient.AdminLoginReq;
-import com.ent.codoa.pojo.req.systemclient.SystemClientPage;
-import com.ent.codoa.pojo.resp.systemclient.CaptchaCodeResp;
-import com.ent.codoa.pojo.resp.token.AdminTokenResp;
+import com.ent.codoa.pojo.req.systemclient.*;
+import com.ent.codoa.pojo.resp.systemclient.CaptchaCode;
+import com.ent.codoa.pojo.resp.token.AdminToken;
 import com.ent.codoa.service.EhcacheService;
 import com.ent.codoa.service.SystemClientService;
 import io.swagger.annotations.Api;
@@ -45,9 +45,31 @@ public class SystemClientController {
         return R.ok(iPage);
     }
 
+    @PostMapping("/add")
+    @ApiOperation(value = "添加系统用户", notes = "添加系统用户")
+    public R add(@RequestBody @Valid SystemClientAdd req) {
+        SystemClient systemClient = BeanUtil.toBean(req, SystemClient.class);
+        systemClientService.add(systemClient);
+        return R.ok(null);
+    }
+
+    @PostMapping("/updateStatus")
+    @ApiOperation(value = "修改系统用户状态", notes = "修改系统用户状态")
+    public R updateStatus(@RequestBody @Valid SystemClientUpdateStatus req) {
+        systemClientService.updateStatus(req.getId(), req.getStatus());
+        return R.ok(null);
+    }
+
+    @PostMapping("/updateBaseInfo")
+    @ApiOperation(value = "修改系统用户基础信息", notes = "修改系统用户基础信息")
+    public R updateBaseInfo(@RequestBody @Valid SystemClientUpdateBaseInfo req) {
+        systemClientService.editBaseInfo(req);
+        return R.ok(null);
+    }
+
     @PostMapping("/login")
     @ApiOperation(value = "登录", notes = "登录")
-    public R<AdminTokenResp> login(@RequestBody @Valid AdminLoginReq req) {
+    public R<AdminToken> login(@RequestBody @Valid AdminLogin req) {
         log.info("登录接口入参:{}", JSONUtil.toJsonStr(req));
         //校验验证码
         String captchaCode = ehcacheService.captchaCodeCache().get(HttpTools.getIp());
@@ -77,18 +99,18 @@ public class SystemClientController {
 
         String tokenId = GenerateTools.createTokenId();
         //生成token并返回
-        AdminTokenResp adminTokenResp = new AdminTokenResp();
-        adminTokenResp.setAccount(req.getAccount());
-        adminTokenResp.setName(systemClient.getName());
-        adminTokenResp.setRole(systemClient.getRole());
-        adminTokenResp.setLoginTime(LocalDateTime.now());
-        adminTokenResp.setTokenId(tokenId);
+        AdminToken adminToken = new AdminToken();
+        adminToken.setAccount(req.getAccount());
+        adminToken.setName(systemClient.getName());
+        adminToken.setRole(systemClient.getRole());
+        adminToken.setLoginTime(LocalDateTime.now());
+        adminToken.setTokenId(tokenId);
 
-        ehcacheService.adminTokenCache().put(tokenId, adminTokenResp);
+        ehcacheService.adminTokenCache().put(tokenId, adminToken);
 
         //删除使用过的验证码缓存
         ehcacheService.captchaCodeCache().remove(HttpTools.getIp());
-        return R.ok(adminTokenResp);
+        return R.ok(adminToken);
     }
 
 
@@ -106,15 +128,15 @@ public class SystemClientController {
 
     @PostMapping("/getCaptchaCode")
     @ApiOperation(value = "获取验证码", notes = "获取验证码")
-    public synchronized R<CaptchaCodeResp> get() {
+    public synchronized R<CaptchaCode> get() {
         String ip = HttpTools.getIp();
         log.info("ip:{}请求图片验证码", ip);
 
         String codeImageStream =  ehcacheService.getVC(ip,30,"每3秒超过30次点击验证码");
 
-        CaptchaCodeResp captchaCodeResp = new CaptchaCodeResp();
-        captchaCodeResp.setCaptchaImage("data:image/png;base64," + codeImageStream);
-        return R.ok(captchaCodeResp);
+        CaptchaCode captchaCode = new CaptchaCode();
+        captchaCode.setCaptchaImage("data:image/png;base64," + codeImageStream);
+        return R.ok(captchaCode);
     }
 
 

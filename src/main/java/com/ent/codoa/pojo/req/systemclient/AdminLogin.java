@@ -8,7 +8,7 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Data
-public class AdminLoginReq implements Serializable {
+public class AdminLogin implements Serializable {
 
     private static final long serialVersionUID = 4559462008185124843L;
 

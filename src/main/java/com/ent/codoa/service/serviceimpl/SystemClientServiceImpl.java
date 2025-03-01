@@ -5,10 +5,16 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ent.codoa.common.constant.enums.AdminRoleEnum;
+import com.ent.codoa.common.constant.enums.SystemClientStatusEnum;
+import com.ent.codoa.common.exception.DataException;
+import com.ent.codoa.common.tools.CodeTools;
+import com.ent.codoa.common.tools.GenerateTools;
 import com.ent.codoa.common.tools.TokenTools;
 import com.ent.codoa.entity.SystemClient;
 import com.ent.codoa.mapper.SystemClientMapper;
 import com.ent.codoa.pojo.req.systemclient.SystemClientPage;
+import com.ent.codoa.pojo.req.systemclient.SystemClientUpdateBaseInfo;
 import com.ent.codoa.service.SystemClientService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -53,11 +59,22 @@ public class SystemClientServiceImpl extends ServiceImpl<SystemClientMapper, Sys
             dto.setCreateTime(LocalDateTime.now());
         }
 
+        SystemClient systemClient = findByAccount(dto.getAccount());
+        if (systemClient != null){
+            throw new DataException("账号重复已存在");
+        }
+
+        dto.setRole(AdminRoleEnum.ADMIN);
+        dto.setStatus(SystemClientStatusEnum.NORMAL);
+        dto.setSalt(GenerateTools.getUUID());
+        dto.setPassword(CodeTools.md5AndSalt(dto.getPassword(), dto.getSalt()));
+        dto.setCreateTime(LocalDateTime.now());
+        dto.setCreateName(TokenTools.getAdminName());
         save(dto);
     }
 
     @Override
-    public void editBaseInfo(SystemClient dto) {
+    public void editBaseInfo(SystemClientUpdateBaseInfo dto) {
         UpdateWrapper<SystemClient> updateWrapper = new UpdateWrapper<>();
         updateWrapper.lambda()
             .set(SystemClient::getName, dto.getName())
@@ -77,6 +94,15 @@ public class SystemClientServiceImpl extends ServiceImpl<SystemClientMapper, Sys
         QueryWrapper<SystemClient> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().eq(SystemClient::getAccount, account);
         return getOne(queryWrapper);
+    }
+
+    @Override
+    public void updateStatus(Long id, SystemClientStatusEnum status) {
+        UpdateWrapper<SystemClient> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.lambda()
+            .set(SystemClient::getStatus, status)
+            .eq(SystemClient::getId, id);
+        update(updateWrapper);
     }
 
 }

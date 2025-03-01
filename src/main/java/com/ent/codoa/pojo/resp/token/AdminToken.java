@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Data
-public class AdminTokenResp implements Serializable {
+public class AdminToken implements Serializable {
     private static final long serialVersionUID = 5130986957455861652L;
 
     @ApiModelProperty("id")
