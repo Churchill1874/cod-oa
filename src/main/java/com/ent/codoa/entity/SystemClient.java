@@ -54,4 +54,28 @@ public class SystemClient extends BaseInfo implements Serializable {
     @ApiModelProperty("盐")
     private String salt;
 
+    @TableField("customer_menu")
+    @ApiModelProperty("客户管理权限")
+    private Boolean customerMenu;
+
+    @TableField("inventory_menu")
+    @ApiModelProperty("库存管理权限")
+    private Boolean inventoryMenu;
+
+    @TableField("hr_menu")
+    @ApiModelProperty("人事管理权限")
+    private Boolean hrMenu;
+
+    @TableField("payment_menu")
+    @ApiModelProperty("支付管理权限")
+    private Boolean paymentMenu;
+
+    @TableField("platform_menu")
+    @ApiModelProperty("平台管理菜单")
+    private Boolean platformMenu;
+
+    @TableField("business_menu")
+    @ApiModelProperty("业务用户菜单")
+    private Boolean businessMenu;
+
 }

@@ -53,6 +53,13 @@ public class TokenTools {
         return getAdminToken(true).getName();
     }
 
+    /**
+     * 获取管理员账号
+     * @return
+     */
+    public static String getAdminAccount() {
+        return getAdminToken(true).getAccount();
+    }
 
 
 }

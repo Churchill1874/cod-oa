@@ -13,7 +13,8 @@ public enum SystemMenuEnum {
     INVENTORY(2, "库存管理"),
     HUMAN_RESOURCE_MANAGEMENT(3,"人事管理"),
     PAYMENT(4,"支付管理"),
-    PLATFORM_BASE(5,"平台基础配置管理")
+    BUSINESS(5,"业务用户管理"),
+    PLATFORM_BASE(6,"平台基础配置管理")
     ;
 
     @Getter

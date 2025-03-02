@@ -9,10 +9,12 @@ import com.ent.codoa.common.tools.CodeTools;
 import com.ent.codoa.common.tools.GenerateTools;
 import com.ent.codoa.common.tools.HttpTools;
 import com.ent.codoa.common.tools.TokenTools;
+import com.ent.codoa.entity.BusinessClient;
 import com.ent.codoa.entity.SystemClient;
 import com.ent.codoa.pojo.req.systemclient.*;
 import com.ent.codoa.pojo.resp.systemclient.CaptchaCode;
 import com.ent.codoa.pojo.resp.token.LoginToken;
+import com.ent.codoa.service.BusinessClientService;
 import com.ent.codoa.service.EhcacheService;
 import com.ent.codoa.service.SystemClientService;
 import io.swagger.annotations.Api;
@@ -37,6 +39,8 @@ public class SystemClientController {
     private EhcacheService ehcacheService;
     @Autowired
     private SystemClientService systemClientService;
+    @Autowired
+    private BusinessClientService businessClientService;
 
     @PostMapping("/page")
     @ApiOperation(value = "分页系统用户", notes = "分页系统用户")
@@ -67,6 +71,59 @@ public class SystemClientController {
         return R.ok(null);
     }
 
+
+    //对比密码正确与否
+    private void checkAccountAndPassword(String actualPassword, String passwordReq){
+        if (!actualPassword.equals(passwordReq)) {
+            throw new AccountOrPasswordException();
+        }
+    }
+
+
+    //判断登录账号与密码是否存在 并正确
+    private LoginToken checkLogin(String account, String password) {
+        LoginToken loginToken;
+
+        //判断登录账号是否存在系统用户中
+        SystemClient systemClient = systemClientService.findByAccount(account);
+        if (systemClient != null) {
+            loginToken = new LoginToken();
+            loginToken.setName(systemClient.getName());
+            loginToken.setRole(systemClient.getRole());
+            loginToken.setIsSystemClient(true);
+            //对比登录密码和正确密码
+            checkAccountAndPassword(systemClient.getPassword(), CodeTools.md5AndSalt(password, systemClient.getSalt()));
+            return loginToken;
+        }
+
+        //判断登录账号是否存在业务管理中
+        BusinessClient businessClient = businessClientService.findByAccount(account);
+        if (businessClient != null){
+            loginToken = new LoginToken();
+            loginToken.setName(businessClient.getName());
+            loginToken.setIsSystemClient(false);
+            loginToken.setSystemClientAccount(businessClient.getSystemClientAccount());
+            //对比登录密码和正确密码
+            checkAccountAndPassword(systemClient.getPassword(), CodeTools.md5AndSalt(password, systemClient.getSalt()));
+
+            //获取所属系统用户的权限赋予自己
+            systemClient = systemClientService.findByAccount(loginToken.getSystemClientAccount());
+            loginToken.setBusinessMenu(systemClient.getBusinessMenu());
+            loginToken.setCustomerMenu(systemClient.getCustomerMenu());
+            loginToken.setHrMenu(systemClient.getHrMenu());
+            loginToken.setInventoryMenu(systemClient.getInventoryMenu());
+            loginToken.setPaymentMenu(systemClient.getPaymentMenu());
+            loginToken.setPlatformMenu(systemClient.getPlatformMenu());
+            return loginToken;
+        }
+
+        //校验是否已经登录,如果已经登陆过删除之前的tokenId和缓存
+        //checkLoginCache(administrators.getAccount());
+
+        throw new AccountOrPasswordException();
+    }
+
+
     @PostMapping("/login")
     @ApiOperation(value = "登录", notes = "登录")
     public R<LoginToken> login(@RequestBody @Valid AdminLogin req) {
@@ -76,39 +133,17 @@ public class SystemClientController {
         if (captchaCode == null) {
             return R.failed("验证码有误或已过期");
         }
-        if (!captchaCode.equals(req.getVerificationCode())){
+        if (!captchaCode.equals(req.getVerificationCode())) {
             return R.failed("验证码错误");
         }
 
-        //判断账号密码是否正确
-        SystemClient systemClient = systemClientService.findByAccount(req.getAccount());
-        if (systemClient == null) {
-            throw new AccountOrPasswordException();
-        }
+        LoginToken loginToken = checkLogin(req.getAccount(), req.getPassword());
 
-        //对比登录密码和正确密码
-        String password = systemClient.getPassword();
-        String passwordReq = CodeTools.md5AndSalt(req.getPassword(), systemClient.getSalt());
-
-        if (!password.equals(passwordReq)) {
-            throw new AccountOrPasswordException();
-        }
-
-        //校验是否已经登录,如果已经登陆过删除之前的tokenId和缓存
-        //checkLoginCache(administrators.getAccount());
-
-        String tokenId = GenerateTools.createTokenId();
         //生成token并返回
-        LoginToken loginToken = new LoginToken();
         loginToken.setAccount(req.getAccount());
-        loginToken.setName(systemClient.getName());
-        loginToken.setRole(systemClient.getRole());
         loginToken.setLoginTime(LocalDateTime.now());
-        loginToken.setTokenId(tokenId);
-        //loginToken.setMenuList();
-        //loginToken.setIsSystemClient();
-
-        ehcacheService.adminTokenCache().put(tokenId, loginToken);
+        loginToken.setTokenId(GenerateTools.createTokenId());
+        ehcacheService.adminTokenCache().put(loginToken.getTokenId(), loginToken);
 
         //删除使用过的验证码缓存
         ehcacheService.captchaCodeCache().remove(HttpTools.getIp());
@@ -120,7 +155,7 @@ public class SystemClientController {
     @ApiOperation(value = "退出登录", notes = "退出登录")
     public R logout() {
         String tokenId = TokenTools.getAdminToken(false).getTokenId();
-        if (StringUtils.isBlank(tokenId)){
+        if (StringUtils.isBlank(tokenId)) {
             return R.ok(null);
         }
         ehcacheService.adminTokenCache().remove(tokenId);
@@ -134,13 +169,12 @@ public class SystemClientController {
         String ip = HttpTools.getIp();
         log.info("ip:{}请求图片验证码", ip);
 
-        String codeImageStream =  ehcacheService.getVC(ip,30,"每3秒超过30次点击验证码");
+        String codeImageStream = ehcacheService.getVC(ip, 30, "每3秒超过30次点击验证码");
 
         CaptchaCode captchaCode = new CaptchaCode();
         captchaCode.setCaptchaImage("data:image/png;base64," + codeImageStream);
         return R.ok(captchaCode);
     }
-
 
 
 }

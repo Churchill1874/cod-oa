@@ -52,6 +52,7 @@ public class SystemClientServiceImpl extends ServiceImpl<SystemClientMapper, Sys
 
     @Override
     public void add(SystemClient dto) {
+        //添加之前要先校验 人事管理系统和客户管理系统是否有同样的account名称 没有才能添加 保证全局唯一账号 公用登录页面
         if (StringUtils.isBlank(dto.getCreateName())){
             dto.setCreateName(TokenTools.getAdminName());
         }
