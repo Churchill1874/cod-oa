@@ -1,5 +1,6 @@
 package com.ent.codoa.pojo.req.systemclient;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
@@ -37,5 +38,24 @@ public class SystemClientAdd implements Serializable {
     @ApiModelProperty(value = "到期时间 精确到日就可以 例2020-10-1 不用时分秒", required = true)
     private LocalDate expiredTime;
 
+    @TableField("customer_menu")
+    @ApiModelProperty("客户管理权限")
+    private Boolean customerMenu;
+
+    @TableField("inventory_menu")
+    @ApiModelProperty("库存管理权限")
+    private Boolean inventoryMenu;
+
+    @TableField("hr_menu")
+    @ApiModelProperty("人事管理权限")
+    private Boolean hrMenu;
+
+    @TableField("payment_menu")
+    @ApiModelProperty("支付管理权限")
+    private Boolean paymentMenu;
+
+    @TableField("platform_menu")
+    @ApiModelProperty("平台管理菜单")
+    private Boolean platformMenu;
 
 }

@@ -8,9 +8,11 @@ import lombok.Getter;
  * 角色枚举
  * @author admin
  */
-public enum AdminRoleEnum {
+public enum RoleEnum {
     SUPER_ADMIN(1, "超级管理员"),
-    ADMIN(2, "普通管理员");
+    ADMIN(2, "系统管理员"),
+    CUSTOMER(3,"客户管理的客户"),
+    HUMAN_RESOURCE_MANAGEMENT(4,"人事管理的职员");
 
     @Getter
     @EnumValue
@@ -20,7 +22,7 @@ public enum AdminRoleEnum {
     @Getter
     private String name;
 
-    AdminRoleEnum(int code, String name) {
+    RoleEnum(int code, String name) {
         this.code = code;
         this.name = name;
     }

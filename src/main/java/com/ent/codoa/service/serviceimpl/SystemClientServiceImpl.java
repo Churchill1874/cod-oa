@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.ent.codoa.common.constant.enums.AdminRoleEnum;
+import com.ent.codoa.common.constant.enums.RoleEnum;
 import com.ent.codoa.common.constant.enums.SystemClientStatusEnum;
 import com.ent.codoa.common.exception.DataException;
 import com.ent.codoa.common.tools.CodeTools;
@@ -65,7 +65,7 @@ public class SystemClientServiceImpl extends ServiceImpl<SystemClientMapper, Sys
             throw new DataException("账号重复已存在");
         }
 
-        dto.setRole(AdminRoleEnum.ADMIN);
+        dto.setRole(RoleEnum.ADMIN);
         dto.setStatus(SystemClientStatusEnum.NORMAL);
         dto.setSalt(GenerateTools.getUUID());
         dto.setPassword(CodeTools.md5AndSalt(dto.getPassword(), dto.getSalt()));

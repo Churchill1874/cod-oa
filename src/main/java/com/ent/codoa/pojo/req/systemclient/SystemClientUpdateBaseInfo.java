@@ -1,5 +1,6 @@
 package com.ent.codoa.pojo.req.systemclient;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.ent.codoa.common.constant.enums.SystemClientStatusEnum;
 import com.ent.codoa.pojo.req.IdBase;
 import io.swagger.annotations.ApiModelProperty;
@@ -29,5 +30,25 @@ public class SystemClientUpdateBaseInfo extends IdBase implements Serializable {
     @NotNull(message = "到期时间不能为空")
     @ApiModelProperty("到期时间")
     private LocalDate expiredTime;
+
+    @NotNull(message = "请设置客户管理权限")
+    @ApiModelProperty("客户管理权限")
+    private Boolean customerMenu;
+
+    @NotNull(message = "请设置库存管理权限")
+    @ApiModelProperty("库存管理权限")
+    private Boolean inventoryMenu;
+
+    @NotNull(message = "请设置人事管理权限")
+    @ApiModelProperty("人事管理权限")
+    private Boolean hrMenu;
+
+    @NotNull(message = "请设置支付管理权限")
+    @ApiModelProperty("支付管理权限")
+    private Boolean paymentMenu;
+
+    @NotNull(message = "请设置平台管理菜单")
+    @ApiModelProperty("平台管理菜单")
+    private Boolean platformMenu;
 
 }

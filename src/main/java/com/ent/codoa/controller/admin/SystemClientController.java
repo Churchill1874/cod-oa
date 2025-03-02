@@ -4,18 +4,21 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
+import com.ent.codoa.common.constant.enums.RoleEnum;
 import com.ent.codoa.common.exception.AccountOrPasswordException;
 import com.ent.codoa.common.tools.CodeTools;
 import com.ent.codoa.common.tools.GenerateTools;
 import com.ent.codoa.common.tools.HttpTools;
 import com.ent.codoa.common.tools.TokenTools;
-import com.ent.codoa.entity.BusinessClient;
+import com.ent.codoa.entity.Customer;
+import com.ent.codoa.entity.Staff;
 import com.ent.codoa.entity.SystemClient;
 import com.ent.codoa.pojo.req.systemclient.*;
 import com.ent.codoa.pojo.resp.systemclient.CaptchaCode;
 import com.ent.codoa.pojo.resp.token.LoginToken;
-import com.ent.codoa.service.BusinessClientService;
+import com.ent.codoa.service.CustomerService;
 import com.ent.codoa.service.EhcacheService;
+import com.ent.codoa.service.StaffService;
 import com.ent.codoa.service.SystemClientService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -40,7 +43,9 @@ public class SystemClientController {
     @Autowired
     private SystemClientService systemClientService;
     @Autowired
-    private BusinessClientService businessClientService;
+    private CustomerService customerService;//客户管理接口
+    @Autowired
+    private StaffService staffService;//人事管理接口
 
     @PostMapping("/page")
     @ApiOperation(value = "分页系统用户", notes = "分页系统用户")
@@ -73,7 +78,7 @@ public class SystemClientController {
 
 
     //对比密码正确与否
-    private void checkAccountAndPassword(String actualPassword, String passwordReq){
+    private void checkAccountAndPassword(String actualPassword, String passwordReq) {
         if (!actualPassword.equals(passwordReq)) {
             throw new AccountOrPasswordException();
         }
@@ -90,25 +95,49 @@ public class SystemClientController {
             loginToken = new LoginToken();
             loginToken.setName(systemClient.getName());
             loginToken.setRole(systemClient.getRole());
-            loginToken.setIsSystemClient(true);
+            loginToken.setAccount(systemClient.getAccount());
+            loginToken.setCustomerMenu(systemClient.getCustomerMenu());
+            loginToken.setHrMenu(systemClient.getHrMenu());
+            loginToken.setInventoryMenu(systemClient.getInventoryMenu());
+            loginToken.setPaymentMenu(systemClient.getPaymentMenu());
+            loginToken.setPlatformMenu(systemClient.getPlatformMenu());
             //对比登录密码和正确密码
             checkAccountAndPassword(systemClient.getPassword(), CodeTools.md5AndSalt(password, systemClient.getSalt()));
             return loginToken;
         }
 
-        //判断登录账号是否存在业务管理中
-        BusinessClient businessClient = businessClientService.findByAccount(account);
-        if (businessClient != null){
+        //判断登录账号是否存在客户管理中
+        Customer customer = customerService.findByAccount(account);
+        if (customer != null) {
             loginToken = new LoginToken();
-            loginToken.setName(businessClient.getName());
-            loginToken.setIsSystemClient(false);
-            loginToken.setSystemClientAccount(businessClient.getSystemClientAccount());
+            loginToken.setName(customer.getName());
+            loginToken.setRole(RoleEnum.CUSTOMER);
+            loginToken.setAccount(customer.getAccount());
+            loginToken.setSystemClientAccount(customer.getSystemClientAccount());
             //对比登录密码和正确密码
             checkAccountAndPassword(systemClient.getPassword(), CodeTools.md5AndSalt(password, systemClient.getSalt()));
-
             //获取所属系统用户的权限赋予自己
             systemClient = systemClientService.findByAccount(loginToken.getSystemClientAccount());
-            loginToken.setBusinessMenu(systemClient.getBusinessMenu());
+            loginToken.setCustomerMenu(systemClient.getCustomerMenu());
+            loginToken.setHrMenu(systemClient.getHrMenu());
+            loginToken.setInventoryMenu(systemClient.getInventoryMenu());
+            loginToken.setPaymentMenu(systemClient.getPaymentMenu());
+            loginToken.setPlatformMenu(systemClient.getPlatformMenu());
+            return loginToken;
+        }
+
+        //判断账号是否在人事管理中
+        Staff staff = staffService.findByAccount(account);
+        if (staff != null){
+            loginToken = new LoginToken();
+            loginToken.setName(staff.getName());
+            loginToken.setRole(RoleEnum.HUMAN_RESOURCE_MANAGEMENT);
+            loginToken.setAccount(staff.getAccount());
+            loginToken.setSystemClientAccount(staff.getSystemClientAccount());
+            //对比登录密码和正确密码
+            checkAccountAndPassword(systemClient.getPassword(), CodeTools.md5AndSalt(password, systemClient.getSalt()));
+            //获取所属系统用户的权限赋予自己
+            systemClient = systemClientService.findByAccount(loginToken.getSystemClientAccount());
             loginToken.setCustomerMenu(systemClient.getCustomerMenu());
             loginToken.setHrMenu(systemClient.getHrMenu());
             loginToken.setInventoryMenu(systemClient.getInventoryMenu());

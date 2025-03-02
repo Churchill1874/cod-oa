@@ -1,6 +1,5 @@
 package com.ent.codoa.config;
-import com.ent.codoa.common.constant.enums.AdminRoleEnum;
-import java.time.LocalDate;
+import com.ent.codoa.common.constant.enums.RoleEnum;
 
 import com.ent.codoa.common.constant.enums.SystemClientStatusEnum;
 import com.ent.codoa.common.tools.CodeTools;
@@ -48,7 +47,7 @@ public class InitConfig {
             systemClient.setStatus(SystemClientStatusEnum.NORMAL);
             systemClient.setIntroduce("超级管理员的开发账号");
             systemClient.setLastLoginTime(LocalDateTime.now());
-            systemClient.setRole(AdminRoleEnum.SUPER_ADMIN);
+            systemClient.setRole(RoleEnum.SUPER_ADMIN);
             String salt = GenerateTools.getUUID();
             systemClient.setSalt(salt);
             systemClient.setCreateTime(LocalDateTime.now());

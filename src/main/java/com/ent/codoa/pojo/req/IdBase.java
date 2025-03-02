@@ -14,7 +14,7 @@ public class IdBase implements Serializable {
 
     @Positive(message = "id数值错误")
     @NotNull(message = "id不能为空")
-    @ApiModelProperty("id")
+    @ApiModelProperty(value = "id", required = true)
     private Long id;
 
 }
