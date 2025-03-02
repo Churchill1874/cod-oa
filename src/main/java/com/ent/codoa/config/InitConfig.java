@@ -43,7 +43,7 @@ public class InitConfig {
 
         if (systemClient == null){
             systemClient = new SystemClient();
-            systemClient.setAccount("admin");
+            systemClient.setAccount(SUPER_ADMIN_ACCOUNT);
             systemClient.setName("超级管理员");
             systemClient.setStatus(SystemClientStatusEnum.NORMAL);
             systemClient.setIntroduce("超级管理员的开发账号");

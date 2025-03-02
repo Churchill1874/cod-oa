@@ -12,7 +12,7 @@ import com.ent.codoa.common.tools.TokenTools;
 import com.ent.codoa.entity.SystemClient;
 import com.ent.codoa.pojo.req.systemclient.*;
 import com.ent.codoa.pojo.resp.systemclient.CaptchaCode;
-import com.ent.codoa.pojo.resp.token.AdminToken;
+import com.ent.codoa.pojo.resp.token.LoginToken;
 import com.ent.codoa.service.EhcacheService;
 import com.ent.codoa.service.SystemClientService;
 import io.swagger.annotations.Api;
@@ -69,7 +69,7 @@ public class SystemClientController {
 
     @PostMapping("/login")
     @ApiOperation(value = "登录", notes = "登录")
-    public R<AdminToken> login(@RequestBody @Valid AdminLogin req) {
+    public R<LoginToken> login(@RequestBody @Valid AdminLogin req) {
         log.info("登录接口入参:{}", JSONUtil.toJsonStr(req));
         //校验验证码
         String captchaCode = ehcacheService.captchaCodeCache().get(HttpTools.getIp());
@@ -99,18 +99,20 @@ public class SystemClientController {
 
         String tokenId = GenerateTools.createTokenId();
         //生成token并返回
-        AdminToken adminToken = new AdminToken();
-        adminToken.setAccount(req.getAccount());
-        adminToken.setName(systemClient.getName());
-        adminToken.setRole(systemClient.getRole());
-        adminToken.setLoginTime(LocalDateTime.now());
-        adminToken.setTokenId(tokenId);
+        LoginToken loginToken = new LoginToken();
+        loginToken.setAccount(req.getAccount());
+        loginToken.setName(systemClient.getName());
+        loginToken.setRole(systemClient.getRole());
+        loginToken.setLoginTime(LocalDateTime.now());
+        loginToken.setTokenId(tokenId);
+        //loginToken.setMenuList();
+        //loginToken.setIsSystemClient();
 
-        ehcacheService.adminTokenCache().put(tokenId, adminToken);
+        ehcacheService.adminTokenCache().put(tokenId, loginToken);
 
         //删除使用过的验证码缓存
         ehcacheService.captchaCodeCache().remove(HttpTools.getIp());
-        return R.ok(adminToken);
+        return R.ok(loginToken);
     }
 
 

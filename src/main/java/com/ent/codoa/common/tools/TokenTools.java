@@ -1,7 +1,7 @@
 package com.ent.codoa.common.tools;
 
 import com.ent.codoa.common.exception.TokenException;
-import com.ent.codoa.pojo.resp.token.AdminToken;
+import com.ent.codoa.pojo.resp.token.LoginToken;
 import com.ent.codoa.service.EhcacheService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ public class TokenTools {
      * 获取管理员登录信息
      * @return
      */
-    public static AdminToken getAdminToken(boolean needCheck) {
+    public static LoginToken getAdminToken(boolean needCheck) {
         String headerToken = HttpTools.getHeaderToken();
         if (StringUtils.isBlank(headerToken)){
             //如果要求在请求头里的token_id不能为空 要校验令牌
@@ -37,11 +37,11 @@ public class TokenTools {
             }
         }
 
-        AdminToken adminToken = ehcacheService.adminTokenCache().get(headerToken);
-        if (adminToken == null) {
+        LoginToken loginToken = ehcacheService.adminTokenCache().get(headerToken);
+        if (loginToken == null) {
             throw new TokenException();
         }
-        return adminToken;
+        return loginToken;
     }
 
 
