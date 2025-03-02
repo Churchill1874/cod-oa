@@ -64,14 +64,14 @@ public class SystemClientController {
 
     @PostMapping("/updateStatus")
     @ApiOperation(value = "修改系统用户状态", notes = "修改系统用户状态")
-    public R updateStatus(@RequestBody @Valid SystemClientUpdateStatus req) {
+    public R updateStatus(@RequestBody @Valid SystemClientStatusUpdate req) {
         systemClientService.updateStatus(req.getId(), req.getStatus());
         return R.ok(null);
     }
 
     @PostMapping("/updateBaseInfo")
     @ApiOperation(value = "修改系统用户基础信息", notes = "修改系统用户基础信息")
-    public R updateBaseInfo(@RequestBody @Valid SystemClientUpdateBaseInfo req) {
+    public R updateBaseInfo(@RequestBody @Valid SystemClientBaseUpdate req) {
         systemClientService.editBaseInfo(req);
         return R.ok(null);
     }
@@ -95,7 +95,6 @@ public class SystemClientController {
             loginToken = new LoginToken();
             loginToken.setName(systemClient.getName());
             loginToken.setRole(systemClient.getRole());
-            loginToken.setAccount(systemClient.getAccount());
             loginToken.setCustomerMenu(systemClient.getCustomerMenu());
             loginToken.setHrMenu(systemClient.getHrMenu());
             loginToken.setInventoryMenu(systemClient.getInventoryMenu());
@@ -112,7 +111,6 @@ public class SystemClientController {
             loginToken = new LoginToken();
             loginToken.setName(customer.getName());
             loginToken.setRole(RoleEnum.CUSTOMER);
-            loginToken.setAccount(customer.getAccount());
             loginToken.setSystemClientAccount(customer.getSystemClientAccount());
             //对比登录密码和正确密码
             checkAccountAndPassword(systemClient.getPassword(), CodeTools.md5AndSalt(password, systemClient.getSalt()));
@@ -132,7 +130,6 @@ public class SystemClientController {
             loginToken = new LoginToken();
             loginToken.setName(staff.getName());
             loginToken.setRole(RoleEnum.HUMAN_RESOURCE_MANAGEMENT);
-            loginToken.setAccount(staff.getAccount());
             loginToken.setSystemClientAccount(staff.getSystemClientAccount());
             //对比登录密码和正确密码
             checkAccountAndPassword(systemClient.getPassword(), CodeTools.md5AndSalt(password, systemClient.getSalt()));

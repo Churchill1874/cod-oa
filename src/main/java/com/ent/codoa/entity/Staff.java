@@ -39,11 +39,11 @@ public class Staff extends BaseInfo implements Serializable {
     @ApiModelProperty("职位")
     private String position;
     @ApiModelProperty("职级")
-    private String rank;
+    private String level;
     @ApiModelProperty("薪资")
     private String salary;
     @ApiModelProperty("入职时间")
-    private String hireDate;
+    private LocalDate hireDate;
     @ApiModelProperty("工作状态 如在职、离职、休假等")
     private String workStatus;
     @ApiModelProperty("账号状态")

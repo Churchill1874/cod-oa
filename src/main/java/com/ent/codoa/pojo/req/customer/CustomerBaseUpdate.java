@@ -12,7 +12,7 @@ public class CustomerBaseUpdate extends IdBase implements Serializable {
     private static final long serialVersionUID = -8187928191343598367L;
 
     @Length(max = 30, message = "客户名称不能超过30位")
-    @ApiModelProperty("客户名称")
+    @ApiModelProperty(value = "客户名称", required = true)
     private String name;
 
     @Length(max = 30, message = "企业名称不能超过30位")

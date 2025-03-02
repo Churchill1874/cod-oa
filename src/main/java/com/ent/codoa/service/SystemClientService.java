@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.ent.codoa.common.constant.enums.SystemClientStatusEnum;
 import com.ent.codoa.entity.SystemClient;
 import com.ent.codoa.pojo.req.systemclient.SystemClientPage;
-import com.ent.codoa.pojo.req.systemclient.SystemClientUpdateBaseInfo;
+import com.ent.codoa.pojo.req.systemclient.SystemClientBaseUpdate;
 
 /**
  * 系统用户接口类
@@ -32,7 +32,7 @@ public interface SystemClientService extends IService<SystemClient> {
      *
      * @param dto
      */
-    void editBaseInfo(SystemClientUpdateBaseInfo dto);
+    void editBaseInfo(SystemClientBaseUpdate dto);
 
     /**
      * 删除系统用户

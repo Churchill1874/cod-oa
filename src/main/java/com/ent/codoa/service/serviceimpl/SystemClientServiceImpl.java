@@ -14,7 +14,7 @@ import com.ent.codoa.common.tools.TokenTools;
 import com.ent.codoa.entity.SystemClient;
 import com.ent.codoa.mapper.SystemClientMapper;
 import com.ent.codoa.pojo.req.systemclient.SystemClientPage;
-import com.ent.codoa.pojo.req.systemclient.SystemClientUpdateBaseInfo;
+import com.ent.codoa.pojo.req.systemclient.SystemClientBaseUpdate;
 import com.ent.codoa.service.SystemClientService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -75,7 +75,7 @@ public class SystemClientServiceImpl extends ServiceImpl<SystemClientMapper, Sys
     }
 
     @Override
-    public void editBaseInfo(SystemClientUpdateBaseInfo dto) {
+    public void editBaseInfo(SystemClientBaseUpdate dto) {
         UpdateWrapper<SystemClient> updateWrapper = new UpdateWrapper<>();
         updateWrapper.lambda()
             .set(SystemClient::getName, dto.getName())

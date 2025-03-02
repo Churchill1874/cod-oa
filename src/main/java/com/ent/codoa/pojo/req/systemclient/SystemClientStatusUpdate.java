@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Data
-public class SystemClientUpdateStatus extends IdBase implements Serializable {
+public class SystemClientStatusUpdate extends IdBase implements Serializable {
     private static final long serialVersionUID = -3893837693284125951L;
 
     @NotNull(message = "状态不能为空")
