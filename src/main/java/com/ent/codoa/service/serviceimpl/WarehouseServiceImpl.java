@@ -78,7 +78,7 @@ public class WarehouseServiceImpl extends ServiceImpl<WarehouseMapper, Warehouse
     }
 
     @Override
-    public List<Warehouse> findWarehouseList(WarehousePage dto) {
+    public List<Warehouse> findWarehouseList() {
         QueryWrapper<Warehouse> queryWrapper=new QueryWrapper<>();
         queryWrapper.lambda()
                 .eq(Warehouse::getSystemClientAccount,TokenTools.getAdminAccount())

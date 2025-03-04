@@ -47,7 +47,7 @@ public interface WarehouseService extends IService<Warehouse> {
      * @param dto
      * @return
      */
-    List<Warehouse> findWarehouseList(WarehousePage dto);
+    List<Warehouse> findWarehouseList();
 
     /**
      * 根据仓库id查询仓库信息

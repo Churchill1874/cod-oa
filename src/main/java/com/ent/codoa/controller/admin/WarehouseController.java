@@ -50,8 +50,8 @@ public class WarehouseController {
 
     @PostMapping("/getallwarehouse")
     @ApiOperation(value="获取所有仓库列表",notes = "获取所有仓库列表")
-    public R<List<Warehouse>> findWarehouseList(@RequestBody WarehousePage req){
-        List<Warehouse> list=wirehouseService.findWarehouseList(req);
+    public R<List<Warehouse>> findWarehouseList(){
+        List<Warehouse> list=wirehouseService.findWarehouseList();
         return R.ok(list);
     }
 
