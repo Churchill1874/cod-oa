@@ -26,10 +26,10 @@ public class ComplaintServiceImpl extends ServiceImpl<ComplaintMapper, Complaint
     @Override
     public IPage<Complaint> queryPage(ComplaintPage dto) {
         IPage<Complaint> iPage = new Page<>(dto.getPageNum(), dto.getPageSize());
-
         QueryWrapper<Complaint> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda()
             .eq(StringUtils.isNotBlank(dto.getAccount()), Complaint::getAccount, dto.getAccount())
+            .eq(Complaint::getSystemClientAccount, TokenTools.getAdminAccount())
             .orderByDesc(Complaint::getCreateTime);
         return page(iPage, queryWrapper);
     }
@@ -44,7 +44,7 @@ public class ComplaintServiceImpl extends ServiceImpl<ComplaintMapper, Complaint
 
     @Override
     public void updateStatus(ComplaintStatusUpdate dto) {
-        UpdateWrapper<Complaint> updateWrapper = new UpdateWrapper<>();;
+        UpdateWrapper<Complaint> updateWrapper = new UpdateWrapper<>();
         updateWrapper.lambda()
             .set(Complaint::getStatus, dto.getStatus())
             .eq(Complaint::getId, dto.getId());

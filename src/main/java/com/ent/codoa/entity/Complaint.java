@@ -22,5 +22,8 @@ public class Complaint extends BaseInfo implements Serializable {
     @ApiModelProperty("状态")
     private ComplaintStatusEnum status;
 
+    @ApiModelProperty("系统用户账号")
+    private String systemClientAccount;
+
 
 }

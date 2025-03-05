@@ -1,7 +1,6 @@
 package com.ent.codoa.service.serviceimpl;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -31,6 +30,7 @@ public class CustomerOrderServiceImpl extends ServiceImpl<CustomerOrderMapper, C
             .eq(StringUtils.isNotBlank(dto.getOrderNum()), CustomerOrder::getOrderNum, dto.getOrderNum())
             .eq(dto.getPayStatus() != null, CustomerOrder::getPayStatus, dto.getPayStatus())
             .eq(dto.getStatus() != null, CustomerOrder::getStatus, dto.getStatus())
+            .eq(CustomerOrder::getSystemClientAccount, TokenTools.getAdminAccount())
             .orderByDesc(CustomerOrder::getCreateTime);
         return page(iPage, queryWrapper);
     }
@@ -41,6 +41,7 @@ public class CustomerOrderServiceImpl extends ServiceImpl<CustomerOrderMapper, C
 
         LogTools.addLog("客户管理", "删除客户订单记录id:" + id, TokenTools.getAdminToken(true));
     }
+
 
     @Override
     public void add(CustomerOrder dto) {
