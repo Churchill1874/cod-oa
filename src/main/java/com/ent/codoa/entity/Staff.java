@@ -3,6 +3,7 @@ package com.ent.codoa.entity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.ent.codoa.common.constant.enums.UserStatusEnum;
 import com.ent.codoa.entity.base.BaseInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -18,8 +19,10 @@ public class Staff extends BaseInfo implements Serializable {
     private String name;
     @ApiModelProperty("账号")
     private String account;
+    @JsonIgnore
     @ApiModelProperty("密码")
     private String password;
+    @JsonIgnore
     @ApiModelProperty("盐值")
     private String salt;
     @ApiModelProperty("年龄")

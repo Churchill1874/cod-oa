@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.ent.codoa.common.constant.enums.RoleEnum;
 import com.ent.codoa.common.constant.enums.SystemClientStatusEnum;
 import com.ent.codoa.entity.base.BaseInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -24,6 +25,7 @@ public class SystemClient extends BaseInfo implements Serializable {
     @ApiModelProperty("名称")
     private String name;
 
+    @JsonIgnore
     @ApiModelProperty("密码")
     private String password;
 
@@ -42,6 +44,7 @@ public class SystemClient extends BaseInfo implements Serializable {
     @ApiModelProperty("角色")
     private RoleEnum role;
 
+    @JsonIgnore
     @ApiModelProperty("盐")
     private String salt;
 

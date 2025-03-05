@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.ent.codoa.common.constant.enums.UserStatusEnum;
 import com.ent.codoa.entity.base.BaseInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -21,12 +22,14 @@ public class Customer extends BaseInfo implements Serializable {
     @ApiModelProperty("账号")
     private String account;
 
+    @JsonIgnore
     @ApiModelProperty("密码")
     private String password;
 
     @ApiModelProperty("状态")
     private UserStatusEnum status;
 
+    @JsonIgnore
     @ApiModelProperty("加密盐值")
     private String salt;
 
