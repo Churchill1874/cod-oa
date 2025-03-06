@@ -64,7 +64,7 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
 
         LoginToken loginToken = TokenTools.getAdminToken(true);
 
-        dto.setSystemClientAccount(loginToken.getSystemClientAccount());
+        dto.setSystemClientAccount(loginToken.getAccount());
         dto.setCreateName(loginToken.getName());
         dto.setCreateTime(LocalDateTime.now());
         dto.setSalt(GenerateTools.getUUID());

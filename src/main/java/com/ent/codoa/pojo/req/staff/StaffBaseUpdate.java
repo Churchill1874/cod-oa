@@ -1,11 +1,13 @@
 package com.ent.codoa.pojo.req.staff;
 
+import com.ent.codoa.common.constant.enums.UserStatusEnum;
 import com.ent.codoa.pojo.req.IdBase;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
 
@@ -82,5 +84,10 @@ public class StaffBaseUpdate extends IdBase implements Serializable {
     @Length(max = 10, message = "邀请书不能超过10位")
     @ApiModelProperty("邀请书状态 如offer已发,以拒绝")
     private String offerStatus;
+
+    @NotNull(message = "状态不能为空")
+    @ApiModelProperty(value = "状态", required = true)
+    private UserStatusEnum status;
+
 
 }

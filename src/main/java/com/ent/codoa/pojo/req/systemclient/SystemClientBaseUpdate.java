@@ -50,4 +50,5 @@ public class SystemClientBaseUpdate extends IdBase implements Serializable {
     @ApiModelProperty(value = "平台管理菜单",required = true)
     private Boolean platformMenu;
 
+
 }

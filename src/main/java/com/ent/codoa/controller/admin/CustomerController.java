@@ -51,11 +51,5 @@ public class CustomerController {
         return R.ok(null);
     }
 
-    @PostMapping("/updateStatus")
-    @ApiOperation(value = "修改客户账号状态", notes = "修改客户账号状态")
-    public R updateStatus(@RequestBody @Valid CustomerStatusUpdate req) {
-        customerService.updateStatus(req);
-        return R.ok(null);
-    }
 
 }

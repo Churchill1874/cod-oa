@@ -62,12 +62,6 @@ public class SystemClientController {
         return R.ok(null);
     }
 
-    @PostMapping("/updateStatus")
-    @ApiOperation(value = "修改系统用户状态", notes = "修改系统用户状态")
-    public R updateStatus(@RequestBody @Valid SystemClientStatusUpdate req) {
-        systemClientService.updateStatus(req.getId(), req.getStatus());
-        return R.ok(null);
-    }
 
     @PostMapping("/updateBaseInfo")
     @ApiOperation(value = "修改系统用户基础信息", notes = "修改系统用户基础信息")

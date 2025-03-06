@@ -1,11 +1,13 @@
 package com.ent.codoa.pojo.req.customer;
 
+import com.ent.codoa.common.constant.enums.UserStatusEnum;
 import com.ent.codoa.pojo.req.IdBase;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Data
@@ -40,5 +42,9 @@ public class CustomerBaseUpdate extends IdBase implements Serializable {
     @Length(max = 30, message = "介绍信息不能超过255位")
     @ApiModelProperty("介绍信息")
     private String introduce;
+
+    @NotNull(message = "状态不能为空")
+    @ApiModelProperty(value = "状态", required = true)
+    private UserStatusEnum status;
 
 }

@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 @Data
@@ -40,5 +41,11 @@ public class CustomerAdd implements Serializable {
     @Length(max = 30, message = "介绍信息不能超过255位")
     @ApiModelProperty("介绍信息")
     private String introduce;
+
+    @NotBlank(message = "密码不能为空")
+    @Length(max = 20, message = "密码不能超过20位")
+    @ApiModelProperty(value = "密码", required = true)
+    private String password;
+
 
 }

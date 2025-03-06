@@ -1,6 +1,5 @@
 package com.ent.codoa.entity;
 
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.ent.codoa.common.constant.enums.UserStatusEnum;
 import com.ent.codoa.entity.base.BaseInfo;

@@ -53,12 +53,6 @@ public class StaffController {
         return R.ok(null);
     }
 
-    @PostMapping("/updateStatus")
-    @ApiOperation(value = "修改员工状态", notes = "修改员工状态")
-    public R updateStatus(@RequestBody @Valid StaffStatusUpdate req) {
-        staffService.updateStatus(req);
-        return R.ok(null);
-    }
 
 
 
