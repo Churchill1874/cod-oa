@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @Slf4j
 @RestController
 @Api(tags = "客户管理-客户订单")
@@ -39,7 +41,7 @@ public class CustomerOrderController {
 
     @PostMapping("/add")
     @ApiOperation(value = "新增", notes = "新增")
-    public R add(@RequestBody CustomerOrderAdd req) {
+    public R add(@RequestBody @Valid CustomerOrderAdd req) {
         CustomerOrder customerOrder = BeanUtil.toBean(req, CustomerOrder.class);
         customerOrderService.add(customerOrder);
         return R.ok(null);
@@ -49,7 +51,7 @@ public class CustomerOrderController {
 
     @PostMapping("/delete")
     @ApiOperation(value = "删除", notes = "删除")
-    public R delete(@RequestBody IdBase req) {
+    public R delete(@RequestBody @Valid IdBase req) {
         customerOrderService.delete(req.getId());
         return R.ok(null);
     }
@@ -58,7 +60,7 @@ public class CustomerOrderController {
 
     @PostMapping("/updateInfo")
     @ApiOperation(value = "修改", notes = "修改")
-    public R updateInfo(@RequestBody CustomerOrderInfoUpdate req) {
+    public R updateInfo(@RequestBody @Valid CustomerOrderInfoUpdate req) {
         customerOrderService.updateInfo(req);
         return R.ok(null);
     }

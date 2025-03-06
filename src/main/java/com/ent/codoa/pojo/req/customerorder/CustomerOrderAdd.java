@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -20,9 +21,11 @@ public class CustomerOrderAdd implements Serializable {
     private String introduce;
     @ApiModelProperty("订单编号")
     private String orderNum;
-    @ApiModelProperty("名称")
+    @NotNull(message = "名字不能为空")
+    @ApiModelProperty(value = "名称",required = true)
     private String name;
-    @ApiModelProperty("数量")
+    @NotNull(message = "数量不能为空")
+    @ApiModelProperty(value = "数量",required = true)
     private Integer count;
     @ApiModelProperty("单价")
     private BigDecimal unitPrice;
@@ -33,7 +36,8 @@ public class CustomerOrderAdd implements Serializable {
     private LocalDateTime payTime;
     @ApiModelProperty("备注")
     private String remark;
-    @ApiModelProperty("订单状态")
+    @NotNull(message = "状态不能为空")
+    @ApiModelProperty(value = "订单状态",required = true)
     private OrderStatusEnum status;
 
 }

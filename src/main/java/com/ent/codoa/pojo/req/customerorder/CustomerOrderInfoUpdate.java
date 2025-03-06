@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -21,7 +22,8 @@ public class CustomerOrderInfoUpdate extends IdBase implements Serializable {
     private LocalDateTime payTime;
     @ApiModelProperty("备注")
     private String remark;
-    @ApiModelProperty("订单状态")
+    @NotNull(message = "订单状态不能为空")
+    @ApiModelProperty(value = "订单状态",required = true)
     private OrderStatusEnum status;
 
 }
