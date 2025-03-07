@@ -22,7 +22,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@Api(tags = "库存管理")
+@Api(tags = "库存管理-仓库管理")
 @RequestMapping("/admin/warehouse")
 public class WarehouseController {
     @Autowired

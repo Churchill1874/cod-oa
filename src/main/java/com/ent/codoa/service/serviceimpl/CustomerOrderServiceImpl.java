@@ -47,6 +47,7 @@ public class CustomerOrderServiceImpl extends ServiceImpl<CustomerOrderMapper, C
     public void add(CustomerOrder dto) {
         dto.setCreateTime(LocalDateTime.now());
         dto.setCreateName(TokenTools.getAdminName());
+        dto.setSystemClientAccount(TokenTools.getAdminAccount());
         save(dto);
 
         LogTools.addLog("客户管理", "添加客户订单", TokenTools.getAdminToken(true));

@@ -85,7 +85,8 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
             .set(Customer::getContact, dto.getContact())
             .set(Customer::getIndustry, dto.getIndustry())
             .set(Customer::getScale, dto.getScale())
-            .set(Customer::getIntroduce, dto.getIntroduce());
+            .set(Customer::getIntroduce, dto.getIntroduce())
+            .eq(Customer::getId,dto.getId());
         update(updateWrapper);
 
         LogTools.addLog("客户管理","修改了一名客户,信息:" + JSONUtil.toJsonStr(dto), TokenTools.getAdminToken(true));
