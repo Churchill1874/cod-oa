@@ -5,6 +5,8 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.io.Serializable;
 
 @Data
@@ -12,15 +14,18 @@ public class InventoryStockOut  implements Serializable {
     private static final long serialVersionUID = 669676907819174415L;
 
 
-    @NotBlank(message = "商品id不能为空")
+    @Positive(message = "商品id数值错误")
+    @NotNull(message = "商品id不能为空")
     @ApiModelProperty(value = "商品id",required = true)
     private Long productId;
 
-    @NotBlank(message = "仓库id不能为空")
+    @Positive(message = "仓库id数值错误")
+    @NotNull(message = "仓库id不能为空")
     @ApiModelProperty(value = "仓库id",required = true)
     private Long warehouseId;
 
-    @NotBlank(message = "出库数量不能为空")
+    @Positive(message = "出库数量数值错误")
+    @NotNull(message = "出库数量不能为空")
     @ApiModelProperty(value = "出库数量",required = true)
     private Integer quantity;
 

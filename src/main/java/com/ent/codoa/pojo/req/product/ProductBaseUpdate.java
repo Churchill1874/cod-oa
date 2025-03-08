@@ -6,6 +6,7 @@ import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
 
@@ -32,7 +33,7 @@ public class ProductBaseUpdate extends IdBase implements Serializable {
     @ApiModelProperty("商品单位")
     private String unit;
 
-    @NotBlank(message = "预警数量不能为空")
+    @NotNull(message = "预警数量不能为空")
     @ApiModelProperty(value = "预警数量",required = true)
     private Integer warningQuantity;
 

@@ -19,10 +19,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class WarehouseServiceImpl extends ServiceImpl<WarehouseMapper, Warehouse> implements WarehouseService {
@@ -41,7 +38,10 @@ public class WarehouseServiceImpl extends ServiceImpl<WarehouseMapper, Warehouse
 
     @Override
     public void add(Warehouse dto) {
-        Warehouse wirehouse=findWarehouseByName(dto.getName());
+        QueryWrapper<Warehouse> queryWrapper=new QueryWrapper();
+        queryWrapper.lambda()
+                .eq(Warehouse::getName,dto.getName());
+        Warehouse wirehouse=getOne(queryWrapper);
         if(wirehouse!=null){
             throw new DataException("仓库名称重复");
         }
@@ -67,30 +67,31 @@ public class WarehouseServiceImpl extends ServiceImpl<WarehouseMapper, Warehouse
 
     @Override
     public void delete(Long id) {
+        removeById(id);
+        LogTools.addLog("库存管理","删除仓库，Id："+ id,TokenTools.getAdminToken(true));
     }
 
-    @Override
-    public Warehouse findWarehouseByName(String name) {
-        QueryWrapper<Warehouse> queryWrapper=new QueryWrapper();
-        queryWrapper.lambda()
-                .eq(Warehouse::getName,name);
-        return getOne(queryWrapper);
-    }
+
 
     @Override
-    public List<Warehouse> findWarehouseList() {
+    public List<Map> findWarehouseList() {
         QueryWrapper<Warehouse> queryWrapper=new QueryWrapper<>();
         queryWrapper.lambda()
                 .eq(Warehouse::getSystemClientAccount,TokenTools.getAdminAccount())
                 .orderByDesc(Warehouse::getCreateTime);
         List<Warehouse> list=list(queryWrapper);
-        Set<Warehouse> set=new HashSet<>(list);    //去重
-        List<Warehouse> distinctList=new ArrayList<>(set);
-        return distinctList;
+        List<Map> newList = new ArrayList<>();
+        for(Warehouse warehouse:list){
+            Map map=new HashMap();
+            map.put("warehouseId",warehouse.getId());
+            map.put("name",warehouse.getName());
+            newList.add(map);
+        }
+        return newList;
     }
 
     @Override
-    public Warehouse findWarehouseById(long id) {
+    public Warehouse findWarehouseById(Long id) {
         QueryWrapper<Warehouse> queryWrapper=new QueryWrapper<>();
         queryWrapper.lambda()
                 .eq(Warehouse::getId,id);

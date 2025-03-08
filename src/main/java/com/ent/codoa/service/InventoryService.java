@@ -8,7 +8,6 @@ import com.ent.codoa.pojo.req.inventory.InventoryPage;
 import com.ent.codoa.pojo.req.inventory.InventoryPageByPro;
 
 import java.util.List;
-import java.util.Map;
 
 public interface InventoryService extends IService<Inventory> {
     /**
@@ -49,11 +48,6 @@ public interface InventoryService extends IService<Inventory> {
      */
     void updateQantity(Long warehouseId,Long productId,String batchNumber,Integer originalQuantity,Integer quantity,OperationTypeEnum operationTypeEnum);
 
-    /**
-     * 修改库存状态
-     * @param dto
-     */
-    void updateStatus( Inventory dto,OperationTypeEnum operationTypeEnum);
 
     /**
      * 获取某个批次的库存
@@ -64,34 +58,20 @@ public interface InventoryService extends IService<Inventory> {
      */
     Inventory getInventory(Long warehouseId,Long productId,String batchNumber);
 
+
     /**
      * 根据仓库id查询即将在2个月后过期的库存
-     * @param warehouseId
+     * @param dto
      * @return
      */
-    List<Inventory> getExpiring(Long warehouseId);
+    List<Inventory> getExpiring(InventoryPage dto);
 
-
-    /**
-     * 根据仓库ID获取仓库库存
-     * @param warehouseId  仓库id
-     * @return
-     */
-    List<Map> getQantity(Long warehouseId);
 
     /**
      * 根据商品ID获取仓库库存
      * @param dto
      * @return
      */
-    List<Map> getQantityByProduct(InventoryPageByPro dto);
-
-    /**
-     * 根据仓库id获取低于预警的商品库存信息
-     * @param warehouseId  仓库id
-     * @return
-     */
-    List<Map> getLowWarning(Long warehouseId);
-
+    Integer getQantityByProduct(InventoryPageByPro dto);
 
 }

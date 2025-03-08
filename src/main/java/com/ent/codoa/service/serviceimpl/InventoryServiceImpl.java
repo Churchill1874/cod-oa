@@ -12,7 +12,6 @@ import com.ent.codoa.common.exception.DataException;
 import com.ent.codoa.common.tools.LogTools;
 import com.ent.codoa.common.tools.TokenTools;
 import com.ent.codoa.entity.Inventory;
-import com.ent.codoa.entity.Product;
 import com.ent.codoa.entity.StockOperation;
 import com.ent.codoa.mapper.InventoryMapper;
 import com.ent.codoa.pojo.req.inventory.InventoryPage;
@@ -29,16 +28,13 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory> implements InventoryService {
     @Autowired
     StockOperationService stockInService;
-    @Autowired
-    ProductService productService;
+
 
     @Override
     public IPage<Inventory> queryPage(InventoryPage dto) {
@@ -193,20 +189,6 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
         update(updateWrapper);
     }
 
-    @Override
-    public void updateStatus(Inventory dto, OperationTypeEnum operationTypeEnum) {
-        UpdateWrapper<Inventory> updateWrapper = new UpdateWrapper<>();
-        if (OperationTypeEnum.STOCKOUT == operationTypeEnum) {
-            updateWrapper.lambda()
-                    .set(Inventory::getStatus, InventoryStatusEnum.SOLDED)
-                    .eq(Inventory::getWarehouseId, dto.getWarehouseId())
-                    .eq(Inventory::getProductId, dto.getProductId())
-                    .eq(Inventory::getBatchNumber, dto.getBatchNumber());
-            update(updateWrapper);
-        } else if (OperationTypeEnum.TOBERETURN == operationTypeEnum) {
-        }
-    }
-
 
     @Override
     public Inventory getInventory(Long warehouseId, Long productId, String batchNumber) {
@@ -221,19 +203,20 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
 
 
     @Override
-    public List<Inventory> getExpiring(Long warehouseId) {
+    public List<Inventory> getExpiring(InventoryPage dto) {
         LocalDate today = LocalDate.now();
         LocalDate twoMonthsLater = today.plusMonths(2);
 
         QueryWrapper<Inventory> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda()
-                .eq(Inventory::getWarehouseId, warehouseId)
+                .eq(Inventory::getWarehouseId, dto.getWarehouseId())
+                .eq(Inventory::getStatus,dto.getStatus())
                 .eq(Inventory::getSystemClientAccount, TokenTools.getAdminAccount());
         List<Inventory> list = list(queryWrapper);
         List<Inventory> newList = new ArrayList<>();
         for (Inventory inventory : list) {
             LocalDate expirationDate = inventory.getExpirationDate(); // 过期日期
-            if (expirationDate != null &&
+            if (expirationDate != null && inventory.getStatus()==InventoryStatusEnum.TOBESOLD && //有效库存
                     !expirationDate.isBefore(today) && // 过期日期在当前日期之后
                     !expirationDate.isAfter(twoMonthsLater)) { // 过期日期在 2 个月后日期之前
                 newList.add(inventory);
@@ -242,28 +225,8 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
         return newList;
     }
 
-
     @Override
-    public List<Map> getQantity (Long warehouseId){
-        QueryWrapper<Inventory> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda()
-                .eq(Inventory::getWarehouseId, warehouseId)
-                .eq(Inventory::getSystemClientAccount, TokenTools.getAdminAccount())
-                .orderByDesc(Inventory::getCreateTime);
-
-        List<Inventory> list = list(queryWrapper);
-        List<Map> newList = new ArrayList<>();
-        for (Inventory inventory : list) {
-            Map map = new HashMap();
-            map.put("productId", inventory.getProductId());
-            map.put("qantity", inventory.getQuantity());
-            newList.add(map);
-        }
-        return newList;
-    }
-
-    @Override
-    public List<Map> getQantityByProduct (InventoryPageByPro dto){
+    public Integer getQantityByProduct (InventoryPageByPro dto){
         QueryWrapper<Inventory> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda()
                 .eq(Inventory::getWarehouseId, dto.getWarehouseId())
@@ -271,41 +234,13 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
                 .eq(Inventory::getSystemClientAccount, TokenTools.getAdminAccount())
                 .orderByDesc(Inventory::getCreateTime);
         List<Inventory> list = list(queryWrapper);
-        List<Map> newList = new ArrayList<>();
+        Integer totalQantity=0;
         for (Inventory inventory : list) {
-            Map map = new HashMap();
-            map.put("batchNumber", inventory.getBatchNumber());
-            map.put("qantity", inventory.getQuantity());
-            newList.add(map);
-        }
-        return newList;
-    }
+            if(inventory.getStatus()==InventoryStatusEnum.TOBESOLD){ //待销售的库存才算入商品实时库存中
+                totalQantity+=inventory.getQuantity();
+            }
 
-    @Override
-    public List<Map> getLowWarning (Long warehouseId){
-        List<Product> list = productService.getAllProduct(warehouseId);
-        QueryWrapper<Inventory> queryWrapper=new QueryWrapper<>();
-        List<Map> newList=new ArrayList<>();
-        for(Product product:list){
-            Integer realQantity=0;
-            InventoryPageByPro inventoryPageByPro=new InventoryPageByPro();
-            inventoryPageByPro.setWarehouseId(warehouseId);
-            inventoryPageByPro.setProductId(product.getId());
-            List<Map> qantityByProduct = getQantityByProduct(inventoryPageByPro);
-            Map newMap=new HashMap();
-            for(Map map:qantityByProduct){
-                realQantity+=(Integer) map.get("qantity");
-            }
-            if(product.getWarningQuantity()>=realQantity){
-                newMap.put("warehouseId",warehouseId);
-                newMap.put("productId",product.getId());
-                newMap.put("productName",product.getName());
-                newMap.put("category",product.getCategory());
-                newMap.put("warningQuantity",product.getWarningQuantity());
-                newMap.put("realQantity",realQantity);
-                newList.add(newMap);
-            }
         }
-        return newList;
+        return totalQantity;
     }
 }

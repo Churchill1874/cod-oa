@@ -5,6 +5,7 @@ import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.ent.codoa.entity.Warehouse;
+import com.ent.codoa.pojo.req.IdBase;
 import com.ent.codoa.pojo.req.warehouse.WarehouseAdd;
 import com.ent.codoa.pojo.req.warehouse.WarehouseBaseUpdate;
 import com.ent.codoa.pojo.req.warehouse.WarehousePage;
@@ -18,7 +19,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -36,29 +39,36 @@ public class WarehouseController {
     }
     @PostMapping("/add")
     @ApiOperation(value = "新增仓库",notes = "新增仓库")
-    public R add(@RequestBody WarehouseAdd req){
+    public R add(@RequestBody @Valid  WarehouseAdd req){
         Warehouse warehouse = BeanUtil.toBean(req, Warehouse.class);
         wirehouseService.add(warehouse);
         return R.ok(null);
     }
     @PostMapping("/updateBaseInfo")
     @ApiOperation(value = "修改仓库",notes = "修改仓库")
-    public R updateBaseInfo(@RequestBody WarehouseBaseUpdate req){
+    public R updateBaseInfo(@RequestBody  @Valid WarehouseBaseUpdate req){
         wirehouseService.updateBaseInfo(req);
         return R.ok(null);
     }
 
+//    @PostMapping("/delete")
+//    @ApiOperation(value = "删除仓库",notes = "删除仓库")
+//    public R updateBaseInfo(@RequestBody @Valid IdBase req){
+//        wirehouseService.delete(req.getId());
+//        return R.ok(null);
+//    }
+
     @PostMapping("/getallwarehouse")
     @ApiOperation(value="获取所有仓库列表",notes = "获取所有仓库列表")
-    public R<List<Warehouse>> findWarehouseList(){
-        List<Warehouse> list=wirehouseService.findWarehouseList();
+    public R<List<Map>> findWarehouseList(){
+        List<Map> list=wirehouseService.findWarehouseList();
         return R.ok(list);
     }
 
     @PostMapping("/getwarehouse")
     @ApiOperation(value="根据Id获取仓库信息",notes = "根据Id获取仓库信息")
-    public R<Warehouse> findWarehouseById(@RequestBody long id){
-        Warehouse warehouse=wirehouseService.findWarehouseById(id);
+    public R<Warehouse> findWarehouseById(@RequestBody @Valid  IdBase req){
+        Warehouse warehouse=wirehouseService.findWarehouseById(req.getId());
         return R.ok(warehouse);
     }
 }

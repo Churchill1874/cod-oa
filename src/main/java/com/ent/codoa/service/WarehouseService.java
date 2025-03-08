@@ -8,6 +8,7 @@ import com.ent.codoa.pojo.req.warehouse.WarehouseBaseUpdate;
 import com.ent.codoa.pojo.req.warehouse.WarehousePage;
 
 import java.util.List;
+import java.util.Map;
 
 public interface WarehouseService extends IService<Warehouse> {
     /**
@@ -35,26 +36,19 @@ public interface WarehouseService extends IService<Warehouse> {
      */
     void delete(Long id);
 
-    /**
-     * 根据仓库名称查询仓库信息
-     * @param name
-     * @return
-     */
-    Warehouse findWarehouseByName(String name);
 
     /**
      * 根据登录用户的系统用户账号获取名下所有仓库信息
-     * @param dto
      * @return
      */
-    List<Warehouse> findWarehouseList();
+    List<Map> findWarehouseList();
 
     /**
      * 根据仓库id查询仓库信息
      * @param id
      * @return
      */
-    Warehouse findWarehouseById(long id);
+    Warehouse findWarehouseById(Long id);
 
 
 
