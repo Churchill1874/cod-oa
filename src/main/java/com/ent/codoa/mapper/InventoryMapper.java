@@ -11,4 +11,6 @@ public interface InventoryMapper extends BaseMapper<Inventory> {
             "FROM inventory\n" +
             "WHERE expiration_date <= DATE_ADD(CURDATE(), INTERVAL 2 MONTH) and status=0")
     IPage<Inventory> selectExpiring(IPage<Inventory> page);
+
+
 }
