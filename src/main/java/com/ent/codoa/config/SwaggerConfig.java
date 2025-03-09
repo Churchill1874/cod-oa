@@ -55,7 +55,7 @@ public class SwaggerConfig {
     private ApiInfo apiInfo() {
         Contact contact = new Contact("cod-oa", "http://127.0.0.1:8009/doc.html", "joy1cs1112@gmail.com");
         return new ApiInfoBuilder()
-                .title("快聊测试API接口")//标题
+                .title("cod-oa 测试API接口")//标题
                 .description("API接口的描述")//文档接口的描述
                 .contact(contact)
                 .termsOfServiceUrl("www.baidu.com")
@@ -68,7 +68,7 @@ public class SwaggerConfig {
         List<Parameter> pars = new ArrayList<>();
         //header中的token参数非必填写,传空也可以
         tokenHeaderParamter
-                .name("TOKEN_ID")
+                .name("token-id")
                 .description("token")
                 .modelRef(new ModelRef("String"))
                 .parameterType("header")

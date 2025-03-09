@@ -147,13 +147,13 @@ public class SystemClientController {
     @PostMapping("/login")
     @ApiOperation(value = "登录", notes = "登录")
     public R<LoginToken> login(@RequestBody @Valid AdminLogin req) {
-        log.info("登录接口入参:{}", JSONUtil.toJsonStr(req));
+        log.info("登录接口入参:{}====>ip:{}", JSONUtil.toJsonStr(req), HttpTools.getIp());
         //校验验证码
         String captchaCode = ehcacheService.captchaCodeCache().get(HttpTools.getIp());
         if (captchaCode == null) {
             return R.failed("验证码有误或已过期");
         }
-        if (!captchaCode.equals(req.getVerificationCode())) {
+        if (!captchaCode.equalsIgnoreCase(req.getVerificationCode())) {
             return R.failed("验证码错误");
         }
 
@@ -174,7 +174,11 @@ public class SystemClientController {
     @PostMapping("/logout")
     @ApiOperation(value = "退出登录", notes = "退出登录")
     public R logout() {
-        String tokenId = TokenTools.getLoginToken(false).getTokenId();
+        LoginToken loginToken = TokenTools.getLoginToken(false);
+        if (loginToken == null){
+            return R.ok(null);
+        }
+        String tokenId = loginToken.getTokenId();
         if (StringUtils.isBlank(tokenId)) {
             return R.ok(null);
         }

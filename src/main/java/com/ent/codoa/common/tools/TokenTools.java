@@ -1,8 +1,10 @@
 package com.ent.codoa.common.tools;
 
+import cn.hutool.json.JSONUtil;
 import com.ent.codoa.common.exception.TokenException;
 import com.ent.codoa.pojo.resp.token.LoginToken;
 import com.ent.codoa.service.EhcacheService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Component;
 /**
  * token工具类
  */
+@Slf4j
 @Component
 public class TokenTools {
 
@@ -28,8 +31,9 @@ public class TokenTools {
      */
     public static LoginToken getLoginToken(boolean needCheck) {
         String headerToken = HttpTools.getHeaderToken();
+        log.info("获取登录令牌id:{}", headerToken);
         if (StringUtils.isBlank(headerToken)){
-            //如果要求在请求头里的token_id不能为空 要校验令牌
+            //如果要求在请求头里的token-id不能为空 要校验令牌
             if (needCheck){
                 throw new TokenException();
             } else {
@@ -38,6 +42,7 @@ public class TokenTools {
         }
 
         LoginToken loginToken = ehcacheService.adminTokenCache().get(headerToken);
+        log.info("使用令牌:{},获取到登录信息:{}", headerToken, JSONUtil.toJsonStr(loginToken));
         if (loginToken == null) {
             throw new TokenException();
         }
