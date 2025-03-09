@@ -61,6 +61,7 @@ public class ProductController {
         return R.ok(product);
     }
 
+/*
     @PostMapping("/getALLProductQantity")
     @ApiOperation(value = "根据仓库Id获取所有商品库存", tags = "根据仓库Id获取所有商品库存")
     public R<IPage<ProductQantity>> getALLProductQantity(@RequestBody @Valid ProductWarehouseIdPage req) {
@@ -75,5 +76,6 @@ public class ProductController {
         IPage<ProductQantity>list = productService.getLowWarning(req);
         return R.ok(list);
     }
+*/
 
 }

@@ -68,7 +68,7 @@ public class WarehouseServiceImpl extends ServiceImpl<WarehouseMapper, Warehouse
     @Override
     public void delete(Long id) {
         removeById(id);
-        LogTools.addLog("库存管理","删除仓库，Id："+ id,TokenTools.getAdminToken(true));
+        LogTools.addLog("库存管理","删除仓库，Id："+ id,TokenTools.getLoginToken(true));
     }
 
 
