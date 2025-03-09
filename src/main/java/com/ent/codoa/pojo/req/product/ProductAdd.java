@@ -5,6 +5,8 @@ import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 import java.io.Serializable;
 import java.time.LocalDate;
 
@@ -30,7 +32,8 @@ public class ProductAdd  implements Serializable {
     @ApiModelProperty(value = "商品单位",required = true)
     private String unit;
 
-    @NotBlank(message = "仓库id不能为空")
+    @Positive(message = "仓库id数值错误")
+    @NotNull(message = "仓库id不能为空")
     @ApiModelProperty(value = "仓库id",required = true)
     private Long warehouseId;
 

@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @RestController
@@ -28,14 +28,14 @@ public class InventoryController {
 
     @PostMapping("/page")
     @ApiOperation(value = "分页查询库存", tags = "分页查询库存")
-    public R<IPage<Inventory>> page(@RequestBody InventoryPage req) {
+    public R<IPage<Inventory>> page(@RequestBody @Valid InventoryPage req) {
         IPage<Inventory> ipage = inventoryService.queryPage(req);
         return R.ok(ipage);
     }
 
     @PostMapping("/stockin")
     @ApiOperation(value = "入库", tags = "入库")
-    public R stockIn(@RequestBody InventoryStockIn req) {
+    public R stockIn(@RequestBody @Valid InventoryStockIn req) {
         Inventory inventory = BeanUtil.toBean(req, Inventory.class);
         inventoryService.stockIn(inventory);
         return R.ok(null);
@@ -43,7 +43,7 @@ public class InventoryController {
 
     @PostMapping("/stockout")
     @ApiOperation(value = "出库", tags = "出库")
-    public R stockOut(@RequestBody InventoryStockOut req) {
+    public R stockOut(@RequestBody @Valid InventoryStockOut req) {
         Inventory inventory = BeanUtil.toBean(req, Inventory.class);
         inventoryService.stockOut(inventory);
         return R.ok(null);
@@ -51,7 +51,7 @@ public class InventoryController {
 
     @PostMapping("/stockreturn")
     @ApiOperation(value = "退货", tags = "退货")
-    public R stockReturn(@RequestBody InventoryReturn req) {
+    public R stockReturn(@RequestBody @Valid InventoryReturn req) {
         Inventory inventory = BeanUtil.toBean(req, Inventory.class);
         inventoryService.inventoryReturn(inventory);
         return R.ok(null);
@@ -59,29 +59,15 @@ public class InventoryController {
 
     @PostMapping("/getExpiring")
     @ApiOperation(value = "根据仓库Id获取即将过期的商品库存", tags = "根据仓库Id获取即将过期的商品库存")
-    public R<List<Inventory>> getExpiring(@RequestBody Long warehouseId) {
-        List<Inventory> list = inventoryService.getExpiring(warehouseId);
-        return R.ok(list);
-    }
-
-    @PostMapping("/getQantity")
-    @ApiOperation(value = "根据仓库Id获取商品库存", tags = "根据仓库Id获取商品库存")
-    public R<List<Map>> getQantity(@RequestBody Long warehouseId) {
-        List<Map> list = inventoryService.getQantity(warehouseId);
+    public R<List<Inventory>> getExpiring(@RequestBody @Valid InventoryPage req) {
+        List<Inventory> list = inventoryService.getExpiring(req);
         return R.ok(list);
     }
 
     @PostMapping("/getQantityByProduct")
     @ApiOperation(value = "根据商品Id获取商品库存", tags = "根据商品Id获取商品库存")
-    public R<List<Map>> getQantityByProduct(@RequestBody InventoryPageByPro req) {
-        List<Map> list = inventoryService.getQantityByProduct(req);
-        return R.ok(list);
-    }
-
-    @PostMapping("/getLowWarning")
-    @ApiOperation(value = "根据仓库Id获取预警库存", tags = "根据仓库Id获取预警库存")
-    public R<List<Map>> getLowWarning(@RequestBody Long warehouseId) {
-        List<Map> list = inventoryService.getLowWarning(warehouseId);
-        return R.ok(list);
+    public R<Integer> getQantityByProduct(@RequestBody @Valid InventoryPageByPro req) {
+        Integer qantity = inventoryService.getQantityByProduct(req);
+        return R.ok(qantity);
     }
 }
