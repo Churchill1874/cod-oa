@@ -25,7 +25,7 @@ import javax.validation.Valid;
 @RequestMapping("admin/product")
 public class ProductController {
     @Autowired
-    ProductService productService;
+    private ProductService productService;
 
     @PostMapping("/page")
     @ApiOperation(value = "分页商品信息",notes = "分页商品信息")
@@ -61,9 +61,9 @@ public class ProductController {
         return R.ok(product);
     }
 
-/*
+
     @PostMapping("/getALLProductQantity")
-    @ApiOperation(value = "根据仓库Id获取所有商品库存", tags = "根据仓库Id获取所有商品库存")
+    @ApiOperation(value = "根据仓库Id获取所有商品库存", notes ="根据仓库Id获取所有商品库存")
     public R<IPage<ProductQantity>> getALLProductQantity(@RequestBody @Valid ProductWarehouseIdPage req) {
         IPage<ProductQantity> iPage = productService.getALLProductQantity(req);
         return R.ok(iPage);
@@ -71,11 +71,11 @@ public class ProductController {
 
 
     @PostMapping("/getLowWarning")
-    @ApiOperation(value = "根据仓库Id获取预警商品库存", tags = "根据仓库Id获取预警商品库存")
+    @ApiOperation(value = "根据仓库Id获取预警商品库存", notes ="根据仓库Id获取预警商品库存")
     public R<IPage<ProductQantity>> getLowWarning(@RequestBody @Valid ProductWarehouseIdPage req) {
         IPage<ProductQantity>list = productService.getLowWarning(req);
         return R.ok(list);
     }
-*/
+
 
 }

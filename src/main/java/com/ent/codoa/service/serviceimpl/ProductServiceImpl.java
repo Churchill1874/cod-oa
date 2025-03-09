@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ent.codoa.common.tools.LogTools;
 import com.ent.codoa.common.tools.TokenTools;
 import com.ent.codoa.entity.Product;
+import com.ent.codoa.pojo.req.product.ProductWarehouseIdPage;
 import com.ent.codoa.pojo.resp.Product.ProductQantity;
 import com.ent.codoa.mapper.ProductMapper;
 import com.ent.codoa.pojo.req.inventory.InventoryPageByPro;
@@ -90,7 +91,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
                 .eq(Product::getId,id);
         return getOne(queryWrapper);
     }
-/*
+
     @Override
     public IPage<ProductQantity> getALLProductQantity (ProductWarehouseIdPage dto){
         IPage<Product> iPage=new Page<>(dto.getPageNum(),dto.getPageSize());
@@ -157,5 +158,5 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         newIPage.setTotal(iPage.getTotal());
         newIPage.setPages(iPage.getPages());
         return newIPage;
-    }*/
+    }
 }

@@ -24,17 +24,17 @@ import java.util.List;
 @RequestMapping("/admin/inventory")
 public class InventoryController {
     @Autowired
-    InventoryService inventoryService;
+    private InventoryService inventoryService;
 
     @PostMapping("/page")
-    @ApiOperation(value = "分页查询库存", tags = "分页查询库存")
+    @ApiOperation(value = "分页查询库存", notes  = "分页查询库存")
     public R<IPage<Inventory>> page(@RequestBody @Valid InventoryPage req) {
         IPage<Inventory> ipage = inventoryService.queryPage(req);
         return R.ok(ipage);
     }
 
     @PostMapping("/stockin")
-    @ApiOperation(value = "入库", tags = "入库")
+    @ApiOperation(value = "入库", notes  = "入库")
     public R stockIn(@RequestBody @Valid InventoryStockIn req) {
         Inventory inventory = BeanUtil.toBean(req, Inventory.class);
         inventoryService.stockIn(inventory);
@@ -42,7 +42,7 @@ public class InventoryController {
     }
 
     @PostMapping("/stockout")
-    @ApiOperation(value = "出库", tags = "出库")
+    @ApiOperation(value = "出库", notes = "出库")
     public R stockOut(@RequestBody @Valid InventoryStockOut req) {
         Inventory inventory = BeanUtil.toBean(req, Inventory.class);
         inventoryService.stockOut(inventory);
@@ -50,7 +50,7 @@ public class InventoryController {
     }
 
     @PostMapping("/stockreturn")
-    @ApiOperation(value = "退货", tags = "退货")
+    @ApiOperation(value = "退货", notes = "退货")
     public R stockReturn(@RequestBody @Valid InventoryReturn req) {
         Inventory inventory = BeanUtil.toBean(req, Inventory.class);
         inventoryService.inventoryReturn(inventory);
@@ -58,14 +58,14 @@ public class InventoryController {
     }
 
     @PostMapping("/getExpiring")
-    @ApiOperation(value = "根据仓库Id获取即将过期的商品库存", tags = "根据仓库Id获取即将过期的商品库存")
+    @ApiOperation(value = "根据仓库Id获取即将过期的商品库存", notes = "根据仓库Id获取即将过期的商品库存")
     public R<List<Inventory>> getExpiring(@RequestBody @Valid InventoryPage req) {
         List<Inventory> list = inventoryService.getExpiring(req);
         return R.ok(list);
     }
 
     @PostMapping("/getQantityByProduct")
-    @ApiOperation(value = "根据商品Id获取商品库存", tags = "根据商品Id获取商品库存")
+    @ApiOperation(value = "根据商品Id获取商品库存", notes  = "根据商品Id获取商品库存")
     public R<Integer> getQantityByProduct(@RequestBody @Valid InventoryPageByPro req) {
         Integer qantity = inventoryService.getQantityByProduct(req);
         return R.ok(qantity);
