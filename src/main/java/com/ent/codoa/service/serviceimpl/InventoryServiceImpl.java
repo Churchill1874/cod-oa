@@ -16,6 +16,7 @@ import com.ent.codoa.entity.StockOperation;
 import com.ent.codoa.mapper.InventoryMapper;
 import com.ent.codoa.pojo.req.inventory.InventoryPage;
 import com.ent.codoa.pojo.req.inventory.InventoryPageByPro;
+import com.ent.codoa.pojo.req.inventory.InventoryWarehousePage;
 import com.ent.codoa.pojo.resp.token.LoginToken;
 import com.ent.codoa.service.InventoryService;
 import com.ent.codoa.service.ProductService;
@@ -33,7 +34,9 @@ import java.util.List;
 @Service
 public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory> implements InventoryService {
     @Autowired
-    StockOperationService stockInService;
+    private StockOperationService stockInService;
+    @Autowired
+    private InventoryMapper inventoryMapper;
 
 
     @Override
@@ -203,26 +206,30 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
 
 
     @Override
-    public List<Inventory> getExpiring(InventoryPage dto) {
-        LocalDate today = LocalDate.now();
-        LocalDate twoMonthsLater = today.plusMonths(2);
+    public IPage<Inventory> getExpiring(InventoryWarehousePage dto) {
+        IPage<Inventory> iPage=new Page<>(dto.getPageNum(),dto.getPageSize());
+        return inventoryMapper.selectExpiring(iPage);
 
-        QueryWrapper<Inventory> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda()
-                .eq(Inventory::getWarehouseId, dto.getWarehouseId())
-                .eq(Inventory::getStatus,dto.getStatus())
-                .eq(Inventory::getSystemClientAccount, TokenTools.getAdminAccount());
-        List<Inventory> list = list(queryWrapper);
-        List<Inventory> newList = new ArrayList<>();
-        for (Inventory inventory : list) {
-            LocalDate expirationDate = inventory.getExpirationDate(); // 过期日期
-            if (expirationDate != null && inventory.getStatus()==InventoryStatusEnum.TOBESOLD && //有效库存
-                    !expirationDate.isBefore(today) && // 过期日期在当前日期之后
-                    !expirationDate.isAfter(twoMonthsLater)) { // 过期日期在 2 个月后日期之前
-                newList.add(inventory);
-            }
-        }
-        return newList;
+
+//        LocalDate today = LocalDate.now();
+//        LocalDate twoMonthsLater = today.plusMonths(2);
+//
+//        QueryWrapper<Inventory> queryWrapper = new QueryWrapper<>();
+//        queryWrapper.lambda()
+//                .eq(Inventory::getWarehouseId, dto.getWarehouseId())
+//                .eq(Inventory::getStatus,dto.getStatus())
+//                .eq(Inventory::getSystemClientAccount, TokenTools.getAdminAccount());
+//        List<Inventory> list = list(queryWrapper);
+//        List<Inventory> newList = new ArrayList<>();
+//        for (Inventory inventory : list) {
+//            LocalDate expirationDate = inventory.getExpirationDate(); // 过期日期
+//            if (expirationDate != null && inventory.getStatus()==InventoryStatusEnum.TOBESOLD && //有效库存
+//                    !expirationDate.isBefore(today) && // 过期日期在当前日期之后
+//                    !expirationDate.isAfter(twoMonthsLater)) { // 过期日期在 2 个月后日期之前
+//                newList.add(inventory);
+//            }
+//        }
+//        return newList;
     }
 
     @Override

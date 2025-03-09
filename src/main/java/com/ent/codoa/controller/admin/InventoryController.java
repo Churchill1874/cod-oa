@@ -59,8 +59,8 @@ public class InventoryController {
 
     @PostMapping("/getExpiring")
     @ApiOperation(value = "根据仓库Id获取即将过期的商品库存", notes = "根据仓库Id获取即将过期的商品库存")
-    public R<List<Inventory>> getExpiring(@RequestBody @Valid InventoryPage req) {
-        List<Inventory> list = inventoryService.getExpiring(req);
+    public R<IPage<Inventory>> getExpiring(@RequestBody @Valid InventoryWarehousePage req) {
+        IPage<Inventory> list = inventoryService.getExpiring(req);
         return R.ok(list);
     }
 
