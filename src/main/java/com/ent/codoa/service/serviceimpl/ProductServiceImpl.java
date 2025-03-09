@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ent.codoa.common.tools.LogTools;
 import com.ent.codoa.common.tools.TokenTools;
 import com.ent.codoa.entity.Product;
+import com.ent.codoa.pojo.req.product.ProductWarehouseIdPage;
 import com.ent.codoa.pojo.resp.Product.ProductQantity;
 import com.ent.codoa.mapper.ProductMapper;
 import com.ent.codoa.pojo.req.inventory.InventoryPageByPro;
@@ -29,6 +30,9 @@ import java.util.*;
 public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> implements ProductService {
     @Autowired
     InventoryService inventoryService;
+
+    @Autowired
+    private ProductMapper productMapper;
 
 
     @Override
@@ -90,7 +94,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
                 .eq(Product::getId,id);
         return getOne(queryWrapper);
     }
-/*
+
     @Override
     public IPage<ProductQantity> getALLProductQantity (ProductWarehouseIdPage dto){
         IPage<Product> iPage=new Page<>(dto.getPageNum(),dto.getPageSize());
@@ -127,35 +131,37 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
 
     @Override
     public IPage<ProductQantity> getLowWarning (ProductWarehouseIdPage dto){
-        IPage<Product> iPage=new Page<>(dto.getPageNum(),dto.getPageSize());
-        QueryWrapper<Product> queryWrapper=new QueryWrapper<>();
-        queryWrapper.lambda()
-                .eq(Product::getWarehouseId,dto.getWarehouseId())
-                .eq(Product::getSystemClientAccount,TokenTools.getAdminAccount())
-                .orderByDesc(Product::getCreateTime);
-        iPage=page(iPage,queryWrapper);
-        List<ProductQantity> newList = new ArrayList<>();
-        for(Product product:iPage.getRecords()){
-            InventoryPageByPro inventoryPageByPro =new InventoryPageByPro();
-            inventoryPageByPro.setWarehouseId(dto.getWarehouseId());
-            inventoryPageByPro.setProductId(product.getId());
-            Integer totalQantity = inventoryService.getQantityByProduct(inventoryPageByPro);
-            if(product.getWarningQuantity()>=totalQantity){
-                ProductQantity productQantity =new ProductQantity();
-                productQantity.setWarehouseId(dto.getWarehouseId());
-                productQantity.setId(product.getId());
-                productQantity.setName(product.getName());
-                productQantity.setCategory(product.getCategory());
-                productQantity.setUnit(product.getUnit());
-                productQantity.setWarningQuantity(product.getWarningQuantity());
-                productQantity.setTotalQuantity(totalQantity);
-                newList.add(productQantity);
-            }
-        }
-        IPage<ProductQantity> newIPage=new Page<>(dto.getPageNum(),dto.getPageSize());
-        newIPage.setRecords(newList);
-        newIPage.setTotal(iPage.getTotal());
-        newIPage.setPages(iPage.getPages());
-        return newIPage;
-    }*/
+        IPage<ProductQantity> iPage=new Page<>(dto.getPageNum(),dto.getPageSize());
+        return productMapper.findProductsWithStockWarning(iPage);
+//        IPage<Product> iPage=new Page<>(dto.getPageNum(),dto.getPageSize());
+//        QueryWrapper<Product> queryWrapper=new QueryWrapper<>();
+//        queryWrapper.lambda()
+//                .eq(Product::getWarehouseId,dto.getWarehouseId())
+//                .eq(Product::getSystemClientAccount,TokenTools.getAdminAccount())
+//                .orderByDesc(Product::getCreateTime);
+//        iPage=page(iPage,queryWrapper);
+//        List<ProductQantity> newList = new ArrayList<>();
+//        for(Product product:iPage.getRecords()){
+//            InventoryPageByPro inventoryPageByPro =new InventoryPageByPro();
+//            inventoryPageByPro.setWarehouseId(dto.getWarehouseId());
+//            inventoryPageByPro.setProductId(product.getId());
+//            Integer totalQantity = inventoryService.getQantityByProduct(inventoryPageByPro);
+//            if(product.getWarningQuantity()>=totalQantity){
+//                ProductQantity productQantity =new ProductQantity();
+//                productQantity.setWarehouseId(dto.getWarehouseId());
+//                productQantity.setId(product.getId());
+//                productQantity.setName(product.getName());
+//                productQantity.setCategory(product.getCategory());
+//                productQantity.setUnit(product.getUnit());
+//                productQantity.setWarningQuantity(product.getWarningQuantity());
+//                productQantity.setTotalQuantity(totalQantity);
+//                newList.add(productQantity);
+//            }
+//        }
+//        IPage<ProductQantity> newIPage=new Page<>(dto.getPageNum(),dto.getPageSize());
+//        newIPage.setRecords(newList);
+//        newIPage.setTotal(iPage.getTotal());
+//        newIPage.setPages(iPage.getPages());
+//        return newIPage;
+    }
 }

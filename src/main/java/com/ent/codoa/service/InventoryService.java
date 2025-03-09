@@ -6,6 +6,7 @@ import com.ent.codoa.common.constant.enums.OperationTypeEnum;
 import com.ent.codoa.entity.Inventory;
 import com.ent.codoa.pojo.req.inventory.InventoryPage;
 import com.ent.codoa.pojo.req.inventory.InventoryPageByPro;
+import com.ent.codoa.pojo.req.inventory.InventoryWarehousePage;
 
 import java.util.List;
 
@@ -64,7 +65,7 @@ public interface InventoryService extends IService<Inventory> {
      * @param dto
      * @return
      */
-    List<Inventory> getExpiring(InventoryPage dto);
+    IPage<Inventory> getExpiring(InventoryWarehousePage dto);
 
 
     /**

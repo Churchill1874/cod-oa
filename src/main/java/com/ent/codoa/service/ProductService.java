@@ -3,6 +3,7 @@ package com.ent.codoa.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ent.codoa.entity.Product;
+import com.ent.codoa.pojo.req.product.ProductWarehouseIdPage;
 import com.ent.codoa.pojo.resp.Product.ProductQantity;
 //import com.ent.codoa.pojo.req.product.ProductWarehouseIdPage;
 import com.ent.codoa.pojo.req.product.ProductBaseUpdate;
@@ -45,21 +46,21 @@ public interface ProductService extends IService<Product> {
     Product getProductById(Long id);
 
 
-/*
-    *//**
+
+    /**
      * 根据仓库ID获取仓库库存
      * @param dto  仓库id
      * @return
-     *//*
+     */
     IPage<ProductQantity> getALLProductQantity(ProductWarehouseIdPage dto);
 
 
-    *//**
+    /**
      * 根据仓库id获取低于预警的商品库存信息
      * @param dto
      * @return
-     *//*
-    IPage<ProductQantity> getLowWarning(ProductWarehouseIdPage dto);*/
+     */
+    IPage<ProductQantity> getLowWarning(ProductWarehouseIdPage dto);
 
 
 }
