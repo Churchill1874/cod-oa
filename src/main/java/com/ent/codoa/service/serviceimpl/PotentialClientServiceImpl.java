@@ -36,9 +36,10 @@ public class PotentialClientServiceImpl extends ServiceImpl<PotentialClientMappe
 
     @Override
     public void add(PotentialClient dto) {
-        LoginToken adminLogin = TokenTools.getAdminToken(true);
+        LoginToken adminLogin = TokenTools.getLoginToken(true);
         dto.setCreateTime(LocalDateTime.now());
         dto.setCreateName(adminLogin.getName());
+        dto.setSystemClientAccount(adminLogin.getAccount());
         save(dto);
 
         LogTools.addLog("客户管理", "添加潜在客户:" + JSONUtil.toJsonStr(dto), adminLogin);
@@ -47,7 +48,7 @@ public class PotentialClientServiceImpl extends ServiceImpl<PotentialClientMappe
     @Override
     public void delete(Long id) {
         removeById(id);
-        LogTools.addLog("客户管理", "删除潜在客户:" + id, TokenTools.getAdminToken(true));
+        LogTools.addLog("客户管理", "删除潜在客户:" + id, TokenTools.getLoginToken(true));
     }
 
     @Override
@@ -62,7 +63,7 @@ public class PotentialClientServiceImpl extends ServiceImpl<PotentialClientMappe
             .eq(PotentialClient::getId, dto.getId());
         update(updateWrapper);
 
-        LogTools.addLog("客户管理", "修改潜在客户信息:" + JSONUtil.toJsonStr(dto), TokenTools.getAdminToken(true));
+        LogTools.addLog("客户管理", "修改潜在客户信息:" + JSONUtil.toJsonStr(dto), TokenTools.getLoginToken(true));
     }
 
 }

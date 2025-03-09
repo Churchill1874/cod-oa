@@ -48,7 +48,7 @@ public class StaffServiceImpl extends ServiceImpl<StaffMapper, Staff> implements
             .eq(Staff::getId, dto.getId());
         update(updateWrapper);
 
-        LogTools.addLog("人事管理","修改了一名员工状态,信息:" + JSONUtil.toJsonStr(dto), TokenTools.getAdminToken(true));
+        LogTools.addLog("人事管理","修改了一名员工状态,信息:" + JSONUtil.toJsonStr(dto), TokenTools.getLoginToken(true));
     }
 
     @Override
@@ -73,7 +73,7 @@ public class StaffServiceImpl extends ServiceImpl<StaffMapper, Staff> implements
             .eq(Staff::getId, dto.getId()); // 根据 ID 更新
         update(updateWrapper);
 
-        LogTools.addLog("人事管理","修改了一名员工信息,信息:" + JSONUtil.toJsonStr(dto), TokenTools.getAdminToken(true));
+        LogTools.addLog("人事管理","修改了一名员工信息,信息:" + JSONUtil.toJsonStr(dto), TokenTools.getLoginToken(true));
     }
 
     @Override
@@ -86,7 +86,7 @@ public class StaffServiceImpl extends ServiceImpl<StaffMapper, Staff> implements
         dto.setStatus(UserStatusEnum.NORMAL);
         save(dto);
 
-        LogTools.addLog("人事管理","添加了一名员工,信息:" + JSONUtil.toJsonStr(dto), TokenTools.getAdminToken(true));
+        LogTools.addLog("人事管理","添加了一名员工,信息:" + JSONUtil.toJsonStr(dto), TokenTools.getLoginToken(true));
     }
 
     @Override

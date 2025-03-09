@@ -45,7 +45,7 @@ public class WarehouseServiceImpl extends ServiceImpl<WarehouseMapper, Warehouse
         if(wirehouse!=null){
             throw new DataException("仓库名称重复");
         }
-        LoginToken loginToken=TokenTools.getAdminToken(true);
+        LoginToken loginToken=TokenTools.getLoginToken(true);
         dto.setCreateName(TokenTools.getAdminName());
         dto.setCreateTime(LocalDateTime.now());
         dto.setSystemClientAccount(TokenTools.getAdminAccount());//系统用户所属账号通过登录后返回的token获取，存入对应表字段
@@ -56,7 +56,7 @@ public class WarehouseServiceImpl extends ServiceImpl<WarehouseMapper, Warehouse
     @Override
     public void updateBaseInfo(WarehouseBaseUpdate dto) {
         UpdateWrapper<Warehouse> updateWrapper=new UpdateWrapper<>();
-        LoginToken loginToken=TokenTools.getAdminToken(true);
+        LoginToken loginToken=TokenTools.getLoginToken(true);
         updateWrapper.lambda()
                 .set(Warehouse::getName,dto.getName())
                 .set(Warehouse::getAddress,dto.getAddress())

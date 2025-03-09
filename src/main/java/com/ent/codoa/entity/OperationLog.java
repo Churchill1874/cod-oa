@@ -21,7 +21,4 @@ public class OperationLog extends BaseInfo implements Serializable {
     @ApiModelProperty("操作账号")
     private String account;
 
-    @ApiModelProperty("所属系统用户账号 只存系统用户账号")
-    private String systemClientAccount;
-
 }

@@ -43,7 +43,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
 
     @Override
     public void add(Product dto) {
-        LoginToken loginToken=TokenTools.getAdminToken(true);
+        LoginToken loginToken=TokenTools.getLoginToken(true);
         dto.setCreateName(TokenTools.getAdminName());
         dto.setCreateTime(LocalDateTime.now());
         dto.setSystemClientAccount(TokenTools.getAdminAccount());
@@ -53,7 +53,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
 
     @Override
     public void updateBaseProduct(ProductBaseUpdate dto) {
-        LoginToken loginToken=TokenTools.getAdminToken(true);
+        LoginToken loginToken=TokenTools.getLoginToken(true);
         UpdateWrapper<Product> updateWrapper=new UpdateWrapper();
         updateWrapper.lambda()
                 .set(Product::getName,dto.getName())

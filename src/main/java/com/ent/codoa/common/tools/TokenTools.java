@@ -26,7 +26,7 @@ public class TokenTools {
      * 获取管理员登录信息
      * @return
      */
-    public static LoginToken getAdminToken(boolean needCheck) {
+    public static LoginToken getLoginToken(boolean needCheck) {
         String headerToken = HttpTools.getHeaderToken();
         if (StringUtils.isBlank(headerToken)){
             //如果要求在请求头里的token_id不能为空 要校验令牌
@@ -50,7 +50,7 @@ public class TokenTools {
      * @return
      */
     public static String getAdminName () {
-        return getAdminToken(true).getName();
+        return getLoginToken(true).getName();
     }
 
     /**
@@ -58,7 +58,7 @@ public class TokenTools {
      * @return
      */
     public static String getAdminAccount() {
-        return getAdminToken(true).getAccount();
+        return getLoginToken(true).getAccount();
     }
 
 

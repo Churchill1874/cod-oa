@@ -174,7 +174,7 @@ public class SystemClientController {
     @PostMapping("/logout")
     @ApiOperation(value = "退出登录", notes = "退出登录")
     public R logout() {
-        String tokenId = TokenTools.getAdminToken(false).getTokenId();
+        String tokenId = TokenTools.getLoginToken(false).getTokenId();
         if (StringUtils.isBlank(tokenId)) {
             return R.ok(null);
         }

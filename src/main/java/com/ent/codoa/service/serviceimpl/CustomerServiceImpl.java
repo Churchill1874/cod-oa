@@ -62,7 +62,7 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
             throw new DataException("账号已经存在,请修改");
         }
 
-        LoginToken loginToken = TokenTools.getAdminToken(true);
+        LoginToken loginToken = TokenTools.getLoginToken(true);
 
         dto.setSystemClientAccount(loginToken.getAccount());
         dto.setCreateName(loginToken.getName());
@@ -89,7 +89,7 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
             .eq(Customer::getId,dto.getId());
         update(updateWrapper);
 
-        LogTools.addLog("客户管理","修改了一名客户,信息:" + JSONUtil.toJsonStr(dto), TokenTools.getAdminToken(true));
+        LogTools.addLog("客户管理","修改了一名客户,信息:" + JSONUtil.toJsonStr(dto), TokenTools.getLoginToken(true));
     }
 
     @Override
@@ -100,7 +100,7 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
             .eq(Customer::getId, dto.getId());
         update(updateWrapper);
 
-        LogTools.addLog("客户管理","修改了客户状态,信息:" + JSONUtil.toJsonStr(dto), TokenTools.getAdminToken(true));
+        LogTools.addLog("客户管理","修改了客户状态,信息:" + JSONUtil.toJsonStr(dto), TokenTools.getLoginToken(true));
     }
 
     @Override

@@ -38,7 +38,7 @@ public class CustomerWorkOrderServiceImpl extends ServiceImpl<CustomerWorkOrderM
             .eq(CustomerWorkOrder::getId, dto.getId());
         update(updateWrapper);
 
-        LogTools.addLog("客户工单","修改客户工单状态:" + JSONUtil.toJsonStr(dto), TokenTools.getAdminToken(true));
+        LogTools.addLog("客户工单","修改客户工单状态:" + JSONUtil.toJsonStr(dto), TokenTools.getLoginToken(true));
     }
 
 }

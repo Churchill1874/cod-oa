@@ -58,7 +58,7 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
     @Transactional(propagation = Propagation.REQUIRED)
     public synchronized void stockIn(Inventory dto) {
         Inventory inventory = getInventory(dto.getWarehouseId(), dto.getProductId(), dto.getBatchNumber());//校验批次是否存在
-        LoginToken loginToken = TokenTools.getAdminToken(true);
+        LoginToken loginToken = TokenTools.getLoginToken(true);
 
         if (inventory != null) {    //已有该批次库存,直接修改现有库存数量
             Integer newQantity = inventory.getQuantity() + dto.getOriginalQuantity();
@@ -99,7 +99,7 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public synchronized void stockOut(Inventory dto) {
-        LoginToken loginToken = TokenTools.getAdminToken(true);
+        LoginToken loginToken = TokenTools.getLoginToken(true);
         Inventory inventory = getInventory(dto.getWarehouseId(), dto.getProductId(), dto.getBatchNumber());//校验批次库存数量
         if (dto.getQuantity() > inventory.getQuantity()) {
             throw new DataException("出库数量不能大于现有批次库存数量");
@@ -138,7 +138,7 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public void inventoryReturn(Inventory dto) {
-        LoginToken loginToken = TokenTools.getAdminToken(true);
+        LoginToken loginToken = TokenTools.getLoginToken(true);
         UpdateWrapper<Inventory> updateWrapper = new UpdateWrapper<>();
         updateWrapper.lambda()
                 .set(Inventory::getStatus, InventoryStatusEnum.RETURNED)

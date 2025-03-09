@@ -50,7 +50,7 @@ public class ComplaintServiceImpl extends ServiceImpl<ComplaintMapper, Complaint
             .eq(Complaint::getId, dto.getId());
         update(updateWrapper);
 
-        LogTools.addLog("投诉记录","修改了状态:" + JSONUtil.toJsonStr(dto), TokenTools.getAdminToken(true));
+        LogTools.addLog("投诉记录","修改了状态:" + JSONUtil.toJsonStr(dto), TokenTools.getLoginToken(true));
     }
 
 }

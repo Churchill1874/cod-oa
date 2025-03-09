@@ -20,7 +20,7 @@ public class SuperAdminCheck {
 
     @Before("superAdminLoginCheck()")
     public void beforeCut(JoinPoint joinPoint) {
-/*        AdminTokenResp adminTokenResp = TokenTools.getAdminToken(true);
+/*        AdminTokenResp adminTokenResp = TokenTools.getLoginToken(true);
         if (adminTokenResp.getRole() != ManageRoleEnum.SUPER_ADMIN) {
             throw new AuthException();
         }*/

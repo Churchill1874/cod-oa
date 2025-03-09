@@ -27,7 +27,6 @@ public class LogTools {
         operationLog.setMenu(menu);
         operationLog.setIntroduce(introduce);
         operationLog.setCreateName(loginToken.getName());
-        operationLog.setSystemClientAccount(loginToken.getSystemClientAccount());
         operationLogService.add(operationLog);
     }
 

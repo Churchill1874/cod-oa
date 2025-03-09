@@ -27,7 +27,7 @@ public class CustomerWorkOrderDialogueServiceImpl extends ServiceImpl<CustomerWo
 
     @Override
     public void systemClientReply(CustomerWorkOrderDialogue dto) {
-        LoginToken loginToken = TokenTools.getAdminToken(true);
+        LoginToken loginToken = TokenTools.getLoginToken(true);
         dto.setIsCustomer(false);
         dto.setCreateTime(LocalDateTime.now());
         dto.setCreateName(loginToken.getName());
