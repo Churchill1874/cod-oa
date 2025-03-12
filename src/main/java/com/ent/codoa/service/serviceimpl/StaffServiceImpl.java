@@ -70,6 +70,7 @@ public class StaffServiceImpl extends ServiceImpl<StaffMapper, Staff> implements
             .set(Staff::getHireDate, dto.getHireDate())
             .set(Staff::getWorkStatus, dto.getWorkStatus())
             .set(Staff::getOfferStatus, dto.getOfferStatus())
+            .set(Staff::getStatus, dto.getStatus())
             .eq(Staff::getId, dto.getId()); // 根据 ID 更新
         update(updateWrapper);
 

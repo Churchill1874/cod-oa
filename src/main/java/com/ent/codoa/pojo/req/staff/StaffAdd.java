@@ -5,6 +5,7 @@ import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
 
@@ -22,8 +23,7 @@ public class StaffAdd implements Serializable {
     @ApiModelProperty(value = "年龄", required = true)
     private String age;
 
-    @NotBlank(message = "出生日期不能为空")
-    @Length(max = 20, message = "出生日期不能超过20位")
+    @NotNull(message = "出生日期不能为空")
     @ApiModelProperty(value = "出生日", required = true)
     private LocalDate birth;
 
@@ -67,8 +67,7 @@ public class StaffAdd implements Serializable {
     @ApiModelProperty(value = "薪资", required = true)
     private String salary;
 
-    @NotBlank(message = "入职时间不能为空")
-    @Length(max = 30, message = "入职时间不能超过30位")
+    @NotNull(message = "入职时间不能为空")
     @ApiModelProperty(value = "入职时间", required = true)
     private LocalDate hireDate;
 
