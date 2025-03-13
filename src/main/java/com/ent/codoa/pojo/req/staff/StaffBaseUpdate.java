@@ -25,8 +25,7 @@ public class StaffBaseUpdate extends IdBase implements Serializable {
     @ApiModelProperty("年龄")
     private String age;
 
-    @NotBlank(message = "出生日期不能为空")
-    @Length(max = 20, message = "出生日期不能超过20位")
+    @NotNull(message = "出生日期不能为空")
     @ApiModelProperty("出生日")
     private LocalDate birth;
 
@@ -70,8 +69,7 @@ public class StaffBaseUpdate extends IdBase implements Serializable {
     @ApiModelProperty("薪资")
     private String salary;
 
-    @NotBlank(message = "入职时间不能为空")
-    @Length(max = 30, message = "入职时间不能超过30位")
+    @NotNull(message = "入职时间不能为空")
     @ApiModelProperty("入职时间")
     private LocalDate hireDate;
 

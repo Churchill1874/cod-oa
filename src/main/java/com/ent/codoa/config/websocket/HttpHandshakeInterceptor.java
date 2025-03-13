@@ -21,9 +21,9 @@ public class HttpHandshakeInterceptor implements HandshakeInterceptor {
         if (query != null) {
             String[] params = query.split("&");
             for (String param : params) {
-                if (param.startsWith("token_id=")) {
-                    String token = param.substring("token_id=".length());
-                    attributes.put("token_id", token);
+                if (param.startsWith("token-id=")) {
+                    String token = param.substring("token-id=".length());
+                    attributes.put("token-id", token);
                     break;
                 }
             }
