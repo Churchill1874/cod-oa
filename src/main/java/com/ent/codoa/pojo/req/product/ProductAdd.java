@@ -38,7 +38,7 @@ public class ProductAdd  implements Serializable {
     private Long warehouseId;
 
 
-    @NotBlank(message = "预警数量不能为空")
+    @NotNull(message = "预警数量不能为空")
     @ApiModelProperty(value = "预警数量",required = true)
     private Integer warningQuantity;
 

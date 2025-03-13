@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ent.codoa.common.exception.DataException;
 import com.ent.codoa.common.tools.LogTools;
 import com.ent.codoa.common.tools.TokenTools;
 import com.ent.codoa.entity.Product;
@@ -51,12 +52,27 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
 
     @Override
     public void add(Product dto) {
-        LoginToken loginToken=TokenTools.getLoginToken(true);
-        dto.setCreateName(TokenTools.getAdminName());
-        dto.setCreateTime(LocalDateTime.now());
-        dto.setSystemClientAccount(TokenTools.getAdminAccount());
-        save(dto);
-        LogTools.addLog("库存管理-新增商品","新增了一个商品,信息："+ JSONUtil.toJsonStr(dto),loginToken);
+        QueryWrapper<Product> queryWrapper=new QueryWrapper<>();
+        queryWrapper.lambda()
+                .eq(Product::getName,dto.getName())
+                .eq(Product::getCategory,dto.getCategory())
+                .eq(Product::getWarehouseId,dto.getWarehouseId())
+                .eq(Product::getSystemClientAccount,TokenTools.getAdminAccount());
+        Product product=getOne(queryWrapper);
+        if(product!=null&&product.getName().equals(dto.getName())&&
+                product.getCategory().equals(dto.getCategory())&&
+                product.getWarehouseId().equals(dto.getWarehouseId())
+        ){
+            throw new DataException("同类商品的商品名称重复");
+        }else{
+            LoginToken loginToken=TokenTools.getLoginToken(true);
+            dto.setCreateName(TokenTools.getAdminName());
+            dto.setCreateTime(LocalDateTime.now());
+            dto.setSystemClientAccount(TokenTools.getAdminAccount());
+            save(dto);
+            LogTools.addLog("库存管理-新增商品","新增了一个商品,信息："+ JSONUtil.toJsonStr(dto),loginToken);
+        }
+
     }
 
     @Override
