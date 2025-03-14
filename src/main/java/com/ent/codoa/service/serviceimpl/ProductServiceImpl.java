@@ -152,7 +152,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     @Override
     public IPage<ProductQantity> getLowWarning (ProductWarehouseIdPage dto){
         IPage<ProductQantity> iPage=new Page<>(dto.getPageNum(),dto.getPageSize());
-        return productMapper.findProductsWithStockWarning(iPage);
+        return productMapper.findProductsWithStockWarning(iPage,dto.getWarehouseId());
 //        IPage<Product> iPage=new Page<>(dto.getPageNum(),dto.getPageSize());
 //        QueryWrapper<Product> queryWrapper=new QueryWrapper<>();
 //        queryWrapper.lambda()
