@@ -41,8 +41,8 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         IPage<Product> iPage=new Page<>(dto.getPageNum(),dto.getPageSize());
         QueryWrapper<Product> queryWrapper=new QueryWrapper<>();
         queryWrapper.lambda()
-                .eq(StringUtils.isNotBlank(dto.getName()),Product::getName,dto.getName())
-                .eq(StringUtils.isNotBlank(dto.getCategory()),Product::getCategory,dto.getCategory())
+                .like(StringUtils.isNotBlank(dto.getName()),Product::getName,dto.getName())
+                .like(StringUtils.isNotBlank(dto.getCategory()),Product::getCategory,dto.getCategory())
                 .eq(Product::getSystemClientAccount,TokenTools.getAdminAccount())
                 .eq(Product::getWarehouseId,dto.getWarehouseId())
                 .orderByDesc(Product::getCreateTime);

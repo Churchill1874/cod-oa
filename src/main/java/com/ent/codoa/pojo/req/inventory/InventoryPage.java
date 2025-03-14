@@ -22,6 +22,8 @@ public class InventoryPage extends PageBase implements Serializable {
     @ApiModelProperty(value = "固定传入，不做筛选条件，仓库id",required = true)
     private Long warehouseId;
 
+    @ApiModelProperty(value = "批次号")
+    private String batchNumber;
 
     @NotNull(message = "status不能为空")
     @ApiModelProperty(value = "库存状态,默认传值0：待销售")

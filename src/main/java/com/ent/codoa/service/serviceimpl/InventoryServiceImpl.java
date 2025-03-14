@@ -20,6 +20,7 @@ import com.ent.codoa.pojo.req.inventory.InventoryWarehousePage;
 import com.ent.codoa.pojo.resp.token.LoginToken;
 import com.ent.codoa.service.InventoryService;
 import com.ent.codoa.service.StockOperationService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,6 +44,7 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
         queryWrapper.lambda()
                 .eq(dto.getProductId() != null || dto.getProductId()!=0, Inventory::getProductId, dto.getProductId())
                 .eq(Inventory::getWarehouseId, dto.getWarehouseId())
+                .like(StringUtils.isNotBlank(dto.getBatchNumber()),Inventory::getBatchNumber,dto.getBatchNumber())
                 .eq(Inventory::getStatus, dto.getStatus())
                 .eq(Inventory::getSystemClientAccount, TokenTools.getAdminAccount())
                 .orderByDesc(Inventory::getCreateTime);
