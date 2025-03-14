@@ -19,16 +19,13 @@ import com.ent.codoa.pojo.req.inventory.InventoryPageByPro;
 import com.ent.codoa.pojo.req.inventory.InventoryWarehousePage;
 import com.ent.codoa.pojo.resp.token.LoginToken;
 import com.ent.codoa.service.InventoryService;
-import com.ent.codoa.service.ProductService;
 import com.ent.codoa.service.StockOperationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -202,26 +199,6 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
                 .eq(Inventory::getBatchNumber, batchNumber)
                 .eq(Inventory::getSystemClientAccount, TokenTools.getAdminAccount());
         return getOne(queryWrapper);
-    }
-
-
-
-
-    //todo 该方法是例子方法 看懂后 可以删除
-    public IPage<Inventory> getExpiringDemo(InventoryWarehousePage dto) {
-
-        IPage<Inventory> iPage=new Page<>(dto.getPageNum(),dto.getPageSize());
-        QueryWrapper<Inventory> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda()
-            // .le是小于等于的意思
-            // LocalDate是时间类型对象 (格式 yyyy-mm-dd 年月日不带时分秒) ,带有时分秒的是LocalDateTime
-            // LocalDate.now()可以获取当前时间
-            // plusMonths是加几个月的意思 提示 有加就有减
-            .le(Inventory::getExpirationDate, LocalDate.now().plusMonths(2))
-            .eq(Inventory::getStatus, InventoryStatusEnum.TOBESOLD);
-        return page(iPage, queryWrapper);
-
-
     }
 
 
