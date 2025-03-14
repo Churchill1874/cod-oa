@@ -29,8 +29,8 @@ public class ProductQantity implements Serializable {
 
 
     @ApiModelProperty("预警数量")
-    private Integer warningQuantity;
+    private Integer warningQuantity = 0;
 
     @ApiModelProperty("实际库存数量")
-    private Integer totalQuantity;
+    private Integer totalQuantity = 0;
 }
