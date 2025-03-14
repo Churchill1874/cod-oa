@@ -54,14 +54,14 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRED)
-    public synchronized void stockIn(Inventory dto) {
+    @Transactional(rollbackFor = Exception.class)
+    public synchronized void inventoryStockIn(Inventory dto) {
         Inventory inventory = getInventory(dto.getWarehouseId(), dto.getProductId(), dto.getBatchNumber());//校验批次是否存在
         LoginToken loginToken = TokenTools.getLoginToken(true);
 
         if (inventory != null) {    //已有该批次库存,直接修改现有库存数量
             Integer newQantity = inventory.getQuantity() + dto.getOriginalQuantity();
-            updateQantity(dto.getWarehouseId(), dto.getProductId(), dto.getBatchNumber(), dto.getOriginalQuantity(), newQantity, OperationTypeEnum.STOCKIN);
+            updateQuantity(dto.getWarehouseId(), dto.getProductId(), dto.getBatchNumber(), dto.getOriginalQuantity(), newQantity, OperationTypeEnum.STOCKIN);
             StockOperation stockOperation = new StockOperation();
             stockOperation.setWarehouseId(dto.getWarehouseId());
             stockOperation.setProductId(dto.getProductId());
@@ -71,7 +71,7 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
             stockOperation.setProductionDate(dto.getProductionDate());
             stockOperation.setExpirationDate(dto.getExpirationDate());
             stockOperation.setOperationTime(LocalDateTime.now());
-            stockInService.stockInAdd(stockOperation);          //插入库存操作记录表
+            stockInService.stockIn(stockOperation);          //插入库存操作记录表
             LogTools.addLog("库存管理-入库", "存在该批次，只更新库存数量，信息：" + JSONUtil.toJsonStr(dto), loginToken);
         } else {   //没有该批次库存，新增该批次库存
             dto.setQuantity(dto.getOriginalQuantity());
@@ -90,14 +90,14 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
             stockOperation.setProductionDate(dto.getProductionDate());
             stockOperation.setExpirationDate(dto.getExpirationDate());
             stockOperation.setOperationTime(LocalDateTime.now());
-            stockInService.stockInAdd(stockOperation);          //插入库存操作记录表
+            stockInService.stockIn(stockOperation);          //插入库存操作记录表
             LogTools.addLog("库存管理-入库", "插入新批次库存，信息：" + JSONUtil.toJsonStr(dto), loginToken);
         }
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRED)
-    public synchronized void stockOut(Inventory dto) {
+    @Transactional(rollbackFor = Exception.class)
+    public synchronized void inventoryStockOut(Inventory dto) {
         LoginToken loginToken = TokenTools.getLoginToken(true);
         Inventory inventory = getInventory(dto.getWarehouseId(), dto.getProductId(), dto.getBatchNumber());//校验批次库存数量
         if (dto.getQuantity() > inventory.getQuantity()) {
@@ -120,7 +120,7 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
         stockOperation.setProductionDate(dto.getProductionDate());
         stockOperation.setExpirationDate(dto.getExpirationDate());
         stockOperation.setOperationTime(LocalDateTime.now());
-        stockInService.stockOutAdd(stockOperation);          //插入库存操作记录表
+        stockInService.stockOut(stockOperation);          //插入库存操作记录表
         LogTools.addLog("库存管理-出库", "出库库存，信息：" + JSONUtil.toJsonStr(dto), loginToken);
         Inventory newInventory = getInventory(dto.getWarehouseId(), dto.getProductId(), dto.getBatchNumber());//校验新库存数量是否大于0
         if (newInventory.getQuantity() == 0) {  //现有库存为0，更新状态为已销售
@@ -135,7 +135,7 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional(rollbackFor = Exception.class)
     public void inventoryReturn(Inventory dto) {
         LoginToken loginToken = TokenTools.getLoginToken(true);
         UpdateWrapper<Inventory> updateWrapper = new UpdateWrapper<>();
@@ -158,14 +158,14 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
         stockOperation.setProductionDate(dto.getProductionDate());
         stockOperation.setExpirationDate(dto.getExpirationDate());
         stockOperation.setOperationTime(LocalDateTime.now());
-        stockInService.stockReturnAdd(stockOperation);          //插入库存操作记录表
+        stockInService.stockReturn(stockOperation);          //插入库存操作记录表
         LogTools.addLog("库存管理-退货", "退货了一批库存，信息：" + JSONUtil.toJsonStr(dto), loginToken);
 
 
     }
 
     @Override
-    public void updateQantity(Long warehouseId, Long productId, String batchNumber, Integer originalQuantity, Integer quantity, OperationTypeEnum operationTypeEnum) {
+    public void updateQuantity(Long warehouseId, Long productId, String batchNumber, Integer originalQuantity, Integer quantity, OperationTypeEnum operationTypeEnum) {
         UpdateWrapper<Inventory> updateWrapper = new UpdateWrapper<>();
         updateWrapper.lambda()
                 .set(Inventory::getQuantity, quantity)
@@ -207,9 +207,16 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
 
     @Override
     public IPage<Inventory> getExpiring(InventoryWarehousePage dto) {
+//
+//        IPage<Inventory> iPage=new Page<>(dto.getPageNum(),dto.getPageSize());
+//        return inventoryMapper.selectExpiring(iPage);
         IPage<Inventory> iPage=new Page<>(dto.getPageNum(),dto.getPageSize());
-        return inventoryMapper.selectExpiring(iPage);
+        QueryWrapper<Inventory> queryWrapper=new QueryWrapper<>();
+        queryWrapper.lambda()
+                .le(Inventory::getExpirationDate,LocalDate.now().plusMonths(2))
+                .eq(Inventory::getStatus,InventoryStatusEnum.TOBESOLD);
 
+        return page(iPage,queryWrapper);
 
 //        LocalDate today = LocalDate.now();
 //        LocalDate twoMonthsLater = today.plusMonths(2);
@@ -233,7 +240,7 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
     }
 
     @Override
-    public Integer getQantityByProduct (InventoryPageByPro dto){
+    public Integer getQuantityByProduct (InventoryPageByPro dto){
         QueryWrapper<Inventory> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda()
                 .eq(Inventory::getWarehouseId, dto.getWarehouseId())

@@ -7,10 +7,10 @@ import org.apache.ibatis.annotations.Select;
 
 public interface InventoryMapper extends BaseMapper<Inventory> {
 
-    @Select("SELECT *\n" +
-            "FROM inventory\n" +
-            "WHERE expiration_date <= DATE_ADD(CURDATE(), INTERVAL 2 MONTH) and status=0")
-    IPage<Inventory> selectExpiring(IPage<Inventory> page);
+//    @Select("SELECT *\n" +
+//            "FROM inventory\n" +
+//            "WHERE expiration_date <= DATE_ADD(CURDATE(), INTERVAL 2 MONTH) and status=0")
+//    IPage<Inventory> selectExpiring(IPage<Inventory> page);
 
 
 }

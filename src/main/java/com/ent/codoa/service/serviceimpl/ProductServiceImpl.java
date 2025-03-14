@@ -14,7 +14,6 @@ import com.ent.codoa.pojo.req.product.ProductWarehouseIdPage;
 import com.ent.codoa.pojo.resp.Product.ProductQantity;
 import com.ent.codoa.mapper.ProductMapper;
 import com.ent.codoa.pojo.req.inventory.InventoryPageByPro;
-//import com.ent.codoa.pojo.req.product.ProductWarehouseIdPage;
 import com.ent.codoa.pojo.req.product.ProductBaseUpdate;
 import com.ent.codoa.pojo.req.product.ProductPage;
 import com.ent.codoa.pojo.resp.token.LoginToken;
@@ -23,6 +22,7 @@ import com.ent.codoa.service.ProductService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -113,19 +113,23 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
 
     @Override
     public IPage<ProductQantity> getALLProductQantity (ProductWarehouseIdPage dto){
-        IPage<Product> iPage=new Page<>(dto.getPageNum(),dto.getPageSize());
+        IPage<ProductQantity> iPage=new Page<>(dto.getPageNum(),dto.getPageSize());
+        IPage<Product> ProductIPage=new Page<>(dto.getPageNum(),dto.getPageSize());
         QueryWrapper<Product> queryWrapper=new QueryWrapper<>();
         queryWrapper.lambda()
                 .eq(Product::getWarehouseId,dto.getWarehouseId())
                 .eq(Product::getSystemClientAccount,TokenTools.getAdminAccount())
                 .orderByDesc(Product::getCreateTime);
-        iPage=page(iPage,queryWrapper);
+        ProductIPage=page(ProductIPage,queryWrapper);
         List<ProductQantity> newList = new ArrayList<>();
-        for (Product product : iPage.getRecords()) {
+        if(CollectionUtils.isEmpty(ProductIPage.getRecords())){
+            return iPage;
+        }
+        for (Product product : ProductIPage.getRecords()) {
             InventoryPageByPro inventoryPageByPro =new InventoryPageByPro();
             inventoryPageByPro.setWarehouseId(dto.getWarehouseId());
             inventoryPageByPro.setProductId(product.getId());
-            Integer totalQantity = inventoryService.getQantityByProduct(inventoryPageByPro);
+            Integer totalQantity = inventoryService.getQuantityByProduct(inventoryPageByPro);
             ProductQantity productQantity =new ProductQantity();
             productQantity.setWarehouseId(dto.getWarehouseId());
             productQantity.setId(product.getId());

@@ -23,13 +23,13 @@ public interface InventoryService extends IService<Inventory> {
      * 新增库存信息-入库
      * @param dto
      */
-    void stockIn(Inventory dto);
+    void inventoryStockIn(Inventory dto);
 
     /**
      * 出库
      * @param dto
      */
-    void stockOut(Inventory dto);
+    void inventoryStockOut(Inventory dto);
 
 
     /**
@@ -47,7 +47,7 @@ public interface InventoryService extends IService<Inventory> {
      * @param quantity
      * @param operationTypeEnum
      */
-    void updateQantity(Long warehouseId,Long productId,String batchNumber,Integer originalQuantity,Integer quantity,OperationTypeEnum operationTypeEnum);
+    void updateQuantity(Long warehouseId,Long productId,String batchNumber,Integer originalQuantity,Integer quantity,OperationTypeEnum operationTypeEnum);
 
 
     /**
@@ -73,6 +73,6 @@ public interface InventoryService extends IService<Inventory> {
      * @param dto
      * @return
      */
-    Integer getQantityByProduct(InventoryPageByPro dto);
+    Integer getQuantityByProduct(InventoryPageByPro dto);
 
 }

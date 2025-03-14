@@ -10,17 +10,17 @@ public interface StockOperationService extends IService<StockOperation> {
      * 新增入库记录
      * @param dto
      */
-    void stockInAdd(StockOperation dto);
+    void stockIn(StockOperation dto);
 
     /**
      * 新增出库记录
      * @param dto
      */
-    void stockOutAdd(StockOperation dto);
+    void stockOut(StockOperation dto);
 
     /**
      * 新增退货记录
      * @param dto
      */
-    void stockReturnAdd(StockOperation dto);
+    void stockReturn(StockOperation dto);
 }

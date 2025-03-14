@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Service
 public class StockOperationServiceImpl extends ServiceImpl<StockOperationMapper, StockOperation> implements StockOperationService {
     @Override
-    public void stockInAdd(StockOperation dto) {
+    public void stockIn(StockOperation dto) {
 
         dto.setOperationType(OperationTypeEnum.STOCKIN);
         dto.setCreateName(TokenTools.getAdminName());
@@ -23,7 +23,7 @@ public class StockOperationServiceImpl extends ServiceImpl<StockOperationMapper,
     }
 
     @Override
-    public void stockOutAdd(StockOperation dto) {
+    public void stockOut(StockOperation dto) {
         dto.setOperationType(OperationTypeEnum.STOCKOUT);
         dto.setCreateName(TokenTools.getAdminName());
         dto.setCreateTime(LocalDateTime.now());
@@ -32,7 +32,7 @@ public class StockOperationServiceImpl extends ServiceImpl<StockOperationMapper,
     }
 
     @Override
-    public void stockReturnAdd(StockOperation dto) {
+    public void stockReturn(StockOperation dto) {
         dto.setOperationType(OperationTypeEnum.TOBERETURN);
         dto.setCreateName(TokenTools.getAdminName());
         dto.setCreateTime(LocalDateTime.now());

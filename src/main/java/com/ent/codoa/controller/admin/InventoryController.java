@@ -37,7 +37,7 @@ public class InventoryController {
     @ApiOperation(value = "入库", notes  = "入库")
     public R stockIn(@RequestBody @Valid InventoryStockIn req) {
         Inventory inventory = BeanUtil.toBean(req, Inventory.class);
-        inventoryService.stockIn(inventory);
+        inventoryService.inventoryStockIn(inventory);
         return R.ok(null);
     }
 
@@ -45,7 +45,7 @@ public class InventoryController {
     @ApiOperation(value = "出库", notes = "出库")
     public R stockOut(@RequestBody @Valid InventoryStockOut req) {
         Inventory inventory = BeanUtil.toBean(req, Inventory.class);
-        inventoryService.stockOut(inventory);
+        inventoryService.inventoryStockOut(inventory);
         return R.ok(null);
     }
 
@@ -67,7 +67,7 @@ public class InventoryController {
     @PostMapping("/getQantityByProduct")
     @ApiOperation(value = "根据商品Id获取商品库存", notes  = "根据商品Id获取商品库存")
     public R<Integer> getQantityByProduct(@RequestBody @Valid InventoryPageByPro req) {
-        Integer qantity = inventoryService.getQantityByProduct(req);
+        Integer qantity = inventoryService.getQuantityByProduct(req);
         return R.ok(qantity);
     }
 }
