@@ -211,7 +211,10 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
         QueryWrapper<Inventory> queryWrapper=new QueryWrapper<>();
         queryWrapper.lambda()
                 .le(Inventory::getExpirationDate,LocalDate.now().plusMonths(2))
+                .eq(Inventory::getWarehouseId,dto.getWarehouseId())
+                .eq(Inventory::getSystemClientAccount,TokenTools.getAdminAccount())
                 .eq(Inventory::getStatus,InventoryStatusEnum.TOBESOLD);
+
 
         return page(iPage,queryWrapper);
 
