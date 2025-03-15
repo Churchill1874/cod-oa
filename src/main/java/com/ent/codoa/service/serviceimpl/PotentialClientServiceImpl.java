@@ -57,7 +57,6 @@ public class PotentialClientServiceImpl extends ServiceImpl<PotentialClientMappe
         updateWrapper.lambda()
             .set(PotentialClient::getName, dto.getName())
             .set(PotentialClient::getIntroduce, dto.getIntroduce())
-            .set(PotentialClient::getContract, dto.getContract())
             .set(PotentialClient::getRemark, dto.getRemark())
             .set(PotentialClient::getStatus, dto.getStatus())
             .eq(PotentialClient::getId, dto.getId());

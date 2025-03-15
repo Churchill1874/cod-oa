@@ -21,8 +21,6 @@ public class PotentialClient extends BaseInfo implements Serializable {
     private ExploreProgressStatus status;
     @ApiModelProperty("备注")
     private String remark;
-    @ApiModelProperty("合同字符串")
-    private String contract;
     @ApiModelProperty("所属系统用户账号")
     private String systemClientAccount;
 
