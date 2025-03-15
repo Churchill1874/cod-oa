@@ -20,5 +20,7 @@ public class CustomerContract extends BaseInfo implements Serializable {
     private String contract;
     @ApiModelProperty("备注 比如什么什么的合同")
     private String remark;
+    @ApiModelProperty("系统用户账号")
+    private String systemClientAccount;
 
 }

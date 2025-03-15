@@ -31,6 +31,7 @@ public class CustomerContractServiceImpl extends ServiceImpl<CustomerContractMap
         queryWrapper.lambda()
             .eq(StringUtils.isNotBlank(dto.getName()), CustomerContract::getName, dto.getName())
             .eq(StringUtils.isNotBlank(dto.getAccount()), CustomerContract::getAccount, dto.getAccount())
+            .eq(CustomerContract::getSystemClientAccount, TokenTools.getAdminAccount())
             .orderByDesc(CustomerContract::getCreateTime);
         return page(iPage, queryWrapper);
     }
@@ -41,6 +42,7 @@ public class CustomerContractServiceImpl extends ServiceImpl<CustomerContractMap
         CustomerContract customerContract = BeanUtil.toBean(dto, CustomerContract.class);
         customerContract.setCreateTime(LocalDateTime.now());
         customerContract.setCreateName(loginToken.getName());
+        customerContract.setSystemClientAccount(loginToken.getAccount());
         save(customerContract);
 
         LogTools.addLog("合同管理", "添加客户合同配置记录:" + JSONUtil.toJsonStr(dto), loginToken);
