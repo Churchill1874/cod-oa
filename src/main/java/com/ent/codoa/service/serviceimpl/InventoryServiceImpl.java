@@ -45,7 +45,7 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
                 .eq(dto.getProductId() != null || dto.getProductId()!=0, Inventory::getProductId, dto.getProductId())
                 .eq(Inventory::getWarehouseId, dto.getWarehouseId())
                 .like(StringUtils.isNotBlank(dto.getBatchNumber()),Inventory::getBatchNumber,dto.getBatchNumber())
-                .eq(Inventory::getStatus, dto.getStatus())
+                .eq(dto.getStatus()!=null,Inventory::getStatus, dto.getStatus())
                 .eq(Inventory::getSystemClientAccount, TokenTools.getAdminAccount())
                 .orderByDesc(Inventory::getCreateTime);
         iPage = page(iPage, queryWrapper);
