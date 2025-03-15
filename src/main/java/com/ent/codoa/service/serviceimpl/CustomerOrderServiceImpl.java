@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ent.codoa.common.constant.enums.OrderStatusEnum;
+import com.ent.codoa.common.constant.enums.PaymentStatusEnum;
 import com.ent.codoa.common.tools.LogTools;
 import com.ent.codoa.common.tools.TokenTools;
 import com.ent.codoa.entity.CustomerOrder;
@@ -20,7 +22,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -39,6 +43,7 @@ public class CustomerOrderServiceImpl extends ServiceImpl<CustomerOrderMapper, C
             .orderByDesc(CustomerOrder::getCreateTime);
         return page(iPage, queryWrapper);
     }
+
 
     @Override
     public void delete(Long id) {
@@ -65,5 +70,25 @@ public class CustomerOrderServiceImpl extends ServiceImpl<CustomerOrderMapper, C
 
         LogTools.addLog("客户管理", "修改客户订单信息:" + JSONUtil.toJsonStr(dto), TokenTools.getLoginToken(true));
     }
+
+
+    @Override
+    public List<CustomerOrder> withinTwoYears() {
+        //今年当前时间
+        LocalDate thisYearMonth = LocalDate.now();
+        //去年1月的时间
+        LocalDate lastYearMonth = LocalDate.of(thisYearMonth.getYear() - 1, 1,1);
+
+        QueryWrapper<CustomerOrder> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda()
+            .ge(CustomerOrder::getCreateTime, lastYearMonth)
+            .le(CustomerOrder::getCreateTime, thisYearMonth)
+            .eq(CustomerOrder::getSystemClientAccount, TokenTools.getAdminAccount())
+            .eq(CustomerOrder::getPayStatus, PaymentStatusEnum.PAID)
+            .eq(CustomerOrder::getStatus, OrderStatusEnum.SUCCESS);
+
+        return list(queryWrapper);
+    }
+
 
 }
