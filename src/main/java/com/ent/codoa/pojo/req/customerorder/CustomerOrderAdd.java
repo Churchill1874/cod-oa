@@ -17,6 +17,8 @@ public class CustomerOrderAdd implements Serializable {
 
     @ApiModelProperty("总价")
     private BigDecimal amount;
+    @ApiModelProperty("利润")
+    private BigDecimal profit;
     @ApiModelProperty("介绍")
     private String introduce;
     @ApiModelProperty("订单编号")

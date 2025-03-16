@@ -1,8 +1,5 @@
 package com.ent.codoa.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.ent.codoa.common.constant.enums.OrderStatusEnum;
 import com.ent.codoa.common.constant.enums.PaymentStatusEnum;
@@ -22,6 +19,8 @@ public class CustomerOrder extends BaseInfo implements Serializable {
 
     @ApiModelProperty("总价")
     private BigDecimal amount;
+    @ApiModelProperty("利润")
+    private BigDecimal profit;
     @ApiModelProperty("介绍")
     private String introduce;
     @ApiModelProperty("订单编号")

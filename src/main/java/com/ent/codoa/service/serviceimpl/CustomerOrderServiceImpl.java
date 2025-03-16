@@ -90,5 +90,23 @@ public class CustomerOrderServiceImpl extends ServiceImpl<CustomerOrderMapper, C
         return list(queryWrapper);
     }
 
+    @Override
+    public List<CustomerOrder> withinThreeMonth() {
+        //当前时间
+        LocalDate thisMonth = LocalDate.now();
+        //3个月之前的时间 并且设置从1日开始
+        LocalDate last3Month = thisMonth.minusMonths(2).withDayOfMonth(1);
+
+        QueryWrapper<CustomerOrder> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda()
+            .ge(CustomerOrder::getCreateTime, last3Month)
+            .le(CustomerOrder::getCreateTime, thisMonth)
+            .eq(CustomerOrder::getSystemClientAccount, TokenTools.getAdminAccount())
+            .eq(CustomerOrder::getPayStatus, PaymentStatusEnum.PAID)
+            .eq(CustomerOrder::getStatus, OrderStatusEnum.SUCCESS);
+
+        return list(queryWrapper);
+    }
+
 
 }

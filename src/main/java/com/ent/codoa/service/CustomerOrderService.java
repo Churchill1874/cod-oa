@@ -20,9 +20,15 @@ public interface CustomerOrderService extends IService<CustomerOrder> {
 
     /**
      * 查询两年内的订单数据
+     * 所谓两年 是从去年的1月开始到现在的数据
      * @return
      */
     List<CustomerOrder> withinTwoYears();
 
+    /**
+     * 查询近三个月的数据
+     * @return
+     */
+    List<CustomerOrder> withinThreeMonth();
 
 }
