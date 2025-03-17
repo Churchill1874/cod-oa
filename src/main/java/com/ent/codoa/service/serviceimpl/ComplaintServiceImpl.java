@@ -14,6 +14,7 @@ import com.ent.codoa.common.tools.TokenTools;
 import com.ent.codoa.entity.Complaint;
 import com.ent.codoa.entity.CustomerOrder;
 import com.ent.codoa.mapper.ComplaintMapper;
+import com.ent.codoa.pojo.req.PageBase;
 import com.ent.codoa.pojo.req.complaint.ComplaintPage;
 import com.ent.codoa.pojo.req.complaint.ComplaintStatusUpdate;
 import com.ent.codoa.service.ComplaintService;
@@ -34,15 +35,16 @@ public class ComplaintServiceImpl extends ServiceImpl<ComplaintMapper, Complaint
         QueryWrapper<Complaint> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda()
             .eq(StringUtils.isNotBlank(dto.getAccount()), Complaint::getAccount, dto.getAccount())
-            .eq(Complaint::getSystemClientAccount, TokenTools.getAdminAccount())
+            .eq(Complaint::getSystemClientAccount, TokenTools.getAccount())
             .orderByDesc(Complaint::getCreateTime);
         return page(iPage, queryWrapper);
     }
 
     @Override
     public void add(Complaint dto) {
+        dto.setSystemClientAccount(TokenTools.getSystemClientAccount());
         dto.setStatus(ComplaintStatusEnum.ALREADY_COMPLAINED);
-        dto.setCreateName("");//todo 尤其修改成用户token中的名字
+        dto.setCreateName(TokenTools.getName());
         dto.setCreateTime(LocalDateTime.now());
         save(dto);
     }
@@ -70,8 +72,18 @@ public class ComplaintServiceImpl extends ServiceImpl<ComplaintMapper, Complaint
         queryWrapper.lambda()
             .ge(Complaint::getCreateTime, last3Month)
             .le(Complaint::getCreateTime, thisMonth)
-            .eq(Complaint::getSystemClientAccount, TokenTools.getAdminAccount());
+            .eq(Complaint::getSystemClientAccount, TokenTools.getAccount());
         return list(queryWrapper);
+    }
+
+    @Override
+    public IPage<Complaint> clientPage(PageBase req) {
+        IPage<Complaint> iPage = new Page<>(req.getPageNum(), req.getPageSize());
+        QueryWrapper<Complaint> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda()
+            .eq(Complaint::getAccount, TokenTools.getAccount())
+            .orderByDesc(Complaint::getCreateTime);
+        return page(iPage, queryWrapper);
     }
 
 }

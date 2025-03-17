@@ -107,7 +107,7 @@ public class SystemClientController {
             loginToken.setRole(RoleEnum.CUSTOMER);
             loginToken.setSystemClientAccount(customer.getSystemClientAccount());
             //对比登录密码和正确密码
-            checkAccountAndPassword(systemClient.getPassword(), CodeTools.md5AndSalt(password, systemClient.getSalt()));
+            checkAccountAndPassword(customer.getPassword(), CodeTools.md5AndSalt(password, customer.getSalt()));
             //获取所属系统用户的权限赋予自己
             systemClient = systemClientService.findByAccount(loginToken.getSystemClientAccount());
             loginToken.setCustomerMenu(systemClient.getCustomerMenu());
@@ -126,7 +126,7 @@ public class SystemClientController {
             loginToken.setRole(RoleEnum.HUMAN_RESOURCE_MANAGEMENT);
             loginToken.setSystemClientAccount(staff.getSystemClientAccount());
             //对比登录密码和正确密码
-            checkAccountAndPassword(systemClient.getPassword(), CodeTools.md5AndSalt(password, systemClient.getSalt()));
+            checkAccountAndPassword(staff.getPassword(), CodeTools.md5AndSalt(password, staff.getSalt()));
             //获取所属系统用户的权限赋予自己
             systemClient = systemClientService.findByAccount(loginToken.getSystemClientAccount());
             loginToken.setCustomerMenu(systemClient.getCustomerMenu());

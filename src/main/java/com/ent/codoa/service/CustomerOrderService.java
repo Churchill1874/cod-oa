@@ -3,6 +3,7 @@ package com.ent.codoa.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ent.codoa.entity.CustomerOrder;
+import com.ent.codoa.pojo.req.PageBase;
 import com.ent.codoa.pojo.req.customerorder.CustomerOrderInfoUpdate;
 import com.ent.codoa.pojo.req.customerorder.CustomerOrderPage;
 
@@ -30,5 +31,12 @@ public interface CustomerOrderService extends IService<CustomerOrder> {
      * @return
      */
     List<CustomerOrder> withinThreeMonth();
+
+    /**
+     * 客户数据分页
+     * @param dto
+     * @return
+     */
+    IPage<CustomerOrder> clientPage(PageBase dto);
 
 }

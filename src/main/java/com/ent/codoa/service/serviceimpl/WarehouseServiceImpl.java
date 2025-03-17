@@ -28,7 +28,7 @@ public class WarehouseServiceImpl extends ServiceImpl<WarehouseMapper, Warehouse
         IPage<Warehouse> ipage=new Page<>(dto.getPageNum(),dto.getPageSize());
         QueryWrapper<Warehouse> queryWrapper=new QueryWrapper<>();
         queryWrapper.lambda() //根据系统用户所属账号来过滤，进行分页查询，只能查到创建人所属系统用户账号的数据
-                .eq(Warehouse::getSystemClientAccount,TokenTools.getAdminAccount())
+                .eq(Warehouse::getSystemClientAccount,TokenTools.getAccount())
                 .eq(StringUtils.isNotBlank(dto.getName()),Warehouse::getName,dto.getName())
                 .orderByDesc(Warehouse::getCreateTime);
 
@@ -46,9 +46,9 @@ public class WarehouseServiceImpl extends ServiceImpl<WarehouseMapper, Warehouse
             throw new DataException("仓库名称重复");
         }
         LoginToken loginToken=TokenTools.getLoginToken(true);
-        dto.setCreateName(TokenTools.getAdminName());
+        dto.setCreateName(TokenTools.getName());
         dto.setCreateTime(LocalDateTime.now());
-        dto.setSystemClientAccount(TokenTools.getAdminAccount());//系统用户所属账号通过登录后返回的token获取，存入对应表字段
+        dto.setSystemClientAccount(TokenTools.getAccount());//系统用户所属账号通过登录后返回的token获取，存入对应表字段
         save(dto);
         LogTools.addLog("库存管理-新增仓库","新增一个仓库，信息："+ JSONUtil.toJsonStr(dto),loginToken);
     }
@@ -77,7 +77,7 @@ public class WarehouseServiceImpl extends ServiceImpl<WarehouseMapper, Warehouse
     public List<Map> findWarehouseList() {
         QueryWrapper<Warehouse> queryWrapper=new QueryWrapper<>();
         queryWrapper.lambda()
-                .eq(Warehouse::getSystemClientAccount,TokenTools.getAdminAccount())
+                .eq(Warehouse::getSystemClientAccount,TokenTools.getAccount())
                 .orderByDesc(Warehouse::getCreateTime);
         List<Warehouse> list=list(queryWrapper);
         List<Map> newList = new ArrayList<>();

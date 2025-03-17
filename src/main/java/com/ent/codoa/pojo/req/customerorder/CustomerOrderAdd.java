@@ -26,6 +26,9 @@ public class CustomerOrderAdd implements Serializable {
     @NotNull(message = "名字不能为空")
     @ApiModelProperty(value = "名称",required = true)
     private String name;
+    @NotNull(message = "账号不能为空")
+    @ApiModelProperty("账号")
+    private String account;
     @NotNull(message = "数量不能为空")
     @ApiModelProperty(value = "数量",required = true)
     private Integer count;

@@ -35,7 +35,7 @@ public class StaffServiceImpl extends ServiceImpl<StaffMapper, Staff> implements
             .eq(StringUtils.isNotBlank(dto.getAccount()) ,Staff::getAccount, dto.getAccount())
             .eq(StringUtils.isNotBlank(dto.getName()), Staff::getName, dto.getName())
             .eq(StringUtils.isNotBlank(dto.getPhone()), Staff::getPhone, dto.getPhone())
-            .eq(Staff::getSystemClientAccount, TokenTools.getAdminAccount())
+            .eq(Staff::getSystemClientAccount, TokenTools.getAccount())
             .orderByDesc(Staff::getCreateTime);
         return page(iPage, queryWrapper);
     }
@@ -81,8 +81,8 @@ public class StaffServiceImpl extends ServiceImpl<StaffMapper, Staff> implements
     public void add(Staff dto) {
         dto.setSalt(GenerateTools.getUUID());
         dto.setPassword(CodeTools.md5AndSalt(dto.getSalt(), dto.getPassword()));
-        dto.setSystemClientAccount(TokenTools.getAdminAccount());
-        dto.setCreateName(TokenTools.getAdminName());
+        dto.setSystemClientAccount(TokenTools.getAccount());
+        dto.setCreateName(TokenTools.getName());
         dto.setCreateTime(LocalDateTime.now());
         dto.setStatus(UserStatusEnum.NORMAL);
         save(dto);

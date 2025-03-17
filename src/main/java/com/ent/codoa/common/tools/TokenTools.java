@@ -49,20 +49,27 @@ public class TokenTools {
 
 
     /**
-     * 获取管理员名称
+     * 获取登录名称
      * @return
      */
-    public static String getAdminName () {
+    public static String getName () {
         return getLoginToken(true).getName();
     }
 
     /**
-     * 获取管理员账号
+     * 获取登录账号
      * @return
      */
-    public static String getAdminAccount() {
+    public static String getAccount() {
         return getLoginToken(true).getAccount();
     }
 
+    /**
+     * 获取所属系统管理员账号
+     * @return
+     */
+    public static String getSystemClientAccount() {
+        return getLoginToken(true).getSystemClientAccount();
+    }
 
 }

@@ -48,7 +48,7 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
             .eq(StringUtils.isNotBlank(dto.getAccount()), Customer::getAccount, dto.getAccount())
             .eq(StringUtils.isNotBlank(dto.getName()), Customer::getName, dto.getName())
             .eq(StringUtils.isNotBlank(dto.getEnterpriseName()), Customer::getEnterpriseName, dto.getEnterpriseName())
-            .eq(Customer::getSystemClientAccount, TokenTools.getAdminAccount())
+            .eq(Customer::getSystemClientAccount, TokenTools.getAccount())
             .orderByDesc(Customer::getCreateTime);
         return page(iPage, queryWrapper);
     }

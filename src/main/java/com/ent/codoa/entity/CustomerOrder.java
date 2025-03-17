@@ -16,7 +16,8 @@ import java.time.LocalDateTime;
 @TableName("customer_order")
 public class CustomerOrder extends BaseInfo implements Serializable {
     private static final long serialVersionUID = 4701719975718071979L;
-
+    @ApiModelProperty("客户账号")
+    private String account;
     @ApiModelProperty("总价")
     private BigDecimal amount;
     @ApiModelProperty("利润")
