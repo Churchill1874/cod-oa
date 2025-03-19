@@ -1,6 +1,5 @@
 package com.ent.codoa.pojo.req.inventory;
 
-import com.ent.codoa.common.constant.enums.InventoryStatusEnum;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -37,11 +36,11 @@ public class InventoryStockIn implements Serializable {
     @ApiModelProperty(value = "入库数量",required = true)
     private Integer originalQuantity;
 
-    @NotBlank(message = "生产日期不能为空")
+    @NotNull(message = "生产日期不能为空")
     @ApiModelProperty(value = "生产日期",required = true)
     private LocalDate productionDate;
 
-    @NotBlank(message = "过期时间不能为空")
+    @NotNull(message = "过期时间不能为空")
     @ApiModelProperty(value = "过期时间",required = true)
     private LocalDate expirationDate;
 }
