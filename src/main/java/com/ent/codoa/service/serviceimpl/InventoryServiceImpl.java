@@ -42,7 +42,7 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
         IPage<Inventory> iPage = new Page<>(dto.getPageNum(), dto.getPageSize());
         QueryWrapper<Inventory> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda()
-                .eq(dto.getProductId() != null || dto.getProductId()!=0, Inventory::getProductId, dto.getProductId())
+                .eq(dto.getProductId() != null && dto.getProductId()!=0, Inventory::getProductId, dto.getProductId())
                 .eq(Inventory::getWarehouseId, dto.getWarehouseId())
                 .like(StringUtils.isNotBlank(dto.getBatchNumber()),Inventory::getBatchNumber,dto.getBatchNumber())
                 .eq(dto.getStatus()!=null,Inventory::getStatus, dto.getStatus())

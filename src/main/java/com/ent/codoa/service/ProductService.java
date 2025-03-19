@@ -4,8 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ent.codoa.entity.Product;
 import com.ent.codoa.pojo.req.product.ProductWarehouseIdPage;
-import com.ent.codoa.pojo.resp.Product.ProductQantity;
-//import com.ent.codoa.pojo.req.product.ProductWarehouseIdPage;
+import com.ent.codoa.pojo.resp.product.ProductQantityVO;
 import com.ent.codoa.pojo.req.product.ProductBaseUpdate;
 import com.ent.codoa.pojo.req.product.ProductPage;
 
@@ -52,7 +51,7 @@ public interface ProductService extends IService<Product> {
      * @param dto  仓库id
      * @return
      */
-    IPage<ProductQantity> getALLProductQantity(ProductWarehouseIdPage dto);
+    IPage<ProductQantityVO> getALLProductQantity(ProductWarehouseIdPage dto);
 
 
     /**
@@ -60,7 +59,7 @@ public interface ProductService extends IService<Product> {
      * @param dto
      * @return
      */
-    IPage<ProductQantity> getLowWarning(ProductWarehouseIdPage dto);
+    IPage<ProductQantityVO> getLowWarning(ProductWarehouseIdPage dto);
 
 
 }

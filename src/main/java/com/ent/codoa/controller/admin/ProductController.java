@@ -4,7 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.ent.codoa.entity.Product;
-import com.ent.codoa.pojo.resp.Product.ProductQantity;
+import com.ent.codoa.pojo.resp.product.ProductQantityVO;
 import com.ent.codoa.pojo.req.IdBase;
 import com.ent.codoa.pojo.req.product.*;
 import com.ent.codoa.service.ProductService;
@@ -64,16 +64,16 @@ public class ProductController {
 
     @PostMapping("/getALLProductQantity")
     @ApiOperation(value = "根据仓库Id获取所有商品库存", notes ="根据仓库Id获取所有商品库存")
-    public R<IPage<ProductQantity>> getALLProductQantity(@RequestBody @Valid ProductWarehouseIdPage req) {
-        IPage<ProductQantity> iPage = productService.getALLProductQantity(req);
+    public R<IPage<ProductQantityVO>> getALLProductQantity(@RequestBody @Valid ProductWarehouseIdPage req) {
+        IPage<ProductQantityVO> iPage = productService.getALLProductQantity(req);
         return R.ok(iPage);
     }
 
 
     @PostMapping("/getLowWarning")
     @ApiOperation(value = "根据仓库Id获取预警商品库存", notes ="根据仓库Id获取预警商品库存")
-    public R<IPage<ProductQantity>> getLowWarning(@RequestBody @Valid ProductWarehouseIdPage req) {
-        IPage<ProductQantity>list = productService.getLowWarning(req);
+    public R<IPage<ProductQantityVO>> getLowWarning(@RequestBody @Valid ProductWarehouseIdPage req) {
+        IPage<ProductQantityVO>list = productService.getLowWarning(req);
         return R.ok(list);
     }
 

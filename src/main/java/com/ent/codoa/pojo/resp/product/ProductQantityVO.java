@@ -1,4 +1,4 @@
-package com.ent.codoa.pojo.resp.Product;
+package com.ent.codoa.pojo.resp.product;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -6,7 +6,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 @Data
-public class ProductQantity implements Serializable {
+public class ProductQantityVO implements Serializable {
     private static final long serialVersionUID = -2891978191447715655L;
 
     @ApiModelProperty("商品id")

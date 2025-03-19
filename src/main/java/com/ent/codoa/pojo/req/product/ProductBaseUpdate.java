@@ -8,7 +8,6 @@ import org.hibernate.validator.constraints.Length;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.time.LocalDate;
 
 @Data
 public class ProductBaseUpdate extends IdBase implements Serializable {
@@ -19,7 +18,7 @@ public class ProductBaseUpdate extends IdBase implements Serializable {
     @ApiModelProperty(value = "商品名称",required = true)
     private String name;
 
-    @Length(max = 100,message = "商品描述长度不能大于30")
+    @Length(max = 100,message = "商品描述长度不能大于100")
     @ApiModelProperty("商品描述")
     private String description;
 

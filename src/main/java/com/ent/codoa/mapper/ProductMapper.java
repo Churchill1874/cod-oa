@@ -2,7 +2,7 @@ package com.ent.codoa.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.ent.codoa.entity.Product;
-import com.ent.codoa.pojo.resp.Product.ProductQantity;
+import com.ent.codoa.pojo.resp.product.ProductQantityVO;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
@@ -24,6 +24,6 @@ public interface ProductMapper extends BaseMapper<Product> {
             "    p.id, p.name, p.warning_quantity\n" +
             "HAVING \n" +
             "    p.warning_quantity >= COALESCE(SUM(i.quantity), 0) AND p.warehouse_id = #{warehouseId}"})
-    IPage<ProductQantity> findProductsWithStockWarning(IPage<ProductQantity> iPage,
-                                                       @Param("warehouseId") Long warehouseId);
+    IPage<ProductQantityVO> findProductsWithStockWarning(IPage<ProductQantityVO> iPage,
+                                                         @Param("warehouseId") Long warehouseId);
 }
