@@ -46,7 +46,7 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
                 .eq(Inventory::getWarehouseId, dto.getWarehouseId())
                 .like(StringUtils.isNotBlank(dto.getBatchNumber()),Inventory::getBatchNumber,dto.getBatchNumber())
                 .eq(dto.getStatus()!=null,Inventory::getStatus, dto.getStatus())
-                .eq(Inventory::getSystemClientAccount, TokenTools.getAdminAccount())
+                .eq(Inventory::getSystemClientAccount, TokenTools.getAccount())
                 .orderByDesc(Inventory::getCreateTime);
         iPage = page(iPage, queryWrapper);
         return iPage;
@@ -76,9 +76,9 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
             dto.setQuantity(dto.getOriginalQuantity());
             dto.setQuantity(dto.getOriginalQuantity());
             dto.setStatus(InventoryStatusEnum.TOBESOLD);
-            dto.setCreateName(TokenTools.getAdminName());
+            dto.setCreateName(TokenTools.getName());
             dto.setCreateTime(LocalDateTime.now());
-            dto.setSystemClientAccount(TokenTools.getAdminAccount());
+            dto.setSystemClientAccount(TokenTools.getAccount());
             save(dto);
             StockOperation stockOperation = new StockOperation();
             stockOperation.setWarehouseId(dto.getWarehouseId());
@@ -199,7 +199,7 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
                 .eq(Inventory::getWarehouseId, warehouseId)
                 .eq(Inventory::getProductId, productId)
                 .eq(Inventory::getBatchNumber, batchNumber)
-                .eq(Inventory::getSystemClientAccount, TokenTools.getAdminAccount());
+                .eq(Inventory::getSystemClientAccount, TokenTools.getAccount());
         return getOne(queryWrapper);
     }
 
@@ -214,7 +214,7 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
         queryWrapper.lambda()
                 .le(Inventory::getExpirationDate,LocalDate.now().plusMonths(2))
                 .eq(Inventory::getWarehouseId,dto.getWarehouseId())
-                .eq(Inventory::getSystemClientAccount,TokenTools.getAdminAccount())
+                .eq(Inventory::getSystemClientAccount,TokenTools.getAccount())
                 .eq(Inventory::getStatus,InventoryStatusEnum.TOBESOLD);
 
 
@@ -227,7 +227,7 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
 //        queryWrapper.lambda()
 //                .eq(Inventory::getWarehouseId, dto.getWarehouseId())
 //                .eq(Inventory::getStatus,dto.getStatus())
-//                .eq(Inventory::getSystemClientAccount, TokenTools.getAdminAccount());
+//                .eq(Inventory::getSystemClientAccount, TokenTools.getAccount());
 //        List<Inventory> list = list(queryWrapper);
 //        List<Inventory> newList = new ArrayList<>();
 //        for (Inventory inventory : list) {
@@ -247,7 +247,7 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
         queryWrapper.lambda()
                 .eq(Inventory::getWarehouseId, dto.getWarehouseId())
                 .eq(Inventory::getProductId, dto.getProductId())
-                .eq(Inventory::getSystemClientAccount, TokenTools.getAdminAccount())
+                .eq(Inventory::getSystemClientAccount, TokenTools.getAccount())
                 .orderByDesc(Inventory::getCreateTime);
         List<Inventory> list = list(queryWrapper);
         Integer totalQantity=0;

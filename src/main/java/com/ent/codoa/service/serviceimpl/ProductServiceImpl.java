@@ -43,7 +43,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         queryWrapper.lambda()
                 .like(StringUtils.isNotBlank(dto.getName()),Product::getName,dto.getName())
                 .like(StringUtils.isNotBlank(dto.getCategory()),Product::getCategory,dto.getCategory())
-                .eq(Product::getSystemClientAccount,TokenTools.getAdminAccount())
+                .eq(Product::getSystemClientAccount,TokenTools.getAccount())
                 .eq(Product::getWarehouseId,dto.getWarehouseId())
                 .orderByDesc(Product::getCreateTime);
         iPage=page(iPage,queryWrapper);
@@ -57,7 +57,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
                 .eq(Product::getName,dto.getName())
                 .eq(Product::getCategory,dto.getCategory())
                 .eq(Product::getWarehouseId,dto.getWarehouseId())
-                .eq(Product::getSystemClientAccount,TokenTools.getAdminAccount());
+                .eq(Product::getSystemClientAccount,TokenTools.getAccount());
         Product product=getOne(queryWrapper);
         if(product!=null&&product.getName().equals(dto.getName())&&
                 product.getCategory().equals(dto.getCategory())&&
@@ -66,9 +66,9 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
             throw new DataException("同类商品的商品名称重复");
         }else{
             LoginToken loginToken=TokenTools.getLoginToken(true);
-            dto.setCreateName(TokenTools.getAdminName());
+            dto.setCreateName(TokenTools.getName());
             dto.setCreateTime(LocalDateTime.now());
-            dto.setSystemClientAccount(TokenTools.getAdminAccount());
+            dto.setSystemClientAccount(TokenTools.getAccount());
             save(dto);
             LogTools.addLog("库存管理-新增商品","新增了一个商品,信息："+ JSONUtil.toJsonStr(dto),loginToken);
         }
@@ -94,7 +94,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
     public List<Product> getAllProduct(Long warehouseId) {
         QueryWrapper<Product> queryWrapper=new QueryWrapper<>();
         queryWrapper.lambda()
-                .eq(Product::getSystemClientAccount,TokenTools.getAdminAccount())
+                .eq(Product::getSystemClientAccount,TokenTools.getAccount())
                 .eq(Product::getWarehouseId,warehouseId)
                 .orderByDesc(Product::getCreateTime);
         List<Product> list=list(queryWrapper);
@@ -118,7 +118,7 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         QueryWrapper<Product> queryWrapper=new QueryWrapper<>();
         queryWrapper.lambda()
                 .eq(Product::getWarehouseId,dto.getWarehouseId())
-                .eq(Product::getSystemClientAccount,TokenTools.getAdminAccount())
+                .eq(Product::getSystemClientAccount,TokenTools.getAccount())
                 .orderByDesc(Product::getCreateTime);
         ProductIPage=page(ProductIPage,queryWrapper);
         List<ProductQantityVO> newList = new ArrayList<>();

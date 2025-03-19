@@ -15,6 +15,9 @@ public class CustomerOrderPage extends PageBase implements Serializable {
     @ApiModelProperty("订单编号")
     private String orderNum;
 
+    @ApiModelProperty("账号")
+    private String account;
+
     @ApiModelProperty("名称")
     private String name;
 

@@ -1,8 +1,5 @@
 package com.ent.codoa.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.ent.codoa.common.constant.enums.OrderStatusEnum;
 import com.ent.codoa.common.constant.enums.PaymentStatusEnum;
@@ -19,9 +16,12 @@ import java.time.LocalDateTime;
 @TableName("customer_order")
 public class CustomerOrder extends BaseInfo implements Serializable {
     private static final long serialVersionUID = 4701719975718071979L;
-
+    @ApiModelProperty("客户账号")
+    private String account;
     @ApiModelProperty("总价")
     private BigDecimal amount;
+    @ApiModelProperty("利润")
+    private BigDecimal profit;
     @ApiModelProperty("介绍")
     private String introduce;
     @ApiModelProperty("订单编号")

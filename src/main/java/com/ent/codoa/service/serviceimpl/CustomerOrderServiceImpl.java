@@ -10,9 +10,11 @@ import com.ent.codoa.common.constant.enums.OrderStatusEnum;
 import com.ent.codoa.common.constant.enums.PaymentStatusEnum;
 import com.ent.codoa.common.tools.LogTools;
 import com.ent.codoa.common.tools.TokenTools;
+import com.ent.codoa.entity.Customer;
 import com.ent.codoa.entity.CustomerOrder;
 import com.ent.codoa.entity.CustomerWorkOrder;
 import com.ent.codoa.mapper.CustomerOrderMapper;
+import com.ent.codoa.pojo.req.PageBase;
 import com.ent.codoa.pojo.req.customerorder.CustomerOrderInfoUpdate;
 import com.ent.codoa.pojo.req.customerorder.CustomerOrderPage;
 import com.ent.codoa.pojo.req.customerworkorder.CustomerWorkOrderPage;
@@ -39,7 +41,7 @@ public class CustomerOrderServiceImpl extends ServiceImpl<CustomerOrderMapper, C
             .eq(StringUtils.isNotBlank(dto.getOrderNum()), CustomerOrder::getOrderNum, dto.getOrderNum())
             .eq(dto.getPayStatus() != null, CustomerOrder::getPayStatus, dto.getPayStatus())
             .eq(dto.getStatus() != null, CustomerOrder::getStatus, dto.getStatus())
-            .eq(CustomerOrder::getSystemClientAccount, TokenTools.getAdminAccount())
+            .eq(CustomerOrder::getSystemClientAccount, TokenTools.getAccount())
             .orderByDesc(CustomerOrder::getCreateTime);
         return page(iPage, queryWrapper);
     }
@@ -83,11 +85,39 @@ public class CustomerOrderServiceImpl extends ServiceImpl<CustomerOrderMapper, C
         queryWrapper.lambda()
             .ge(CustomerOrder::getCreateTime, lastYearMonth)
             .le(CustomerOrder::getCreateTime, thisYearMonth)
-            .eq(CustomerOrder::getSystemClientAccount, TokenTools.getAdminAccount())
+            .eq(CustomerOrder::getSystemClientAccount, TokenTools.getAccount())
             .eq(CustomerOrder::getPayStatus, PaymentStatusEnum.PAID)
             .eq(CustomerOrder::getStatus, OrderStatusEnum.SUCCESS);
 
         return list(queryWrapper);
+    }
+
+    @Override
+    public List<CustomerOrder> withinThreeMonth() {
+        //当前时间
+        LocalDate thisMonth = LocalDate.now();
+        //3个月之前的时间 并且设置从1日开始
+        LocalDate last3Month = thisMonth.minusMonths(2).withDayOfMonth(1);
+
+        QueryWrapper<CustomerOrder> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda()
+            .ge(CustomerOrder::getCreateTime, last3Month)
+            .le(CustomerOrder::getCreateTime, thisMonth)
+            .eq(CustomerOrder::getSystemClientAccount, TokenTools.getAccount())
+            .eq(CustomerOrder::getPayStatus, PaymentStatusEnum.PAID)
+            .eq(CustomerOrder::getStatus, OrderStatusEnum.SUCCESS);
+
+        return list(queryWrapper);
+    }
+
+    @Override
+    public IPage<CustomerOrder> clientPage(PageBase dto) {
+        IPage<CustomerOrder> iPage = new Page<>(dto.getPageNum(), dto.getPageSize());
+        QueryWrapper<CustomerOrder> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda()
+            .eq(CustomerOrder::getAccount, TokenTools.getAccount())
+            .orderByDesc(CustomerOrder::getCreateTime);
+        return page(iPage, queryWrapper);
     }
 
 

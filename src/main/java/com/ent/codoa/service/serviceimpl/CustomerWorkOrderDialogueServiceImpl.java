@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ent.codoa.common.tools.TokenTools;
 import com.ent.codoa.entity.CustomerWorkOrderDialogue;
 import com.ent.codoa.mapper.CustomerWorkOrderDialogueMapper;
+import com.ent.codoa.pojo.req.IdPageBase;
 import com.ent.codoa.pojo.req.PageBase;
 import com.ent.codoa.pojo.resp.token.LoginToken;
 import com.ent.codoa.service.CustomerWorkOrderDialogueService;
@@ -37,7 +38,22 @@ public class CustomerWorkOrderDialogueServiceImpl extends ServiceImpl<CustomerWo
 
     @Override
     public void customerReply(CustomerWorkOrderDialogue dto) {
-        //todo 客户发送的工单聊天对话
+        LoginToken loginToken = TokenTools.getLoginToken(true);
+        dto.setIsCustomer(true);
+        dto.setCreateTime(LocalDateTime.now());
+        dto.setCreateName(loginToken.getName());
+        dto.setAccount(loginToken.getAccount());
+        save(dto);
+    }
+
+    @Override
+    public IPage<CustomerWorkOrderDialogue> clientPage(IdPageBase dto) {
+        IPage<CustomerWorkOrderDialogue> iPage = new Page<>(dto.getPageNum(), dto.getPageSize());
+        QueryWrapper<CustomerWorkOrderDialogue> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda()
+            .eq(CustomerWorkOrderDialogue::getWorkOrderId, dto.getId())
+            .orderByDesc(CustomerWorkOrderDialogue::getCreateTime);
+        return page(iPage, queryWrapper);
     }
 
 }

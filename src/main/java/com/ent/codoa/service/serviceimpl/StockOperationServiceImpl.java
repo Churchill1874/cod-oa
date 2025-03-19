@@ -15,9 +15,9 @@ public class StockOperationServiceImpl extends ServiceImpl<StockOperationMapper,
     public void stockIn(StockOperation dto) {
 
         dto.setOperationType(OperationTypeEnum.STOCKIN);
-        dto.setCreateName(TokenTools.getAdminName());
+        dto.setCreateName(TokenTools.getName());
         dto.setCreateTime(LocalDateTime.now());
-        dto.setSystemClientAccount(TokenTools.getAdminAccount());
+        dto.setSystemClientAccount(TokenTools.getAccount());
         save(dto);
 
     }
@@ -25,18 +25,18 @@ public class StockOperationServiceImpl extends ServiceImpl<StockOperationMapper,
     @Override
     public void stockOut(StockOperation dto) {
         dto.setOperationType(OperationTypeEnum.STOCKOUT);
-        dto.setCreateName(TokenTools.getAdminName());
+        dto.setCreateName(TokenTools.getName());
         dto.setCreateTime(LocalDateTime.now());
-        dto.setSystemClientAccount(TokenTools.getAdminAccount());
+        dto.setSystemClientAccount(TokenTools.getAccount());
         save(dto);
     }
 
     @Override
     public void stockReturn(StockOperation dto) {
         dto.setOperationType(OperationTypeEnum.TOBERETURN);
-        dto.setCreateName(TokenTools.getAdminName());
+        dto.setCreateName(TokenTools.getName());
         dto.setCreateTime(LocalDateTime.now());
-        dto.setSystemClientAccount(TokenTools.getAdminAccount());
+        dto.setSystemClientAccount(TokenTools.getAccount());
         save(dto);
     }
 }

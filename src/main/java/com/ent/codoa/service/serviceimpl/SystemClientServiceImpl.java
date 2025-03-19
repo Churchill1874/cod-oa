@@ -55,7 +55,7 @@ public class SystemClientServiceImpl extends ServiceImpl<SystemClientMapper, Sys
     public void add(SystemClient dto) {
         //添加之前要先校验 人事管理系统和客户管理系统是否有同样的account名称 没有才能添加 保证全局唯一账号 公用登录页面
         if (StringUtils.isBlank(dto.getCreateName())){
-            dto.setCreateName(TokenTools.getAdminName());
+            dto.setCreateName(TokenTools.getName());
         }
         if (dto.getCreateTime() == null){
             dto.setCreateTime(LocalDateTime.now());
@@ -71,7 +71,7 @@ public class SystemClientServiceImpl extends ServiceImpl<SystemClientMapper, Sys
         dto.setSalt(GenerateTools.getUUID());
         dto.setPassword(CodeTools.md5AndSalt(dto.getPassword(), dto.getSalt()));
         dto.setCreateTime(LocalDateTime.now());
-        dto.setCreateName(TokenTools.getAdminName());
+        dto.setCreateName(TokenTools.getName());
         save(dto);
     }
 

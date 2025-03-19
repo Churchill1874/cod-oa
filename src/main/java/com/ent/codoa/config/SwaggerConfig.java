@@ -30,7 +30,7 @@ public class SwaggerConfig {
                 //.globalOperationParameters(setRequestHeaders())
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.ent.codoa.controller.player"))
+                .apis(RequestHandlerSelectors.basePackage("com.ent.codoa.controller.client"))
                 .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
                 .paths(PathSelectors.any())
                 .build()

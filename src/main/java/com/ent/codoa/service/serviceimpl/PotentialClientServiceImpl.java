@@ -29,7 +29,7 @@ public class PotentialClientServiceImpl extends ServiceImpl<PotentialClientMappe
             .eq(StringUtils.isNotBlank(dto.getIntroduce()), PotentialClient::getIntroduce, dto.getIntroduce())
             .eq(StringUtils.isNotBlank(dto.getName()), PotentialClient::getName, dto.getName())
             .eq(StringUtils.isNotBlank(dto.getRemark()), PotentialClient::getRemark, dto.getRemark())
-            .eq(PotentialClient::getSystemClientAccount , TokenTools.getAdminAccount())
+            .eq(PotentialClient::getSystemClientAccount , TokenTools.getAccount())
             .orderByDesc(PotentialClient::getCreateTime);
         return page(iPage, queryWrapper);
     }
