@@ -9,6 +9,7 @@ import org.hibernate.validator.constraints.Length;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Data
@@ -86,6 +87,22 @@ public class StaffBaseUpdate extends IdBase implements Serializable {
     @NotNull(message = "状态不能为空")
     @ApiModelProperty(value = "状态", required = true)
     private UserStatusEnum status;
+
+    @NotNull(message = "雇佣到期时间不能为空")
+    @ApiModelProperty(value = "雇佣到期时间", required = true)
+    private LocalDate employmentExpire;
+
+    @NotNull(message = "每月交税比例不能为空")
+    @ApiModelProperty(value = "每月交税比例", required = true)
+    private Integer payTaxesRate;
+
+    @NotNull(message = "工作日加班费比例不能为空")
+    @ApiModelProperty(value = "工作日加班费比例", required = true)
+    private Integer weekdayOverTimePayRate;
+
+    @NotNull(message = "周末加班费比例不能为空")
+    @ApiModelProperty(value = "周末加班费比例", required = true)
+    private Integer weekendOverTimePayRate;
 
 
 }

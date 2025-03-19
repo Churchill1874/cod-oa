@@ -1,6 +1,5 @@
 package com.ent.codoa.service.serviceimpl;
 
-import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
@@ -15,6 +14,7 @@ import com.ent.codoa.common.tools.LogTools;
 import com.ent.codoa.common.tools.TokenTools;
 import com.ent.codoa.entity.Staff;
 import com.ent.codoa.mapper.StaffMapper;
+import com.ent.codoa.pojo.req.PageBase;
 import com.ent.codoa.pojo.req.staff.StaffBaseUpdate;
 import com.ent.codoa.pojo.req.staff.StaffPage;
 import com.ent.codoa.pojo.req.staff.StaffStatusUpdate;
@@ -22,6 +22,7 @@ import com.ent.codoa.service.StaffService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Service
@@ -32,7 +33,7 @@ public class StaffServiceImpl extends ServiceImpl<StaffMapper, Staff> implements
         IPage<Staff> iPage = new Page<>(dto.getPageNum(), dto.getPageSize());
         QueryWrapper<Staff> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda()
-            .eq(StringUtils.isNotBlank(dto.getAccount()) ,Staff::getAccount, dto.getAccount())
+            .eq(StringUtils.isNotBlank(dto.getAccount()), Staff::getAccount, dto.getAccount())
             .eq(StringUtils.isNotBlank(dto.getName()), Staff::getName, dto.getName())
             .eq(StringUtils.isNotBlank(dto.getPhone()), Staff::getPhone, dto.getPhone())
             .eq(Staff::getSystemClientAccount, TokenTools.getAccount())
@@ -48,7 +49,7 @@ public class StaffServiceImpl extends ServiceImpl<StaffMapper, Staff> implements
             .eq(Staff::getId, dto.getId());
         update(updateWrapper);
 
-        LogTools.addLog("人事管理","修改了一名员工状态,信息:" + JSONUtil.toJsonStr(dto), TokenTools.getLoginToken(true));
+        LogTools.addLog("人事管理", "修改了一名员工状态,信息:" + JSONUtil.toJsonStr(dto), TokenTools.getLoginToken(true));
     }
 
     @Override
@@ -74,7 +75,7 @@ public class StaffServiceImpl extends ServiceImpl<StaffMapper, Staff> implements
             .eq(Staff::getId, dto.getId()); // 根据 ID 更新
         update(updateWrapper);
 
-        LogTools.addLog("人事管理","修改了一名员工信息,信息:" + JSONUtil.toJsonStr(dto), TokenTools.getLoginToken(true));
+        LogTools.addLog("人事管理", "修改了一名员工信息,信息:" + JSONUtil.toJsonStr(dto), TokenTools.getLoginToken(true));
     }
 
     @Override
@@ -87,7 +88,7 @@ public class StaffServiceImpl extends ServiceImpl<StaffMapper, Staff> implements
         dto.setStatus(UserStatusEnum.NORMAL);
         save(dto);
 
-        LogTools.addLog("人事管理","添加了一名员工,信息:" + JSONUtil.toJsonStr(dto), TokenTools.getLoginToken(true));
+        LogTools.addLog("人事管理", "添加了一名员工,信息:" + JSONUtil.toJsonStr(dto), TokenTools.getLoginToken(true));
     }
 
     @Override
@@ -95,6 +96,28 @@ public class StaffServiceImpl extends ServiceImpl<StaffMapper, Staff> implements
         QueryWrapper<Staff> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().eq(Staff::getAccount, account);
         return getOne(queryWrapper);
+    }
+
+    @Override
+    public void updateContract(Long id, String contract) {
+        UpdateWrapper<Staff> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.lambda()
+            .set(Staff::getContract, contract)
+            .eq(Staff::getId, id);
+        update(updateWrapper);
+
+        LogTools.addLog("人事管理", "更新员工合同,id:" + id, TokenTools.getLoginToken(true));
+    }
+
+    @Override
+    public IPage<Staff> aboutToExpirePage(PageBase dto) {
+        IPage<Staff> iPage = new Page<>(dto.getPageNum(), dto.getPageSize());
+        QueryWrapper<Staff> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda()
+            .le(Staff::getEmploymentExpire, LocalDate.now().plusMonths(3))
+            .eq(Staff::getWorkStatus, "在职")
+            .orderByDesc(Staff::getCreateTime);
+        return page(iPage, queryWrapper);
     }
 
 
