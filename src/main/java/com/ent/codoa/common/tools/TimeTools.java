@@ -1,7 +1,9 @@
 package com.ent.codoa.common.tools;
 
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.temporal.TemporalAdjusters;
 
 /**
@@ -52,6 +54,16 @@ public class TimeTools {
             return true;
         }
         return false;
+    }
+
+    /**
+     * 根据时间转化成 当天localDateTime
+     * @param clock
+     * @return
+     */
+    public static LocalDateTime getTodayDateTime (String clock){
+        LocalTime localTime = LocalTime.parse(clock);
+        return LocalDateTime.of(LocalDate.now(), localTime);
     }
 
 }
