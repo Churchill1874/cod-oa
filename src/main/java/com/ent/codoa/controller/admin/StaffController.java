@@ -5,10 +5,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ent.codoa.entity.Staff;
-import com.ent.codoa.pojo.req.staff.StaffAdd;
-import com.ent.codoa.pojo.req.staff.StaffBaseUpdate;
-import com.ent.codoa.pojo.req.staff.StaffPage;
-import com.ent.codoa.pojo.req.staff.StaffStatusUpdate;
+import com.ent.codoa.pojo.req.PageBase;
+import com.ent.codoa.pojo.req.staff.*;
 import com.ent.codoa.pojo.req.systemclient.SystemClientPage;
 import com.ent.codoa.service.StaffService;
 import io.swagger.annotations.Api;
@@ -53,7 +51,17 @@ public class StaffController {
         return R.ok(null);
     }
 
+    @PostMapping("/updateContract")
+    @ApiOperation(value = "更新合同", notes = "更新合同")
+    public R updateContract(@RequestBody @Valid StaffContractUpdate req) {
+        staffService.updateContract(req.getId(), req.getContract());
+        return R.ok(null);
+    }
 
-
+    @PostMapping("/aboutExpirePage")
+    @ApiOperation(value = "即将到期的合同分页", notes = "即将到期的合同分页")
+    public R<IPage<Staff>> aboutExpirePage(@RequestBody @Valid PageBase req) {
+        return R.ok(staffService.aboutToExpirePage(req));
+    }
 
 }
