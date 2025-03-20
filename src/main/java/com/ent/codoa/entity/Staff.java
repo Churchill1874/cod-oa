@@ -8,8 +8,6 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.net.InetAddress;
 import java.time.LocalDate;
 
 @Data
@@ -66,9 +64,9 @@ public class Staff extends BaseInfo implements Serializable {
 
 
     @ApiModelProperty("工作日加班费比例")
-    private Integer weekdayOverTimePayRate;
+    private Integer weekdayOvertimePayRate;
     @ApiModelProperty("周末加班费比例")
-    private Integer weekendOverTimePayRate;
+    private Integer weekendOvertimePayRate;
     @ApiModelProperty("所属系统用户账号")
     private String systemClientAccount;
 

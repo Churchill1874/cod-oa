@@ -12,7 +12,6 @@ import com.ent.codoa.mapper.ClockInMapper;
 import com.ent.codoa.pojo.req.clockin.ClockInStaffQuery;
 import com.ent.codoa.service.AttendanceSettingService;
 import com.ent.codoa.service.ClockInService;
-import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
