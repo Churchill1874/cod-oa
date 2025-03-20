@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ent.codoa.common.tools.TokenTools;
 import com.ent.codoa.entity.AttendanceSetting;
 import com.ent.codoa.mapper.AttendanceSettingMapper;
-import com.ent.codoa.pojo.req.attendancesetting.AttendanceSettingAdd;
+import com.ent.codoa.pojo.req.attendancesetting.AttendanceSettingUpdate;
 import com.ent.codoa.service.AttendanceSettingService;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +27,7 @@ public class AttendanceSettingServiceImpl extends ServiceImpl<AttendanceSettingM
     }
 
     @Override
-    public void setting(AttendanceSettingAdd dto) {
+    public void setting(AttendanceSettingUpdate dto) {
         AttendanceSetting attendanceSetting = findBySCA(TokenTools.getAccount());
         if (attendanceSetting == null){
             attendanceSetting = BeanUtil.toBean(dto, AttendanceSetting.class);
@@ -41,11 +41,7 @@ public class AttendanceSettingServiceImpl extends ServiceImpl<AttendanceSettingM
 
     @Override
     public AttendanceSetting init(String systemClientAccount) {
-        AttendanceSetting attendanceSetting = findBySCA(systemClientAccount);
-        if (attendanceSetting != null){
-            return attendanceSetting;
-        }
-        attendanceSetting = new AttendanceSetting();
+        AttendanceSetting attendanceSetting = new AttendanceSetting();
         attendanceSetting.setStartWorkTime("09:00");
         attendanceSetting.setEndWorkTime("18:00");
         attendanceSetting.setSystemClientAccount(systemClientAccount);

@@ -2,7 +2,7 @@ package com.ent.codoa.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ent.codoa.entity.AttendanceSetting;
-import com.ent.codoa.pojo.req.attendancesetting.AttendanceSettingAdd;
+import com.ent.codoa.pojo.req.attendancesetting.AttendanceSettingUpdate;
 
 public interface AttendanceSettingService extends IService<AttendanceSetting> {
 
@@ -16,7 +16,7 @@ public interface AttendanceSettingService extends IService<AttendanceSetting> {
      * 更新考勤配置
      * @param dto
      */
-    void setting(AttendanceSettingAdd dto);
+    void setting(AttendanceSettingUpdate dto);
 
     /**
      * 初始化考勤
