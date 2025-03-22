@@ -7,7 +7,7 @@ import com.ent.codoa.pojo.req.PageBase;
 import com.ent.codoa.pojo.req.performanceappraisal.PerformanceAppraisalAdd;
 import com.ent.codoa.pojo.req.performanceappraisal.PerformanceAppraisalPage;
 
-public interface PerformanceAppraisalService extends IService<PerformanceAppraisal>{
+public interface PerformanceAppraisaService extends IService<PerformanceAppraisal>{
 
     IPage<PerformanceAppraisal> queryPage(PerformanceAppraisalPage dto);
 

@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.ent.codoa.entity.PerformanceAppraisal;
 import com.ent.codoa.pojo.req.PageBase;
-import com.ent.codoa.service.PerformanceAppraisalService;
+import com.ent.codoa.service.PerformanceAppraisaService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -21,13 +21,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class PerformanceAppraisalApi {
 
     @Autowired
-    private PerformanceAppraisalService performanceAppraisalService;
+    private PerformanceAppraisaService performanceAppraisaService;
 
 
     @PostMapping("/page")
     @ApiOperation(value = "员工分页绩效考核", notes = "员工分页绩效考核")
     public R<IPage<PerformanceAppraisal>> page(@RequestBody PageBase req) {
-        IPage<PerformanceAppraisal> iPage = performanceAppraisalService.clientPage(req);
+        IPage<PerformanceAppraisal> iPage = performanceAppraisaService.clientPage(req);
         return R.ok(iPage);
     }
 

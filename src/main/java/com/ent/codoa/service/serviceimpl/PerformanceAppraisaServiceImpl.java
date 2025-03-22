@@ -13,13 +13,13 @@ import com.ent.codoa.mapper.PerformanceAppraisalMapper;
 import com.ent.codoa.pojo.req.PageBase;
 import com.ent.codoa.pojo.req.performanceappraisal.PerformanceAppraisalAdd;
 import com.ent.codoa.pojo.req.performanceappraisal.PerformanceAppraisalPage;
-import com.ent.codoa.service.PerformanceAppraisalService;
+import com.ent.codoa.service.PerformanceAppraisaService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 @Service
-public class PerformanceAppraisalServiceImpl extends ServiceImpl<PerformanceAppraisalMapper, PerformanceAppraisal> implements PerformanceAppraisalService {
+public class PerformanceAppraisaServiceImpl extends ServiceImpl<PerformanceAppraisalMapper, PerformanceAppraisal> implements PerformanceAppraisaService {
 
     @Override
     public IPage<PerformanceAppraisal> queryPage(PerformanceAppraisalPage dto) {
