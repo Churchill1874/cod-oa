@@ -81,7 +81,7 @@ public class StaffServiceImpl extends ServiceImpl<StaffMapper, Staff> implements
     @Override
     public void add(Staff dto) {
         dto.setSalt(GenerateTools.getUUID());
-        dto.setPassword(CodeTools.md5AndSalt(dto.getSalt(), dto.getPassword()));
+        dto.setPassword(CodeTools.md5AndSalt(dto.getPassword(), dto.getSalt()));
         dto.setSystemClientAccount(TokenTools.getAccount());
         dto.setCreateName(TokenTools.getName());
         dto.setCreateTime(LocalDateTime.now());
