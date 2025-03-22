@@ -24,4 +24,7 @@ public class PerformanceAppraisal extends BaseInfo implements Serializable {
     @ApiModelProperty("评价内容存json字符串")
     private String appraisal;
 
+    @ApiModelProperty("系统用户账号")
+    private String systemClientAccount;
+
 }

@@ -61,7 +61,10 @@ public class Staff extends BaseInfo implements Serializable {
     private LocalDate employmentExpire;
     @ApiModelProperty("每月交税比例")
     private Integer payTaxesRate;
-
+    @ApiModelProperty("年假天数")
+    private Integer annualLeave;
+    @ApiModelProperty("剩余休假 这里面包括了调休增加的")
+    private Integer remainingLeave;
 
     @ApiModelProperty("工作日加班费比例")
     private Integer weekdayOvertimePayRate;

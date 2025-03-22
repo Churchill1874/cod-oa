@@ -109,4 +109,12 @@ public class StaffAdd implements Serializable {
     @ApiModelProperty(value = "周末加班费比例", required = true)
     private Integer weekendOvertimePayRate;
 
+    @NotNull(message = "年假天数不能为空")
+    @ApiModelProperty(value = "年假天数",required = true)
+    private Integer annualLeave;
+
+    @NotNull(message = "剩余休假不能为空")
+    @ApiModelProperty(value = "剩余休假 这里面包括了调休增加的",required = true)
+    private Integer remainingLeave;
+
 }

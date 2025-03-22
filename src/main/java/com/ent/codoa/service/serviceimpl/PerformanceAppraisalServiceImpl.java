@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 @Service
-public class PerformanceAppraisaServiceImpl extends ServiceImpl<PerformanceAppraisalMapper, PerformanceAppraisal> implements PerformanceAppraisaService {
+public class PerformanceAppraisalServiceImpl extends ServiceImpl<PerformanceAppraisalMapper, PerformanceAppraisal> implements PerformanceAppraisaService {
 
     @Override
     public IPage<PerformanceAppraisal> queryPage(PerformanceAppraisalPage dto) {
@@ -27,6 +27,7 @@ public class PerformanceAppraisaServiceImpl extends ServiceImpl<PerformanceAppra
         QueryWrapper<PerformanceAppraisal> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda()
             .eq(StringUtils.isNotBlank(dto.getAccount()), PerformanceAppraisal::getAccount, dto.getAccount())
+            .eq(PerformanceAppraisal::getSystemClientAccount, TokenTools.getAccount())
             .orderByDesc(PerformanceAppraisal::getCreateTime);
 
         return page(iPage, queryWrapper);
@@ -37,6 +38,7 @@ public class PerformanceAppraisaServiceImpl extends ServiceImpl<PerformanceAppra
         PerformanceAppraisal performanceAppraisal = BeanUtil.toBean(dto, PerformanceAppraisal.class);
         performanceAppraisal.setCreateName(TokenTools.getName());
         performanceAppraisal.setCreateTime(LocalDateTime.now());
+        performanceAppraisal.setSystemClientAccount(TokenTools.getAccount());
         save(performanceAppraisal);
 
         LogTools.addLog("绩效考核","新增考核绩效:" + JSONUtil.toJsonStr(performanceAppraisal),TokenTools.getLoginToken(true));
