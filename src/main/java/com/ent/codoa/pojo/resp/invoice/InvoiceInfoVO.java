@@ -14,6 +14,9 @@ public class InvoiceInfoVO implements Serializable {
     private static final long serialVersionUID = -7491214358525593596L;
 
 
+    @ApiModelProperty(value = "发票的id")
+    private Long id;
+
     @ApiModelProperty(value = "发票的发行日期")
     private LocalDate issueDate;
 

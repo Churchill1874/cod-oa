@@ -53,6 +53,7 @@ public class InvoiceServiceImpl extends ServiceImpl<InvoiceMapper, Invoice> impl
         for(Invoice invoice:iPage.getRecords()){
             InvoiceInfoVO invoiceInfoVO=new InvoiceInfoVO();
             List<InvoiceItem> itemList=invoiceItemService.getItems(invoice.getId());
+            invoiceInfoVO.setId(invoice.getId());
             invoiceInfoVO.setInvoiceNumber(invoice.getInvoiceNumber());
             invoiceInfoVO.setRegistrationNumber(invoice.getRegistrationNumber());
             invoiceInfoVO.setIssueDate(invoice.getIssueDate());
@@ -109,12 +110,34 @@ public class InvoiceServiceImpl extends ServiceImpl<InvoiceMapper, Invoice> impl
         dto.setTaxAmount(tax);
         dto.setSubTaxTotal(subTaxTotal);
         dto.setTotalAmount(totalAmount);
+
         save(dto);
 //        updateById(dto);
         List<InvoiceItem> items = dto.getItems();
+        if(CollectionUtils.isEmpty(items)){
+            throw new DataException("至少需要一条以上的商品或服务明细数据");
+        }
         for (InvoiceItem item : items) {
-            item.setInvoiceId(dto.getId()); // 设置关联的发票ID
-            invoiceItemService.add(item);
+            if(item.getDate()==null){
+                throw new DataException("商品或服务提供日期不能为空");
+            }else if(item.getTaxRate()==null){
+                throw new DataException("税率不能为空");
+            }else if(item.getAmount()==null){
+                throw new DataException("商品或服务明细金额不能为空");
+            }else if(item.getDescription()==null){
+                throw new DataException("商品或服务明细金额不能为空");
+            }else if(item.getQuantity()==null){
+                throw new DataException("商品或服务数量不能为空");
+            }else if(item.getTaxType()==null){
+                throw new DataException("税率标识不能为空");
+            }else if(!StringUtils.isNotBlank(item.getUnit())){
+                throw new DataException("商品或服务明细的单位不能为空");
+            }else if(item.getUnitPrice()==null){
+                throw new DataException("商品或服务明细的单价不能为空");
+            }else{
+                item.setInvoiceId(dto.getId()); // 设置关联的发票ID
+                invoiceItemService.add(item);
+            }
         }
         LogTools.addLog("支付管理-电子发票", "新增了一条发票信息，信息：" + JSONUtil.toJsonStr(dto), TokenTools.getLoginToken(true));
 
@@ -137,32 +160,37 @@ public class InvoiceServiceImpl extends ServiceImpl<InvoiceMapper, Invoice> impl
         queryWrapper.lambda()
                 .eq(Invoice::getId,id);
         Invoice invoice=getOne(queryWrapper);
-        InvoiceInfoVO invoiceInfoVO=new InvoiceInfoVO();
-        List<InvoiceItem> itemList=invoiceItemService.getItems(invoice.getId());
-        invoiceInfoVO.setInvoiceNumber(invoice.getInvoiceNumber());
-        invoiceInfoVO.setRegistrationNumber(invoice.getRegistrationNumber());
-        invoiceInfoVO.setIssueDate(invoice.getIssueDate());
-        invoiceInfoVO.setSupplierName(invoice.getSupplierName());
-        invoiceInfoVO.setSupplierAddress(invoice.getSupplierAddress());
-        invoiceInfoVO.setSupplierPhone(invoice.getSupplierPhone());
-        invoiceInfoVO.setSupplierEmail(invoice.getSupplierEmail());
-        invoiceInfoVO.setCustomerName(invoice.getCustomerName());
-        invoiceInfoVO.setCustomerAddress(invoice.getCustomerAddress());
-        invoiceInfoVO.setPreviousAmount(invoice.getPreviousAmount());
-        invoiceInfoVO.setPaymentAmount(invoice.getPaymentAmount());
-        invoiceInfoVO.setSubTotal(invoice.getSubTotal());
-        invoiceInfoVO.setTaxAmount(invoice.getTaxAmount());
-        invoiceInfoVO.setSubTaxTotal(invoice.getSubTaxTotal());
-        invoiceInfoVO.setCarryOverAmount(invoice.getCarryOverAmount());
-        invoiceInfoVO.setTotalAmount(invoice.getTotalAmount());
-        invoiceInfoVO.setBankName(invoice.getBankName());
-        invoiceInfoVO.setBranchName(invoice.getBranchName());
-        invoiceInfoVO.setAccountNumber(invoice.getAccountNumber());
-        invoiceInfoVO.setAccountHolder(invoice.getAccountHolder());
-        invoiceInfoVO.setPaymentDueDate(invoice.getPaymentDueDate());
-        invoiceInfoVO.setRemarks(invoice.getRemarks());
-        invoiceInfoVO.setItems(itemList);
-        return invoiceInfoVO;
+        if(invoice!=null){
+            InvoiceInfoVO invoiceInfoVO=new InvoiceInfoVO();
+            List<InvoiceItem> itemList=invoiceItemService.getItems(invoice.getId());
+            invoiceInfoVO.setId(invoice.getId());
+            invoiceInfoVO.setInvoiceNumber(invoice.getInvoiceNumber());
+            invoiceInfoVO.setRegistrationNumber(invoice.getRegistrationNumber());
+            invoiceInfoVO.setIssueDate(invoice.getIssueDate());
+            invoiceInfoVO.setSupplierName(invoice.getSupplierName());
+            invoiceInfoVO.setSupplierAddress(invoice.getSupplierAddress());
+            invoiceInfoVO.setSupplierPhone(invoice.getSupplierPhone());
+            invoiceInfoVO.setSupplierEmail(invoice.getSupplierEmail());
+            invoiceInfoVO.setCustomerName(invoice.getCustomerName());
+            invoiceInfoVO.setCustomerAddress(invoice.getCustomerAddress());
+            invoiceInfoVO.setPreviousAmount(invoice.getPreviousAmount());
+            invoiceInfoVO.setPaymentAmount(invoice.getPaymentAmount());
+            invoiceInfoVO.setSubTotal(invoice.getSubTotal());
+            invoiceInfoVO.setTaxAmount(invoice.getTaxAmount());
+            invoiceInfoVO.setSubTaxTotal(invoice.getSubTaxTotal());
+            invoiceInfoVO.setCarryOverAmount(invoice.getCarryOverAmount());
+            invoiceInfoVO.setTotalAmount(invoice.getTotalAmount());
+            invoiceInfoVO.setBankName(invoice.getBankName());
+            invoiceInfoVO.setBranchName(invoice.getBranchName());
+            invoiceInfoVO.setAccountNumber(invoice.getAccountNumber());
+            invoiceInfoVO.setAccountHolder(invoice.getAccountHolder());
+            invoiceInfoVO.setPaymentDueDate(invoice.getPaymentDueDate());
+            invoiceInfoVO.setRemarks(invoice.getRemarks());
+            invoiceInfoVO.setItems(itemList);
+            return invoiceInfoVO;
+        }else{
+            throw new DataException("未获取到任何数据");
+        }
     }
 
 //    @Override

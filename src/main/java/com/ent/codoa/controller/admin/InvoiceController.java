@@ -51,9 +51,9 @@ public class InvoiceController {
 //        return R.ok(null);
 //    }
 
-    @PostMapping("/getInvoiceImage")
+    @PostMapping("/getInvoiceInfo")
     @ApiOperation(value="根据发票Id获取发票详情",notes = "根据发票Id获取发票详情")
-    public R<InvoiceInfoVO> getInvoiceImage(@RequestBody @Valid IdBase req){
+    public R<InvoiceInfoVO> getInvoiceInfo(@RequestBody @Valid IdBase req){
         InvoiceInfoVO invoiceInfoVO = invoiceService.getInvoiceById(req.getId());
         return R.ok(invoiceInfoVO);
     }
