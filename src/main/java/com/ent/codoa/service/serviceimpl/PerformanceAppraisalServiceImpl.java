@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ent.codoa.common.tools.LogTools;
@@ -13,13 +14,15 @@ import com.ent.codoa.mapper.PerformanceAppraisalMapper;
 import com.ent.codoa.pojo.req.PageBase;
 import com.ent.codoa.pojo.req.performanceappraisal.PerformanceAppraisalAdd;
 import com.ent.codoa.pojo.req.performanceappraisal.PerformanceAppraisalPage;
-import com.ent.codoa.service.PerformanceAppraisaService;
+import com.ent.codoa.service.PerformanceAppraisalService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
+
 @Service
-public class PerformanceAppraisalServiceImpl extends ServiceImpl<PerformanceAppraisalMapper, PerformanceAppraisal> implements PerformanceAppraisaService {
+public class PerformanceAppraisalServiceImpl extends ServiceImpl<PerformanceAppraisalMapper, PerformanceAppraisal> implements PerformanceAppraisalService {
 
     @Override
     public IPage<PerformanceAppraisal> queryPage(PerformanceAppraisalPage dto) {
@@ -58,6 +61,22 @@ public class PerformanceAppraisalServiceImpl extends ServiceImpl<PerformanceAppr
             .eq(PerformanceAppraisal::getAccount, TokenTools.getAccount())
             .orderByDesc(PerformanceAppraisal::getCreateTime);
         return page(iPage,queryWrapper);
+    }
+
+    @Override
+    public PerformanceAppraisal findByDateAndAccount(String date, String account) {
+        QueryWrapper<PerformanceAppraisal> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda()
+            .eq(PerformanceAppraisal::getAccount, account)
+            .eq(PerformanceAppraisal::getDate, date)
+            .orderByDesc(PerformanceAppraisal::getCreateTime);
+
+        List<PerformanceAppraisal> list = list(queryWrapper);
+        if (CollectionUtils.isEmpty(list)){
+            return null;
+        }
+
+        return list.get(0);
     }
 
 }

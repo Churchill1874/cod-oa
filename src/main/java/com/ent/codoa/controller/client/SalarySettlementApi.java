@@ -2,9 +2,9 @@ package com.ent.codoa.controller.client;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
-import com.ent.codoa.entity.PerformanceAppraisal;
+import com.ent.codoa.entity.SalarySettlement;
 import com.ent.codoa.pojo.req.PageBase;
-import com.ent.codoa.service.PerformanceAppraisalService;
+import com.ent.codoa.service.SalarySettlementService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -16,18 +16,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
-@Api(tags = "绩效考核")
-@RequestMapping("/client/performanceAppraisal")
-public class PerformanceAppraisalApi {
+@Api(tags = "结算薪资记录")
+@RequestMapping("/client/salarySettlement")
+public class SalarySettlementApi {
 
     @Autowired
-    private PerformanceAppraisalService performanceAppraisalService;
-
+    private SalarySettlementService salarySettlementService;
 
     @PostMapping("/page")
-    @ApiOperation(value = "员工分页绩效考核", notes = "员工分页绩效考核")
-    public R<IPage<PerformanceAppraisal>> page(@RequestBody PageBase req) {
-        IPage<PerformanceAppraisal> iPage = performanceAppraisalService.clientPage(req);
+    @ApiOperation(value = "薪资结算记录分页查询", notes = "薪资结算记录分页查询")
+    public R<IPage<SalarySettlement>> page(@RequestBody PageBase req) {
+        IPage<SalarySettlement> iPage = salarySettlementService.clientPage(req);
         return R.ok(iPage);
     }
 
