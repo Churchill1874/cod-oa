@@ -173,8 +173,7 @@ public class SalarySettlementServiceImpl extends ServiceImpl<SalarySettlementMap
 
         String[] dateArray = date.split("-");
         Set<LocalDate> localDateSet = TimeTools.getWorkdaysSet(Integer.parseInt(dateArray[0]), Integer.parseInt(dateArray[1]));
-
-        //查询员工打卡出勤情况
+        salarySettlement.setExpectedAttendance(new BigDecimal(localDateSet.size()).setScale(0, RoundingMode.DOWN));
 
         //查询打卡记录
         ClockInStaffQuery clockInStaffQuery = new ClockInStaffQuery();
@@ -207,7 +206,7 @@ public class SalarySettlementServiceImpl extends ServiceImpl<SalarySettlementMap
                 weekendsOvertime = weekendsOvertime.add(clockInCheckDto.getWeekendsOvertime());
             }
         }
-        salarySettlement.setExpectedAttendance(new BigDecimal(localDateSet.size()).setScale(0, RoundingMode.DOWN));
+
 
         //统计出来的迟到,早退,加班等数据存入对象
         salarySettlement.setActualAttendance(actualAttendance);
