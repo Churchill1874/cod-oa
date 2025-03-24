@@ -58,13 +58,11 @@ public class SalarySettlementServiceImpl extends ServiceImpl<SalarySettlementMap
 
     @Override
     public void add(SalarySettlementAdd dto) {
-        SalarySettlement salarySettlement = BeanUtil.toBean(dto, SalarySettlement.class);
+        // 计算出来工资
+        SalarySettlement salarySettlement = specifyDataStatistics(dto);
         salarySettlement.setSystemClientAccount(TokenTools.getAccount());
         salarySettlement.setCreateName(TokenTools.getName());
         salarySettlement.setCreateTime(LocalDateTime.now());
-
-        Staff staff = staffService.findByAccount(dto.getAccount());
-        salarySettlement.setBaseSalary(new BigDecimal(staff.getSalary()));
 
         PerformanceAppraisal performanceAppraisal = performanceAppraisalService.findByDateAndAccount(dto.getDate(), dto.getAccount());
         if (performanceAppraisal != null) {
@@ -242,8 +240,32 @@ public class SalarySettlementServiceImpl extends ServiceImpl<SalarySettlementMap
 
     @Override
     public SalarySettlement specifyDataStatistics(SalarySettlementAdd dto) {
+        Staff staff = staffService.findByAccount(dto.getAccount());
+        if (staff == null) {
+            throw new DataException("员工不存在");
+        }
+        if (staff.getSalary() == null) {
+            throw new DataException("员工基本工资未配置");
+        }
+        SalarySettlement salarySettlement = BeanUtil.toBean(dto, SalarySettlement.class);
+        salarySettlement.setBaseSalary(new BigDecimal(staff.getSalary()));
 
-        return null;
+        //计算工资 ( 基本工资 / 应该出勤的天数 * 实际出勤天数 + 平日加班费 + 六日加班费 ) as 税前工作工资 - 税支出
+        //日薪资
+        BigDecimal daySalary = salarySettlement.getBaseSalary().divide(salarySettlement.getExpectedAttendance(), RoundingMode.DOWN);
+        //无加班工资
+        BigDecimal estimateSalary = daySalary.multiply(salarySettlement.getActualAttendance());
+        //平日加班费
+        salarySettlement.setWeekdayOvertimeAmount(salarySettlement.getWeekdayOvertimePayRate().multiply(salarySettlement.getWeekdaysOverTime()));
+        //六日加班费
+        salarySettlement.setWeekendOvertimeAmount(salarySettlement.getWeekendOvertimePayRate().multiply(salarySettlement.getWeekendsOverTime()));
+        //加上平日加班费 加上六日加班费
+        salarySettlement.setEstimateSalary(estimateSalary.add(salarySettlement.getWeekdayOvertimeAmount()).add(salarySettlement.getWeekendOvertimeAmount()));
+        //税
+        salarySettlement.setPayTaxesAmount(salarySettlement.getEstimateSalary().divide(new BigDecimal(salarySettlement.getPayTaxesRate()), 2, RoundingMode.DOWN));
+        //减去税
+        salarySettlement.setEstimateSalary(salarySettlement.getEstimateSalary().subtract(salarySettlement.getPayTaxesAmount()));
+        return salarySettlement;
     }
 
 
