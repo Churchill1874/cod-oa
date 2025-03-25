@@ -50,10 +50,10 @@ public class SalarySettlement extends BaseInfo implements Serializable {
     private BigDecimal leaveEarly;
 
     @ApiModelProperty("平日加班时间 单位小时")
-    private BigDecimal weekdaysOverTime;
+    private BigDecimal weekdaysOvertime;
 
     @ApiModelProperty("周末加班时间 单位小时")
-    private BigDecimal weekendsOverTime;
+    private BigDecimal weekendsOvertime;
 
     @ApiModelProperty("绩效评分")
     private String performanceScore;
