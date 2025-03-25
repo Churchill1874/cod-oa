@@ -17,7 +17,9 @@ import com.ent.codoa.service.LeaveManagementService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 @Service
 public class LeaveManagementServiceImpl extends ServiceImpl<LeaveManagementMapper, LeaveManagement> implements LeaveManagementService {
@@ -46,6 +48,7 @@ public class LeaveManagementServiceImpl extends ServiceImpl<LeaveManagementMappe
     @Override
     public void add(LeaveManagementAdd dto) {
         LeaveManagement leaveManagement = BeanUtil.toBean(dto, LeaveManagement.class);
+        leaveManagement.setLeaveDaysCount(ChronoUnit.DAYS.between(leaveManagement.getStartDate(), leaveManagement.getEndDate()));
         leaveManagement.setCreateTime(LocalDateTime.now());
         leaveManagement.setCreateName(TokenTools.getName());
         leaveManagement.setSystemClientAccount(TokenTools.getSystemClientAccount());

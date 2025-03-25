@@ -23,7 +23,7 @@ public class LeaveManagement extends BaseInfo implements Serializable {
     @ApiModelProperty("申请结束休假日期")
     private LocalDate endDate;
     @ApiModelProperty("休假天数统计")
-    private Integer leaveDaysCount;
+    private Long leaveDaysCount;
     @ApiModelProperty("审批账号")
     private String approvalAccount;
     @ApiModelProperty("审批时间")

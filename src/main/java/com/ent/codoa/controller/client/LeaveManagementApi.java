@@ -2,6 +2,7 @@ package com.ent.codoa.controller.client;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
+import com.ent.codoa.common.exception.DataException;
 import com.ent.codoa.entity.LeaveManagement;
 import com.ent.codoa.pojo.req.PageBase;
 import com.ent.codoa.pojo.req.leavemanagement.LeaveManagementAdd;
@@ -15,6 +16,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 
 @Slf4j
 @RestController
@@ -34,7 +39,11 @@ public class LeaveManagementApi {
 
     @PostMapping("/add")
     @ApiOperation(value = "新增休假申请", notes = "新增休假申请")
-    public R add(@RequestBody LeaveManagementAdd req) {
+    public R add(@RequestBody @Valid LeaveManagementAdd req) {
+        long leaveDays = ChronoUnit.DAYS.between(req.getStartDate(), req.getEndDate());
+        if (leaveDays < 1){
+            throw new DataException("申请休假时间至少一天或以上");
+        }
         leaveManagementService.add(req);
         return R.ok(null);
     }
