@@ -77,6 +77,16 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
 
     @Override
     public void updateBaseProduct(ProductBaseUpdate dto) {
+        QueryWrapper<Product> queryWrapper=new QueryWrapper<>();
+        queryWrapper.lambda()
+                .eq(Product::getId,dto.getId())
+                .eq(Product::getSystemClientAccount,TokenTools.getAccount());
+        Product product=getOne(queryWrapper);
+        if(product!=null&&product.getName().equals(dto.getName())&&
+                product.getCategory().equals(dto.getCategory())
+        ){
+            throw new DataException("同类商品的商品名称重复");
+        }
         LoginToken loginToken=TokenTools.getLoginToken(true);
         UpdateWrapper<Product> updateWrapper=new UpdateWrapper();
         updateWrapper.lambda()
