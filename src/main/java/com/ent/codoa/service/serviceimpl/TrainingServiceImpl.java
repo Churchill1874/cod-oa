@@ -51,9 +51,6 @@ public class TrainingServiceImpl extends ServiceImpl<TrainingMapper, Training> i
             if ("学习视频".equals(key)) {
                 trainingVO.setVideoList(trainings);
             }
-            if ("公告信息".equals(key)) {
-                trainingVO.setAnnouncementList(trainings);
-            }
         });
 
         return trainingVO;

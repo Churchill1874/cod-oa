@@ -23,7 +23,5 @@ public class TrainingVO implements Serializable {
     @ApiModelProperty("学习视频链接")
     private List<Training> videoList;
 
-    @ApiModelProperty("公告信息")
-    private List<Training> announcementList;
 
 }
