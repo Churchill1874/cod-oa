@@ -2,6 +2,7 @@ package com.ent.codoa.service.serviceimpl;
 
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ent.codoa.common.tools.LogTools;
 import com.ent.codoa.common.tools.TimeTools;
@@ -15,8 +16,11 @@ import com.ent.codoa.service.ClockInService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class ClockInServiceImpl extends ServiceImpl<ClockInMapper, ClockIn> implements ClockInService {

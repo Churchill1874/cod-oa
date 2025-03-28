@@ -93,51 +93,66 @@ public class SalarySettlementServiceImpl extends ServiceImpl<SalarySettlementMap
     //根据上班打卡时间 和下班打卡时间 解析当天迟到,加班,出勤等信息
     private ClockInCheckDto checkClockInTime(LocalDateTime clockInStartTime, LocalDateTime clockInEndTime, String startWorkTime, String endWorkTime) {
         ClockInCheckDto clockInCheckDto = new ClockInCheckDto();
+        //如果没有打下班卡 就算没出勤
+        if (clockInEndTime == null){
+            return clockInCheckDto;
+        }
+
         LocalDateTime todayStartTime = TimeTools.getDateTime(clockInStartTime.toLocalDate(), startWorkTime);
-        LocalDateTime todayEndTime = TimeTools.getDateTime(clockInEndTime.toLocalDate(), endWorkTime);
+        LocalDateTime todayEndTime = TimeTools.getDateTime(clockInStartTime.toLocalDate(), endWorkTime);
 
         //如果当天打卡了
         if (todayStartTime.toLocalDate().compareTo(clockInStartTime.toLocalDate()) == 0) {
             //下班之前打上班卡了,并且 上班之前没有打下班卡 就算出勤了
-            if (todayEndTime.compareTo(clockInStartTime) < 0 && todayStartTime.compareTo(clockInEndTime) < 0) {
+            if (todayEndTime.compareTo(clockInStartTime) > 0 && todayStartTime.compareTo(clockInEndTime) < 0) {
                 clockInCheckDto.setActualAttendance(new BigDecimal(1));
-
-                //判断出勤了,但是迟到了 并且不是六日
-                DayOfWeek dayOfWeek = clockInStartTime.toLocalDate().getDayOfWeek();
-                if (dayOfWeek != DayOfWeek.SATURDAY && dayOfWeek != DayOfWeek.SUNDAY) {
-                    if (todayStartTime.compareTo(clockInStartTime) < 0) {
-                        long lateMinutes = Duration.between(todayStartTime, clockInStartTime).toMinutes();
-                        clockInCheckDto.setLateHours(new BigDecimal(lateMinutes).divide(new BigDecimal(60), 1, RoundingMode.HALF_UP));
-                    }
-
-                    //判断出勤了,但是早退了 并且不是六日
-                    if (todayEndTime.compareTo(clockInEndTime) > 0) {
-                        long leaveEarlyMinutes = Duration.between(clockInEndTime, todayEndTime).toMinutes();
-                        clockInCheckDto.setLeaveEarly(new BigDecimal(leaveEarlyMinutes).divide(new BigDecimal(60), 1, RoundingMode.HALF_UP));
-                    }
-
-                    //判断今天是否加了班
-                    if (todayEndTime.compareTo(clockInEndTime) < 0) {
-                        long overtime = Duration.between(todayEndTime, clockInEndTime).toMinutes();
-                        //如果加班30分钟以上 则开始累计加班时常
-                        if (overtime > 30) {
-                            //平日
-                            clockInCheckDto.setWeekdaysOvertime(new BigDecimal(overtime).divide(new BigDecimal(60), 1, RoundingMode.HALF_UP));
-                        }
-                    }
-                } else {
-                    //六日
-                    long overtime = Duration.between(clockInStartTime, clockInEndTime).toMinutes();
-                    //六日加班也是30分钟以上 开始累计算加班
-                    if (overtime > 30) {
-                        clockInCheckDto.setWeekendsOvertime(new BigDecimal(overtime).divide(new BigDecimal(60), 1, RoundingMode.HALF_UP));
-                    }
-                }
+                //出勤时间统计
+                attendanceTimeCount(todayStartTime, todayEndTime, clockInStartTime, clockInEndTime, clockInCheckDto);
             }
         }
 
         return clockInCheckDto;
     }
+
+
+    //出勤时间统计
+    private void attendanceTimeCount(LocalDateTime todayStartTime, LocalDateTime todayEndTime,
+                                     LocalDateTime clockInStartTime, LocalDateTime clockInEndTime,
+                                     ClockInCheckDto clockInCheckDto){
+
+        //判断出勤了,但是迟到了 并且不是六日
+        DayOfWeek dayOfWeek = clockInStartTime.toLocalDate().getDayOfWeek();
+        if (dayOfWeek != DayOfWeek.SATURDAY && dayOfWeek != DayOfWeek.SUNDAY) {
+            if (todayStartTime.compareTo(clockInStartTime) < 0) {
+                long lateMinutes = Duration.between(todayStartTime, clockInStartTime).toMinutes();
+                clockInCheckDto.setLateHours(new BigDecimal(lateMinutes).divide(new BigDecimal(60), 1, RoundingMode.HALF_UP));
+            }
+
+            //判断出勤了,但是早退了 并且不是六日
+            if (todayEndTime.compareTo(clockInEndTime) > 0) {
+                long leaveEarlyMinutes = Duration.between(clockInEndTime, todayEndTime).toMinutes();
+                clockInCheckDto.setLeaveEarly(new BigDecimal(leaveEarlyMinutes).divide(new BigDecimal(60), 1, RoundingMode.HALF_UP));
+            }
+
+            //判断今天是否加了班
+            if (todayEndTime.compareTo(clockInEndTime) < 0) {
+                long overtime = Duration.between(todayEndTime, clockInEndTime).toMinutes();
+                //如果加班30分钟以上 则开始累计加班时常
+                if (overtime > 30) {
+                    //平日
+                    clockInCheckDto.setWeekdaysOvertime(new BigDecimal(overtime).divide(new BigDecimal(60), 1, RoundingMode.HALF_UP));
+                }
+            }
+        } else {
+            //六日
+            long overtime = Duration.between(clockInStartTime, clockInEndTime).toMinutes();
+            //六日加班也是30分钟以上 开始累计算加班
+            if (overtime > 30) {
+                clockInCheckDto.setWeekendsOvertime(new BigDecimal(overtime).divide(new BigDecimal(60), 1, RoundingMode.HALF_UP));
+            }
+        }
+    }
+
 
     @Override
     public SalarySettlement statisticsByDateAndAccount(String date, String account) {

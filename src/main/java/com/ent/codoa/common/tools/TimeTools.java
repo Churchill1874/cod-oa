@@ -101,4 +101,15 @@ public class TimeTools {
         return set;
     }
 
+
+    /**
+     * 获取指定年月 没有六日的出勤天数
+     * @param date
+     * @return
+     */
+    public static Set<LocalDate> getWorkdaysSet(LocalDate date){
+        return getWorkdaysSet(date.getYear(), date.getMonthValue());
+    }
+
+
 }
