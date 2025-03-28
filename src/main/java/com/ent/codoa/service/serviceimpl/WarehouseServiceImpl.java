@@ -55,6 +55,13 @@ public class WarehouseServiceImpl extends ServiceImpl<WarehouseMapper, Warehouse
 
     @Override
     public void updateBaseInfo(WarehouseBaseUpdate dto) {
+        QueryWrapper<Warehouse> queryWrapper=new QueryWrapper();
+        queryWrapper.lambda()
+                .eq(Warehouse::getName,dto.getName());
+        Warehouse wirehouse=getOne(queryWrapper);
+        if(wirehouse!=null){
+            throw new DataException("仓库名称重复");
+        }
         UpdateWrapper<Warehouse> updateWrapper=new UpdateWrapper<>();
         LoginToken loginToken=TokenTools.getLoginToken(true);
         updateWrapper.lambda()
