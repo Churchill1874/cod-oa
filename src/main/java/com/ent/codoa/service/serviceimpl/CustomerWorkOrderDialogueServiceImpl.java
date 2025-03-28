@@ -9,6 +9,7 @@ import com.ent.codoa.entity.CustomerWorkOrderDialogue;
 import com.ent.codoa.mapper.CustomerWorkOrderDialogueMapper;
 import com.ent.codoa.pojo.req.IdPageBase;
 import com.ent.codoa.pojo.req.PageBase;
+import com.ent.codoa.pojo.req.customerworkorderdialogue.CustomerWorkOrderDialoguePage;
 import com.ent.codoa.pojo.resp.token.LoginToken;
 import com.ent.codoa.service.CustomerWorkOrderDialogueService;
 import org.springframework.stereotype.Service;
@@ -19,10 +20,12 @@ import java.time.LocalDateTime;
 public class CustomerWorkOrderDialogueServiceImpl extends ServiceImpl<CustomerWorkOrderDialogueMapper, CustomerWorkOrderDialogue> implements CustomerWorkOrderDialogueService {
 
     @Override
-    public IPage<CustomerWorkOrderDialogue> queryPage(PageBase dto) {
+    public IPage<CustomerWorkOrderDialogue> queryPage(CustomerWorkOrderDialoguePage dto) {
         IPage<CustomerWorkOrderDialogue> iPage = new Page<>(dto.getPageNum(), dto.getPageSize());
         QueryWrapper<CustomerWorkOrderDialogue> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().orderByDesc(CustomerWorkOrderDialogue::getCreateTime);
+        queryWrapper.lambda()
+            .eq(CustomerWorkOrderDialogue::getWorkOrderId, dto.getWorkOrderId())
+            .orderByDesc(CustomerWorkOrderDialogue::getCreateTime);
         return page(iPage, queryWrapper);
     }
 
