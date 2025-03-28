@@ -58,7 +58,12 @@ public class ClockInServiceImpl extends ServiceImpl<ClockInMapper, ClockIn> impl
             if (clockIn.getEndTime().compareTo(TimeTools.getTodayDateTime(attendanceSetting.getEndWorkTime())) >= 0) {
                 clockIn.setStatus("正常");
             } else {
-                clockIn.setStatus("早退打卡");
+                if ("迟到打卡".equals(clockIn.getStatus())){
+                    clockIn.setStatus("迟到打卡/早退打卡");
+                } else {
+                    clockIn.setStatus("早退打卡");
+                }
+
             }
         }
 
