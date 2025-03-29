@@ -17,6 +17,9 @@ public class BigDecimalTools {
      * @return
      */
     public static String divideK2AndDownStr(BigDecimal dividend, BigDecimal divisor) {
+        if (BigDecimal.ZERO.compareTo(divisor) == 0){
+            return "0.00";
+        }
         return dividend.divide(divisor, 2, RoundingMode.DOWN).toPlainString();
     }
 
@@ -29,6 +32,9 @@ public class BigDecimalTools {
      * @return
      */
     public static BigDecimal divideK2AndDown(BigDecimal dividend, BigDecimal divisor) {
+        if (BigDecimal.ZERO.compareTo(divisor) == 0){
+            return new BigDecimal("0.00").setScale(2, RoundingMode.DOWN);
+        }
         return dividend.divide(divisor, 2, RoundingMode.DOWN);
     }
 

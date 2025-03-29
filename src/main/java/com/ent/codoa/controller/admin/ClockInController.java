@@ -80,7 +80,8 @@ public class ClockInController {
 
         list = new ArrayList<>();
 
-        Set<LocalDate> set = TimeTools.getWorkdaysSet(LocalDate.parse(req.getMonth()));
+        String[] array = req.getMonth().split("-");
+        Set<LocalDate> set = TimeTools.getWorkdaysSet(Integer.parseInt(array[0]),Integer.parseInt(array[1]));
         for(LocalDate value: set){
 
             int randomValue = RandomUtil.randomInt(1,100);
@@ -89,22 +90,22 @@ public class ClockInController {
             clockIn.setAccount(req.getAccount());
             clockIn.setSystemClientAccount(TokenTools.getAccount());
             if (randomValue > 3){
-                clockIn.setStartTime(TimeTools.getDateTime(value, "9:00"));
+                clockIn.setStartTime(TimeTools.getDateTime(value, "09:00"));
                 clockIn.setEndTime(TimeTools.getDateTime(value, "18:00"));
                 clockIn.setStatus("正常");
             }
             if (randomValue == 3){
-                clockIn.setStartTime(TimeTools.getDateTime(value, "9:10"));
+                clockIn.setStartTime(TimeTools.getDateTime(value, "09:10"));
                 clockIn.setEndTime(TimeTools.getDateTime(value, "18:00"));
                 clockIn.setStatus("迟到打卡");
             }
             if (randomValue == 2){
-                clockIn.setStartTime(TimeTools.getDateTime(value, "9:00"));
+                clockIn.setStartTime(TimeTools.getDateTime(value, "09:00"));
                 clockIn.setEndTime(TimeTools.getDateTime(value, "17:00"));
                 clockIn.setStatus("早退打卡");
             }
             if (randomValue == 1){
-                clockIn.setStartTime(TimeTools.getDateTime(value, "9:00"));
+                clockIn.setStartTime(TimeTools.getDateTime(value, "09:00"));
                 clockIn.setEndTime(TimeTools.getDateTime(value, "18:00"));
                 clockIn.setStatus("迟到打卡/早退打卡");
             }
@@ -142,7 +143,8 @@ public class ClockInController {
 
         list = new ArrayList<>();
 
-        Set<LocalDate> set = TimeTools.getWorkdaysSet(LocalDate.parse(req.getMonth()));
+        String[] array = req.getMonth().split("-");
+        Set<LocalDate> set = TimeTools.getWorkdaysSet(Integer.parseInt(array[0]),Integer.parseInt(array[1]));
 
         int count = 0;
         int randomValue = RandomUtil.randomInt(10, set.size());
@@ -152,22 +154,22 @@ public class ClockInController {
             clockIn.setAccount(req.getAccount());
             clockIn.setSystemClientAccount(TokenTools.getAccount());
             if (randomValue > 3){
-                clockIn.setStartTime(TimeTools.getDateTime(value, "9:00"));
+                clockIn.setStartTime(TimeTools.getDateTime(value, "09:00"));
                 clockIn.setEndTime(TimeTools.getDateTime(value, "18:00"));
                 clockIn.setStatus("正常");
             }
             if (randomValue == 3){
-                clockIn.setStartTime(TimeTools.getDateTime(value, "9:10"));
+                clockIn.setStartTime(TimeTools.getDateTime(value, "09:10"));
                 clockIn.setEndTime(TimeTools.getDateTime(value, "18:00"));
                 clockIn.setStatus("迟到打卡");
             }
             if (randomValue == 2){
-                clockIn.setStartTime(TimeTools.getDateTime(value, "9:00"));
+                clockIn.setStartTime(TimeTools.getDateTime(value, "09:00"));
                 clockIn.setEndTime(TimeTools.getDateTime(value, "17:00"));
                 clockIn.setStatus("早退打卡");
             }
             if (randomValue == 1){
-                clockIn.setStartTime(TimeTools.getDateTime(value, "9:00"));
+                clockIn.setStartTime(TimeTools.getDateTime(value, "09:00"));
                 clockIn.setEndTime(TimeTools.getDateTime(value, "18:00"));
                 clockIn.setStatus("迟到打卡/早退打卡");
             }

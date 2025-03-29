@@ -79,6 +79,7 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
     public void updateBase(CustomerBaseUpdate dto) {
         UpdateWrapper<Customer> updateWrapper = new UpdateWrapper();
         updateWrapper.lambda()
+            .set(Customer::getStatus, dto.getStatus())
             .set(Customer::getName, dto.getName())
             .set(Customer::getEnterpriseName, dto.getEnterpriseName())
             .set(Customer::getAddress, dto.getAddress())

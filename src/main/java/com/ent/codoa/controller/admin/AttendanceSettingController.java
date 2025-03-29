@@ -35,6 +35,15 @@ public class AttendanceSettingController {
     @PostMapping("/setting")
     @ApiOperation(value = "考勤设置", notes = "考勤设置")
     public R setting(@RequestBody @Valid AttendanceSettingUpdate req) {
+        String[] startTimeArray = req.getStartWork().split(":");
+        if (Integer.parseInt(startTimeArray[0]) < 10 && !startTimeArray[0].contains("0")){
+            req.setStartWork("0" + startTimeArray[0] + ":" + startTimeArray[1]);
+        }
+
+        String[] endTimeArray = req.getEndWork().split(":");
+        if (Integer.parseInt(endTimeArray[0]) < 10 && !endTimeArray[0].contains("0")){
+            req.setEndWork("0" + endTimeArray[0] + ":" + endTimeArray[1]);
+        }
         attendanceSettingService.setting(req);
         return R.ok(null);
     }
