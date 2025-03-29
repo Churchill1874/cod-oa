@@ -76,7 +76,9 @@ public class ClockInServiceImpl extends ServiceImpl<ClockInMapper, ClockIn> impl
         //查出今天时间
         LocalDateTime today = LocalDateTime.now();
         QueryWrapper<ClockIn> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().likeRight(ClockIn::getStartTime, today.toLocalDate());
+        queryWrapper.lambda()
+            .eq(ClockIn::getAccount, TokenTools.getAccount())
+            .likeRight(ClockIn::getStartTime, today.toLocalDate());
         ClockIn clockIn = getOne(queryWrapper);
         //没有打卡就新增
         if (clockIn == null) {
