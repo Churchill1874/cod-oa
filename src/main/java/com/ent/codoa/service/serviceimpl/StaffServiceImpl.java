@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ent.codoa.common.constant.enums.UserStatusEnum;
+import com.ent.codoa.common.exception.DataException;
 import com.ent.codoa.common.tools.CodeTools;
 import com.ent.codoa.common.tools.GenerateTools;
 import com.ent.codoa.common.tools.LogTools;
@@ -18,8 +19,11 @@ import com.ent.codoa.pojo.req.PageBase;
 import com.ent.codoa.pojo.req.staff.StaffBaseUpdate;
 import com.ent.codoa.pojo.req.staff.StaffPage;
 import com.ent.codoa.pojo.req.staff.StaffStatusUpdate;
+import com.ent.codoa.service.CustomerService;
 import com.ent.codoa.service.StaffService;
+import com.ent.codoa.service.SystemClientService;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -27,6 +31,12 @@ import java.time.LocalDateTime;
 
 @Service
 public class StaffServiceImpl extends ServiceImpl<StaffMapper, Staff> implements StaffService {
+
+    @Autowired
+    private SystemClientService systemClientService;
+
+    @Autowired
+    private CustomerService customerService;
 
     @Override
     public IPage<Staff> queryPage(StaffPage dto) {
@@ -82,6 +92,11 @@ public class StaffServiceImpl extends ServiceImpl<StaffMapper, Staff> implements
 
     @Override
     public void add(Staff dto) {
+        if (findByAccount(dto.getAccount()) != null
+            || systemClientService.findByAccount(dto.getAccount()) != null
+            || customerService.findByAccount(dto.getAccount()) != null) {
+            throw new DataException("账号已经存在,请修改");
+        }
         dto.setSalt(GenerateTools.getUUID());
         dto.setPassword(CodeTools.md5AndSalt(dto.getPassword(), dto.getSalt()));
         dto.setSystemClientAccount(TokenTools.getAccount());

@@ -7,6 +7,7 @@ import org.hibernate.validator.constraints.Length;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Data
@@ -103,11 +104,11 @@ public class StaffAdd implements Serializable {
 
     @NotNull(message = "工作日加班费比例不能为空")
     @ApiModelProperty(value = "工作日加班费比例", required = true)
-    private Integer weekdayOvertimePayRate;
+    private BigDecimal weekdayOvertimePayRate;
 
     @NotNull(message = "周末加班费比例不能为空")
     @ApiModelProperty(value = "周末加班费比例", required = true)
-    private Integer weekendOvertimePayRate;
+    private BigDecimal weekendOvertimePayRate;
 
     @NotNull(message = "年假天数不能为空")
     @ApiModelProperty(value = "年假天数",required = true)

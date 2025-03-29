@@ -248,7 +248,9 @@ public class SalarySettlementServiceImpl extends ServiceImpl<SalarySettlementMap
         //加上平日加班费 加上六日加班费
         salarySettlement.setEstimateSalary(estimateSalary.add(salarySettlement.getWeekdayOvertimeAmount()).add(salarySettlement.getWeekendOvertimeAmount()));
         //税
-        salarySettlement.setPayTaxesAmount(salarySettlement.getEstimateSalary().divide(new BigDecimal(salarySettlement.getPayTaxesRate()), 2, RoundingMode.DOWN));
+        //税的比例
+        BigDecimal payTaxesRate = new BigDecimal(salarySettlement.getPayTaxesRate()).divide(new BigDecimal("100"), 2,RoundingMode.DOWN);
+        salarySettlement.setPayTaxesAmount(salarySettlement.getEstimateSalary().multiply(payTaxesRate).setScale(2, RoundingMode.DOWN));
         //减去税
         salarySettlement.setEstimateSalary(salarySettlement.getEstimateSalary().subtract(salarySettlement.getPayTaxesAmount()));
         return salarySettlement;
@@ -288,7 +290,8 @@ public class SalarySettlementServiceImpl extends ServiceImpl<SalarySettlementMap
         //加上平日加班费 加上六日加班费
         salarySettlement.setEstimateSalary(estimateSalary.add(salarySettlement.getWeekdayOvertimeAmount()).add(salarySettlement.getWeekendOvertimeAmount()));
         //税
-        salarySettlement.setPayTaxesAmount(salarySettlement.getEstimateSalary().divide(new BigDecimal(salarySettlement.getPayTaxesRate()), 2, RoundingMode.DOWN));
+        BigDecimal payTaxesRate = new BigDecimal(salarySettlement.getPayTaxesRate()).divide(new BigDecimal("100"), 2,RoundingMode.DOWN);
+        salarySettlement.setPayTaxesAmount(salarySettlement.getEstimateSalary().multiply(payTaxesRate).setScale(2, RoundingMode.DOWN));
         //减去税
         salarySettlement.setEstimateSalary(salarySettlement.getEstimateSalary().subtract(salarySettlement.getPayTaxesAmount()));
         return salarySettlement;
