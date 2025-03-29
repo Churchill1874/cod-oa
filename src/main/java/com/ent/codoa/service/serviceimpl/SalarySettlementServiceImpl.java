@@ -25,10 +25,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.time.DayOfWeek;
-import java.time.Duration;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.*;
 import java.util.List;
 import java.util.Set;
 
@@ -241,9 +238,13 @@ public class SalarySettlementServiceImpl extends ServiceImpl<SalarySettlementMap
         //无加班工资
         BigDecimal estimateSalary = daySalary.multiply(salarySettlement.getActualAttendance());
         //平日加班费
-        salarySettlement.setWeekdayOvertimeAmount(salarySettlement.getWeekdayOvertimePayRate().multiply(salarySettlement.getWeekdaysOvertime()));
+        //每天工作时常 小时
+        long hours = Duration.between(LocalTime.parse(attendanceSetting.getStartWorkTime()),LocalTime.parse(attendanceSetting.getEndWorkTime())).toHours();
+        //每小时的基本工资
+        BigDecimal hourSalary = daySalary.divide(new BigDecimal(hours), 2, RoundingMode.DOWN);
+        salarySettlement.setWeekdayOvertimeAmount(hourSalary.multiply(salarySettlement.getWeekdaysOvertime()).multiply(salarySettlement.getWeekdayOvertimePayRate()));
         //六日加班费
-        salarySettlement.setWeekendOvertimeAmount(salarySettlement.getWeekendOvertimePayRate().multiply(salarySettlement.getWeekendsOvertime()));
+        salarySettlement.setWeekendOvertimeAmount(hourSalary.multiply(salarySettlement.getWeekendsOvertime()).multiply(salarySettlement.getWeekendOvertimePayRate()));
         //加上平日加班费 加上六日加班费
         salarySettlement.setEstimateSalary(estimateSalary.add(salarySettlement.getWeekdayOvertimeAmount()).add(salarySettlement.getWeekendOvertimeAmount()));
         //税
@@ -255,6 +256,12 @@ public class SalarySettlementServiceImpl extends ServiceImpl<SalarySettlementMap
 
     @Override
     public SalarySettlement specifyDataStatistics(SalarySettlementAdd dto) {
+        //查询查询考勤上班时间设置
+        AttendanceSetting attendanceSetting = attendanceSettingService.findBySCA(TokenTools.getAccount());
+        if (attendanceSetting == null) {
+            throw new DataException("缺少上班打开时间配置");
+        }
+
         Staff staff = staffService.findByAccount(dto.getAccount());
         if (staff == null) {
             throw new DataException("员工不存在");
@@ -271,9 +278,13 @@ public class SalarySettlementServiceImpl extends ServiceImpl<SalarySettlementMap
         //无加班工资
         BigDecimal estimateSalary = daySalary.multiply(salarySettlement.getActualAttendance());
         //平日加班费
-        salarySettlement.setWeekdayOvertimeAmount(salarySettlement.getWeekdayOvertimePayRate().multiply(salarySettlement.getWeekdaysOvertime()));
+        //每天工作时常 小时
+        long hours = Duration.between(LocalTime.parse(attendanceSetting.getStartWorkTime()),LocalTime.parse(attendanceSetting.getEndWorkTime())).toHours();
+        //每小时的基本工资
+        BigDecimal hourSalary = daySalary.divide(new BigDecimal(hours), 2, RoundingMode.DOWN);
+        salarySettlement.setWeekdayOvertimeAmount(hourSalary.multiply(salarySettlement.getWeekdaysOvertime()).multiply(salarySettlement.getWeekdayOvertimePayRate()));
         //六日加班费
-        salarySettlement.setWeekendOvertimeAmount(salarySettlement.getWeekendOvertimePayRate().multiply(salarySettlement.getWeekendsOvertime()));
+        salarySettlement.setWeekendOvertimeAmount(hourSalary.multiply(salarySettlement.getWeekendsOvertime()).multiply(salarySettlement.getWeekendOvertimePayRate()));
         //加上平日加班费 加上六日加班费
         salarySettlement.setEstimateSalary(estimateSalary.add(salarySettlement.getWeekdayOvertimeAmount()).add(salarySettlement.getWeekendOvertimeAmount()));
         //税
