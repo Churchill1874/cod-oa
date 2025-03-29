@@ -3,6 +3,7 @@ package com.ent.codoa.controller.client;
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
+import com.ent.codoa.common.annotation.LoginCheck;
 import com.ent.codoa.entity.CustomerWorkOrder;
 import com.ent.codoa.entity.CustomerWorkOrderDialogue;
 import com.ent.codoa.pojo.req.IdPageBase;
@@ -40,6 +41,7 @@ public class CustomerWorkOrderApi {
         return R.ok(null);
     }
 
+    @LoginCheck
     @PostMapping("/orderWorkPage")
     @ApiOperation(value = "分页客户工单", notes = "分页客户工单")
     public R<IPage<CustomerWorkOrder>> orderWorkPage(@RequestBody PageBase req) {
@@ -54,7 +56,7 @@ public class CustomerWorkOrderApi {
         return R.ok(null);
     }
 
-
+    @LoginCheck
     @PostMapping("/dialoguePage")
     @ApiOperation(value = "分页客户指定工单留言记录", notes = "分页客户指定工单留言记录")
     public R<IPage<CustomerWorkOrderDialogue>> page(@RequestBody IdPageBase req) {

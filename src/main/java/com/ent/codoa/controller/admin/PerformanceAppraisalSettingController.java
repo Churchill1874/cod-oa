@@ -2,6 +2,7 @@ package com.ent.codoa.controller.admin;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
+import com.ent.codoa.common.annotation.LoginCheck;
 import com.ent.codoa.entity.Customer;
 import com.ent.codoa.entity.PerformanceAppraisalSetting;
 import com.ent.codoa.pojo.req.customer.CustomerPage;
@@ -27,6 +28,7 @@ public class PerformanceAppraisalSettingController {
     @Autowired
     private PerformanceAppraisalSettingService performanceAppraisalSettingService;
 
+    @LoginCheck
     @PostMapping("/querySetting")
     @ApiOperation(value = "查询绩效考核当前配置", notes = "查询绩效考核当前配置")
     public R<PerformanceAppraisalSetting> querySetting() {

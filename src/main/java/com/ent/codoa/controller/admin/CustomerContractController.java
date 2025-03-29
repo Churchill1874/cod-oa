@@ -2,6 +2,7 @@ package com.ent.codoa.controller.admin;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
+import com.ent.codoa.common.annotation.LoginCheck;
 import com.ent.codoa.entity.CustomerContract;
 import com.ent.codoa.pojo.req.IdBase;
 import com.ent.codoa.pojo.req.customercontract.CustomerContractAdd;
@@ -28,6 +29,7 @@ public class CustomerContractController {
     @Autowired
     private CustomerContractService customerContractService;
 
+    @LoginCheck
     @PostMapping("/page")
     @ApiOperation(value = "分页", notes = "分页")
     public R<IPage<CustomerContract>> page(@RequestBody CustomerContractPage req) {

@@ -4,6 +4,7 @@ package com.ent.codoa.controller.admin;
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
+import com.ent.codoa.common.annotation.LoginCheck;
 import com.ent.codoa.entity.PotentialClient;
 import com.ent.codoa.entity.Staff;
 import com.ent.codoa.pojo.req.IdBase;
@@ -32,6 +33,7 @@ public class PotentialClientController {
     @Autowired
     private PotentialClientService potentialClientService;
 
+    @LoginCheck
     @PostMapping("/page")
     @ApiOperation(value = "分页潜在客户", notes = "分页潜在客户")
     public R<IPage<PotentialClient>> page(@RequestBody PotentialClientPage req) {

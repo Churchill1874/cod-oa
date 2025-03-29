@@ -3,6 +3,7 @@ package com.ent.codoa.controller.admin;
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
+import com.ent.codoa.common.annotation.LoginCheck;
 import com.ent.codoa.entity.Customer;
 import com.ent.codoa.pojo.req.customer.CustomerAdd;
 import com.ent.codoa.pojo.req.customer.CustomerBaseUpdate;
@@ -29,6 +30,7 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
 
+    @LoginCheck
     @PostMapping("/page")
     @ApiOperation(value = "分页客户", notes = "分页客户")
     public R<IPage<Customer>> page(@RequestBody CustomerPage req) {

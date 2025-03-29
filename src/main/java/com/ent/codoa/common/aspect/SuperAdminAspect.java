@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Aspect
 @Component
-public class SuperAdminCheck {
+public class SuperAdminAspect {
 
     //定位切面的目标 是一个注解
     @Pointcut("@annotation(com.ent.codoa.common.annotation.SuperAdminLoginCheck)")

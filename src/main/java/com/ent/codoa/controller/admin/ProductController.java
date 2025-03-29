@@ -3,6 +3,7 @@ package com.ent.codoa.controller.admin;
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
+import com.ent.codoa.common.annotation.LoginCheck;
 import com.ent.codoa.entity.Product;
 import com.ent.codoa.pojo.resp.product.ProductQantityVO;
 import com.ent.codoa.pojo.req.IdBase;
@@ -27,6 +28,7 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
+    @LoginCheck
     @PostMapping("/page")
     @ApiOperation(value = "分页商品信息",notes = "分页商品信息")
     public R<IPage<Product>> page(@RequestBody @Valid ProductPage req){
@@ -54,6 +56,8 @@ public class ProductController {
 //        List<Product> list=productService.getAllProduct(warehouseId);
 //        return R.ok(list);
 //    }
+
+    @LoginCheck
     @PostMapping("/getProduct")
     @ApiOperation(value = "根据ID获取商品",notes = "根据ID获取商品")
     public R<Product> getProduct(@RequestBody @Valid IdBase req){
@@ -61,7 +65,7 @@ public class ProductController {
         return R.ok(product);
     }
 
-
+    @LoginCheck
     @PostMapping("/getALLProductQantity")
     @ApiOperation(value = "根据仓库Id获取所有商品库存", notes ="根据仓库Id获取所有商品库存")
     public R<IPage<ProductQantityVO>> getALLProductQantity(@RequestBody @Valid ProductWarehouseIdPage req) {
@@ -69,7 +73,7 @@ public class ProductController {
         return R.ok(iPage);
     }
 
-
+    @LoginCheck
     @PostMapping("/getLowWarning")
     @ApiOperation(value = "根据仓库Id获取预警商品库存", notes ="根据仓库Id获取预警商品库存")
     public R<IPage<ProductQantityVO>> getLowWarning(@RequestBody @Valid ProductWarehouseIdPage req) {

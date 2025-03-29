@@ -2,6 +2,7 @@ package com.ent.codoa.controller.client;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
+import com.ent.codoa.common.annotation.LoginCheck;
 import com.ent.codoa.entity.CustomerOrder;
 import com.ent.codoa.pojo.req.PageBase;
 import com.ent.codoa.pojo.req.customerorder.CustomerOrderPage;
@@ -24,6 +25,7 @@ public class CustomerOrderApi {
     @Autowired
     private CustomerOrderService customerOrderService;
 
+    @LoginCheck
     @PostMapping("/page")
     @ApiOperation(value = "分页客户订单", notes = "分页客户订单")
     public R<IPage<CustomerOrder>> page(@RequestBody PageBase req) {

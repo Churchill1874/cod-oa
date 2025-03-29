@@ -3,6 +3,7 @@ package com.ent.codoa.controller.client;
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
+import com.ent.codoa.common.annotation.LoginCheck;
 import com.ent.codoa.common.tools.TokenTools;
 import com.ent.codoa.entity.Complaint;
 import com.ent.codoa.pojo.req.PageBase;
@@ -30,7 +31,7 @@ public class ComplaintApi {
     @Autowired
     private ComplaintService complaintService;
 
-
+    @LoginCheck
     @PostMapping("/page")
     @ApiOperation(value = "分页客户自己投诉记录", notes = "分页客户自己投诉记录")
     public R<IPage<Complaint>> page(@RequestBody PageBase req) {

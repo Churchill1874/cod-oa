@@ -4,6 +4,7 @@ import cn.hutool.core.util.RandomUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.api.R;
+import com.ent.codoa.common.annotation.LoginCheck;
 import com.ent.codoa.common.exception.DataException;
 import com.ent.codoa.common.tools.TimeTools;
 import com.ent.codoa.common.tools.TokenTools;
@@ -38,6 +39,7 @@ public class ClockInController {
     @Autowired
     private ClockInService clockInService;
 
+    @LoginCheck
     @PostMapping("/findByMonthAndAccount")
     @ApiOperation(value = "查询某员工某月份记录", notes = "查询某员工某月份记录")
     public R<List<ClockIn>> findByMonthAndAccount(@RequestBody @Valid ClockInStaffQuery req) {

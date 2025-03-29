@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
+import com.ent.codoa.common.annotation.LoginCheck;
 import com.ent.codoa.common.constant.enums.RoleEnum;
 import com.ent.codoa.common.exception.AccountOrPasswordException;
 import com.ent.codoa.common.tools.CodeTools;
@@ -47,6 +48,7 @@ public class SystemClientController {
     @Autowired
     private StaffService staffService;//人事管理接口
 
+    @LoginCheck
     @PostMapping("/page")
     @ApiOperation(value = "分页系统用户", notes = "分页系统用户")
     public R<IPage<SystemClient>> page(@RequestBody SystemClientPage req) {

@@ -4,6 +4,7 @@ package com.ent.codoa.controller.admin;
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
+import com.ent.codoa.common.annotation.LoginCheck;
 import com.ent.codoa.entity.Warehouse;
 import com.ent.codoa.pojo.req.IdBase;
 import com.ent.codoa.pojo.req.warehouse.WarehouseAdd;
@@ -31,6 +32,7 @@ public class WarehouseController {
     @Autowired
     private WarehouseService wirehouseService;
 
+    @LoginCheck
     @PostMapping("/page")
     @ApiOperation(value = "分页仓库信息",notes ="分页仓库信息" )
     public R<IPage<Warehouse>> page(@RequestBody WarehousePage req){
@@ -58,6 +60,7 @@ public class WarehouseController {
 //        return R.ok(null);
 //    }
 
+    @LoginCheck
     @PostMapping("/getallwarehouse")
     @ApiOperation(value="获取所有仓库列表",notes = "获取所有仓库列表")
     public R<List<Map>> findWarehouseList(){
@@ -65,6 +68,7 @@ public class WarehouseController {
         return R.ok(list);
     }
 
+    @LoginCheck
     @PostMapping("/getwarehouse")
     @ApiOperation(value="根据Id获取仓库信息",notes = "根据Id获取仓库信息")
     public R<Warehouse> findWarehouseById(@RequestBody @Valid  IdBase req){

@@ -1,6 +1,7 @@
 package com.ent.codoa.controller.admin;
 
 import com.baomidou.mybatisplus.extension.api.R;
+import com.ent.codoa.common.annotation.LoginCheck;
 import com.ent.codoa.pojo.req.invoiceitem.InvoiceItemAmount;
 import com.ent.codoa.pojo.req.invoiceitem.InvoiceItemTax;
 import com.ent.codoa.service.InvoiceItemService;
@@ -24,6 +25,7 @@ public class InvoiceItemController {
     @Autowired
     private InvoiceItemService invoiceItemService;
 
+    @LoginCheck
     @PostMapping("/calculateSubAmount")
     @ApiOperation(value="根据商品数量和商品单价计算该明细商品总金额",notes = "根据商品数量和商品单价计算该明细商品总金额")
     public R<BigDecimal> calculateSubAmount(@RequestBody @Valid InvoiceItemAmount req){
@@ -32,6 +34,7 @@ public class InvoiceItemController {
 
     }
 
+    @LoginCheck
     @PostMapping("/calculateSubTax")
     @ApiOperation(value="根据商品总金额和商品税率计算该明细消费税",notes = "根据商品总金额和商品税率计算该明细消费税")
     public R<BigDecimal> calculateSubTax(@RequestBody @Valid InvoiceItemTax req){

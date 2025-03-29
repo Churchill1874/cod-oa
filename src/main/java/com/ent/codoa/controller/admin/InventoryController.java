@@ -3,6 +3,7 @@ package com.ent.codoa.controller.admin;
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
+import com.ent.codoa.common.annotation.LoginCheck;
 import com.ent.codoa.entity.Inventory;
 import com.ent.codoa.pojo.req.inventory.*;
 import com.ent.codoa.service.InventoryService;
@@ -26,12 +27,14 @@ public class InventoryController {
     @Autowired
     private InventoryService inventoryService;
 
+    @LoginCheck
     @PostMapping("/page")
     @ApiOperation(value = "分页查询库存", notes  = "分页查询库存")
     public R<IPage<Inventory>> page(@RequestBody @Valid InventoryPage req) {
         IPage<Inventory> ipage = inventoryService.queryPage(req);
         return R.ok(ipage);
     }
+
 
     @PostMapping("/stockin")
     @ApiOperation(value = "入库", notes  = "入库")
@@ -57,6 +60,7 @@ public class InventoryController {
         return R.ok(null);
     }
 
+    @LoginCheck
     @PostMapping("/getExpiring")
     @ApiOperation(value = "根据仓库Id获取即将过期的商品库存", notes = "根据仓库Id获取即将过期的商品库存")
     public R<IPage<Inventory>> getExpiring(@RequestBody @Valid InventoryWarehousePage req) {
@@ -64,6 +68,7 @@ public class InventoryController {
         return R.ok(list);
     }
 
+    @LoginCheck
     @PostMapping("/getQantityByProduct")
     @ApiOperation(value = "根据商品Id获取商品库存", notes  = "根据商品Id获取商品库存")
     public R<Integer> getQantityByProduct(@RequestBody @Valid InventoryPageByPro req) {

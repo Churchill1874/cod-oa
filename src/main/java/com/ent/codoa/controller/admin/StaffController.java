@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.ent.codoa.common.annotation.LoginCheck;
 import com.ent.codoa.entity.Staff;
 import com.ent.codoa.pojo.req.PageBase;
 import com.ent.codoa.pojo.req.staff.*;
@@ -29,6 +30,7 @@ public class StaffController {
     @Autowired
     private StaffService staffService;
 
+    @LoginCheck
     @PostMapping("/page")
     @ApiOperation(value = "分页员工", notes = "分页员工")
     public R<IPage<Staff>> page(@RequestBody StaffPage req) {
@@ -58,6 +60,7 @@ public class StaffController {
         return R.ok(null);
     }
 
+    @LoginCheck
     @PostMapping("/aboutExpirePage")
     @ApiOperation(value = "即将到期的合同分页", notes = "即将到期的合同分页")
     public R<IPage<Staff>> aboutExpirePage(@RequestBody @Valid PageBase req) {
