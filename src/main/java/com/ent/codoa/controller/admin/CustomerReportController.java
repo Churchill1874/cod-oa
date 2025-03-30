@@ -2,6 +2,7 @@ package com.ent.codoa.controller.admin;
 
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.api.R;
+import com.ent.codoa.common.annotation.CustomerAuthCheck;
 import com.ent.codoa.common.annotation.LoginCheck;
 import com.ent.codoa.common.tools.BigDecimalTools;
 import com.ent.codoa.common.tools.TimeTools;
@@ -40,7 +41,7 @@ public class CustomerReportController {
     @Autowired
     private CustomerOrderService customerOrderService;
 
-    @LoginCheck
+    @CustomerAuthCheck
     @PostMapping("/salesStatistics")
     @ApiOperation(value = "销售额统计数据", notes = "销售额统计数据")
     public R<CustomerReportVO> salesStatistics() {
@@ -110,7 +111,7 @@ public class CustomerReportController {
         return R.ok(customerReportVO);
     }
 
-    @LoginCheck
+    @CustomerAuthCheck
     @PostMapping("/profitStatistics")
     @ApiOperation(value = "利润率统计数据", notes = "利润率统计数据")
     public R<CustomerReportVO> profitStatistics() {
@@ -199,7 +200,7 @@ public class CustomerReportController {
         return R.ok(customerReportVO);
     }
 
-    @LoginCheck
+    @CustomerAuthCheck
     @PostMapping("/lossWarning")
     @ApiOperation(value = "客户流失预警", notes = "客户流失预警")
     public R<LossWarningVO> lossWarning() {

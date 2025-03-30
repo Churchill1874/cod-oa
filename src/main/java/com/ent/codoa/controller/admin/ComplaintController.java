@@ -2,6 +2,7 @@ package com.ent.codoa.controller.admin;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
+import com.ent.codoa.common.annotation.CustomerAuthCheck;
 import com.ent.codoa.common.annotation.LoginCheck;
 import com.ent.codoa.entity.Complaint;
 import com.ent.codoa.pojo.req.complaint.ComplaintPage;
@@ -25,7 +26,7 @@ public class ComplaintController {
     @Autowired
     private ComplaintService complaintService;
 
-    @LoginCheck
+    @CustomerAuthCheck
     @PostMapping("/page")
     @ApiOperation(value = "分页投诉", notes = "分页投诉")
     public R<IPage<Complaint>> page(@RequestBody ComplaintPage req) {
@@ -33,7 +34,7 @@ public class ComplaintController {
         return R.ok(iPage);
     }
 
-
+    @CustomerAuthCheck
     @PostMapping("/updateStatus")
     @ApiOperation(value = "修改状态", notes = "修改状态")
     public R updateStatus(@RequestBody ComplaintStatusUpdate req) {

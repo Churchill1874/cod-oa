@@ -3,6 +3,8 @@ package com.ent.codoa.controller.admin;
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
+import com.ent.codoa.common.annotation.CustomerAuthCheck;
+import com.ent.codoa.common.annotation.InventoryAuthCheck;
 import com.ent.codoa.common.annotation.LoginCheck;
 import com.ent.codoa.entity.Product;
 import com.ent.codoa.pojo.resp.product.ProductQantityVO;
@@ -28,25 +30,27 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    @LoginCheck
+    @InventoryAuthCheck
     @PostMapping("/page")
-    @ApiOperation(value = "分页商品信息",notes = "分页商品信息")
-    public R<IPage<Product>> page(@RequestBody @Valid ProductPage req){
-        IPage<Product> ipage=productService.queryPage(req);
+    @ApiOperation(value = "分页商品信息", notes = "分页商品信息")
+    public R<IPage<Product>> page(@RequestBody @Valid ProductPage req) {
+        IPage<Product> ipage = productService.queryPage(req);
         return R.ok(ipage);
     }
 
+    @InventoryAuthCheck
     @PostMapping("/add")
-    @ApiOperation(value = "新增商品",notes = "新增商品")
-    public R add(@RequestBody @Valid ProductAdd req){
-        Product product= BeanUtil.toBean(req,Product.class);
+    @ApiOperation(value = "新增商品", notes = "新增商品")
+    public R add(@RequestBody @Valid ProductAdd req) {
+        Product product = BeanUtil.toBean(req, Product.class);
         productService.add(product);
         return R.ok(null);
     }
 
+    @InventoryAuthCheck
     @PostMapping("/update")
-    @ApiOperation(value = "修改商品",notes = "修改商品")
-    public R updateBaseProduct(@RequestBody @Valid ProductBaseUpdate req){
+    @ApiOperation(value = "修改商品", notes = "修改商品")
+    public R updateBaseProduct(@RequestBody @Valid ProductBaseUpdate req) {
         productService.updateBaseProduct(req);
         return R.ok(null);
     }
@@ -57,27 +61,27 @@ public class ProductController {
 //        return R.ok(list);
 //    }
 
-    @LoginCheck
+    @InventoryAuthCheck
     @PostMapping("/getProduct")
-    @ApiOperation(value = "根据ID获取商品",notes = "根据ID获取商品")
-    public R<Product> getProduct(@RequestBody @Valid IdBase req){
-        Product product=productService.getProductById(req.getId());
+    @ApiOperation(value = "根据ID获取商品", notes = "根据ID获取商品")
+    public R<Product> getProduct(@RequestBody @Valid IdBase req) {
+        Product product = productService.getProductById(req.getId());
         return R.ok(product);
     }
 
-    @LoginCheck
+    @InventoryAuthCheck
     @PostMapping("/getALLProductQantity")
-    @ApiOperation(value = "根据仓库Id获取所有商品库存", notes ="根据仓库Id获取所有商品库存")
+    @ApiOperation(value = "根据仓库Id获取所有商品库存", notes = "根据仓库Id获取所有商品库存")
     public R<IPage<ProductQantityVO>> getALLProductQantity(@RequestBody @Valid ProductWarehouseIdPage req) {
         IPage<ProductQantityVO> iPage = productService.getALLProductQantity(req);
         return R.ok(iPage);
     }
 
-    @LoginCheck
+    @InventoryAuthCheck
     @PostMapping("/getLowWarning")
-    @ApiOperation(value = "根据仓库Id获取预警商品库存", notes ="根据仓库Id获取预警商品库存")
+    @ApiOperation(value = "根据仓库Id获取预警商品库存", notes = "根据仓库Id获取预警商品库存")
     public R<IPage<ProductQantityVO>> getLowWarning(@RequestBody @Valid ProductWarehouseIdPage req) {
-        IPage<ProductQantityVO>list = productService.getLowWarning(req);
+        IPage<ProductQantityVO> list = productService.getLowWarning(req);
         return R.ok(list);
     }
 

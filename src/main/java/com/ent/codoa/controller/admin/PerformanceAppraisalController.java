@@ -3,6 +3,7 @@ package com.ent.codoa.controller.admin;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.ent.codoa.common.annotation.LoginCheck;
+import com.ent.codoa.common.annotation.StaffAuthCheck;
 import com.ent.codoa.entity.PerformanceAppraisal;
 import com.ent.codoa.pojo.req.IdBase;
 import com.ent.codoa.pojo.req.performanceappraisal.PerformanceAppraisalAdd;
@@ -28,7 +29,7 @@ public class PerformanceAppraisalController {
     @Autowired
     private PerformanceAppraisalService performanceAppraisalService;
 
-    @LoginCheck
+    @StaffAuthCheck
     @PostMapping("/page")
     @ApiOperation(value = "分页绩效考核", notes = "分页绩效考核")
     public R<IPage<PerformanceAppraisal>> page(@RequestBody PerformanceAppraisalPage req) {
@@ -36,6 +37,7 @@ public class PerformanceAppraisalController {
         return R.ok(iPage);
     }
 
+    @StaffAuthCheck
     @PostMapping("/add")
     @ApiOperation(value = "提交绩效考核", notes = "提交绩效考核")
     public R add(@RequestBody @Valid PerformanceAppraisalAdd req) {
@@ -43,6 +45,7 @@ public class PerformanceAppraisalController {
         return R.ok(null);
     }
 
+    @StaffAuthCheck
     @PostMapping("/delete")
     @ApiOperation(value = "根据绩效id删除", notes = "根据绩效id删除")
     public R delete(@RequestBody @Valid IdBase req) {

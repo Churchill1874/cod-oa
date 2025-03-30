@@ -3,6 +3,7 @@ package com.ent.codoa.controller.admin;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.ent.codoa.common.annotation.LoginCheck;
+import com.ent.codoa.common.annotation.StaffAuthCheck;
 import com.ent.codoa.entity.SalarySettlement;
 import com.ent.codoa.pojo.req.PageBase;
 import com.ent.codoa.pojo.req.salarysettlement.SalarySettlementAdd;
@@ -29,7 +30,7 @@ public class SalarySettlementController {
     @Autowired
     private SalarySettlementService salarySettlementService;
 
-    @LoginCheck
+    @StaffAuthCheck
     @PostMapping("/page")
     @ApiOperation(value = "薪资结算记录分页查询", notes = "薪资结算记录分页查询")
     public R<IPage<SalarySettlement>> page(@RequestBody SalarySettlementPage req) {
@@ -37,7 +38,7 @@ public class SalarySettlementController {
         return R.ok(iPage);
     }
 
-    @LoginCheck
+    @StaffAuthCheck
     @PostMapping("/statisticsByDateAndAccount")
     @ApiOperation(value = "预估薪资结算数据查询 初始化数据", notes = "预估薪资结算数据查询 初始化数据")
     public R<SalarySettlement> statisticsByDateAndAccount(@RequestBody @Valid SalarySettlementStatistic req) {
@@ -45,7 +46,7 @@ public class SalarySettlementController {
         return R.ok(salarySettlement);
     }
 
-    @LoginCheck
+    @StaffAuthCheck
     @PostMapping("/specifyDataStatistics")
     @ApiOperation(value = "修改后的指定数据查询 薪资统计", notes = "修改后的指定数据查询 薪资统计")
     public R<SalarySettlement> specifyDataStatistics(@RequestBody @Valid SalarySettlementAdd req) {
@@ -53,6 +54,7 @@ public class SalarySettlementController {
         return R.ok(salarySettlement);
     }
 
+    @StaffAuthCheck
     @PostMapping("/add")
     @ApiOperation(value = "新增薪资结算记录", notes = "新增薪资结算记录")
     public R add(@RequestBody @Valid SalarySettlementAdd req) {

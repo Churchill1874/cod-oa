@@ -4,6 +4,7 @@ package com.ent.codoa.controller.admin;
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
+import com.ent.codoa.common.annotation.InventoryAuthCheck;
 import com.ent.codoa.common.annotation.LoginCheck;
 import com.ent.codoa.entity.Warehouse;
 import com.ent.codoa.pojo.req.IdBase;
@@ -32,13 +33,15 @@ public class WarehouseController {
     @Autowired
     private WarehouseService wirehouseService;
 
-    @LoginCheck
+    @InventoryAuthCheck
     @PostMapping("/page")
     @ApiOperation(value = "分页仓库信息",notes ="分页仓库信息" )
     public R<IPage<Warehouse>> page(@RequestBody WarehousePage req){
         IPage<Warehouse> ipage = wirehouseService.queryPage(req);
         return R.ok(ipage);
     }
+
+    @InventoryAuthCheck
     @PostMapping("/add")
     @ApiOperation(value = "新增仓库",notes = "新增仓库")
     public R add(@RequestBody @Valid  WarehouseAdd req){
@@ -46,6 +49,8 @@ public class WarehouseController {
         wirehouseService.add(warehouse);
         return R.ok(null);
     }
+
+    @InventoryAuthCheck
     @PostMapping("/updateBaseInfo")
     @ApiOperation(value = "修改仓库",notes = "修改仓库")
     public R updateBaseInfo(@RequestBody  @Valid WarehouseBaseUpdate req){
@@ -60,7 +65,7 @@ public class WarehouseController {
 //        return R.ok(null);
 //    }
 
-    @LoginCheck
+    @InventoryAuthCheck
     @PostMapping("/getallwarehouse")
     @ApiOperation(value="获取所有仓库列表",notes = "获取所有仓库列表")
     public R<List<Map>> findWarehouseList(){
@@ -68,11 +73,12 @@ public class WarehouseController {
         return R.ok(list);
     }
 
-    @LoginCheck
+    @InventoryAuthCheck
     @PostMapping("/getwarehouse")
     @ApiOperation(value="根据Id获取仓库信息",notes = "根据Id获取仓库信息")
     public R<Warehouse> findWarehouseById(@RequestBody @Valid  IdBase req){
         Warehouse warehouse=wirehouseService.findWarehouseById(req.getId());
         return R.ok(warehouse);
     }
+
 }

@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ent.codoa.common.annotation.LoginCheck;
+import com.ent.codoa.common.annotation.StaffAuthCheck;
 import com.ent.codoa.entity.Staff;
 import com.ent.codoa.pojo.req.PageBase;
 import com.ent.codoa.pojo.req.staff.*;
@@ -30,7 +31,7 @@ public class StaffController {
     @Autowired
     private StaffService staffService;
 
-    @LoginCheck
+    @StaffAuthCheck
     @PostMapping("/page")
     @ApiOperation(value = "分页员工", notes = "分页员工")
     public R<IPage<Staff>> page(@RequestBody StaffPage req) {
@@ -38,6 +39,7 @@ public class StaffController {
         return R.ok(iPage);
     }
 
+    @StaffAuthCheck
     @PostMapping("/add")
     @ApiOperation(value = "添加员工", notes = "添加员工")
     public R add(@RequestBody @Valid StaffAdd req) {
@@ -46,6 +48,7 @@ public class StaffController {
         return R.ok(null);
     }
 
+    @StaffAuthCheck
     @PostMapping("/updateBase")
     @ApiOperation(value = "修改员工基本信息", notes = "修改员工基本信息")
     public R updateBase(@RequestBody @Valid StaffBaseUpdate req) {
@@ -53,6 +56,7 @@ public class StaffController {
         return R.ok(null);
     }
 
+    @StaffAuthCheck
     @PostMapping("/updateContract")
     @ApiOperation(value = "更新合同", notes = "更新合同")
     public R updateContract(@RequestBody @Valid StaffContractUpdate req) {
@@ -60,7 +64,7 @@ public class StaffController {
         return R.ok(null);
     }
 
-    @LoginCheck
+    @StaffAuthCheck
     @PostMapping("/aboutExpirePage")
     @ApiOperation(value = "即将到期的合同分页", notes = "即将到期的合同分页")
     public R<IPage<Staff>> aboutExpirePage(@RequestBody @Valid PageBase req) {

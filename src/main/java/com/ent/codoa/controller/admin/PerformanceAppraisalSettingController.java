@@ -3,6 +3,7 @@ package com.ent.codoa.controller.admin;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.ent.codoa.common.annotation.LoginCheck;
+import com.ent.codoa.common.annotation.StaffAuthCheck;
 import com.ent.codoa.entity.Customer;
 import com.ent.codoa.entity.PerformanceAppraisalSetting;
 import com.ent.codoa.pojo.req.customer.CustomerPage;
@@ -28,7 +29,7 @@ public class PerformanceAppraisalSettingController {
     @Autowired
     private PerformanceAppraisalSettingService performanceAppraisalSettingService;
 
-    @LoginCheck
+    @StaffAuthCheck
     @PostMapping("/querySetting")
     @ApiOperation(value = "查询绩效考核当前配置", notes = "查询绩效考核当前配置")
     public R<PerformanceAppraisalSetting> querySetting() {
@@ -40,7 +41,7 @@ public class PerformanceAppraisalSettingController {
         return R.ok(performanceAppraisalSetting);
     }
 
-
+    @StaffAuthCheck
     @PostMapping("/setting")
     @ApiOperation(value = "配置绩效考核", notes = "配置绩效考核")
     public R setting(@RequestBody @Valid PerformanceAppraisalSettingAdd req) {

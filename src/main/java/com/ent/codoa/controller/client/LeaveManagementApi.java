@@ -2,7 +2,9 @@ package com.ent.codoa.controller.client;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
+import com.ent.codoa.common.annotation.CustomerAuthCheck;
 import com.ent.codoa.common.annotation.LoginCheck;
+import com.ent.codoa.common.annotation.StaffAuthCheck;
 import com.ent.codoa.common.exception.DataException;
 import com.ent.codoa.entity.LeaveManagement;
 import com.ent.codoa.pojo.req.PageBase;
@@ -31,7 +33,7 @@ public class LeaveManagementApi {
     @Autowired
     private LeaveManagementService leaveManagementService;
 
-    @LoginCheck
+    @StaffAuthCheck
     @PostMapping("/page")
     @ApiOperation(value = "员工休假申请分页", notes = "员工休假申请分页")
     public R<IPage<LeaveManagement>> page(@RequestBody PageBase req) {
@@ -39,6 +41,7 @@ public class LeaveManagementApi {
         return R.ok(iPage);
     }
 
+    @CustomerAuthCheck
     @PostMapping("/add")
     @ApiOperation(value = "新增休假申请", notes = "新增休假申请")
     public R add(@RequestBody @Valid LeaveManagementAdd req) {

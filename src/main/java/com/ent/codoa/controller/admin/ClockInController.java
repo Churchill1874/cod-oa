@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.ent.codoa.common.annotation.LoginCheck;
+import com.ent.codoa.common.annotation.StaffAuthCheck;
 import com.ent.codoa.common.exception.DataException;
 import com.ent.codoa.common.tools.TimeTools;
 import com.ent.codoa.common.tools.TokenTools;
@@ -39,7 +40,7 @@ public class ClockInController {
     @Autowired
     private ClockInService clockInService;
 
-    @LoginCheck
+    @StaffAuthCheck
     @PostMapping("/findByMonthAndAccount")
     @ApiOperation(value = "查询某员工某月份记录", notes = "查询某员工某月份记录")
     public R<List<ClockIn>> findByMonthAndAccount(@RequestBody @Valid ClockInStaffQuery req) {
@@ -47,6 +48,7 @@ public class ClockInController {
         return R.ok(list);
     }
 
+    @StaffAuthCheck
     @PostMapping("/delete")
     @ApiOperation(value = "根据id删除上下班打卡的一条记录", notes = "根据id删除上下班打卡的一条记录")
     public R delete(@RequestBody @Valid IdBase req) {

@@ -1,6 +1,9 @@
 package com.ent.codoa.common.tools;
 
 import cn.hutool.json.JSONUtil;
+import com.ent.codoa.common.constant.enums.SystemClientStatusEnum;
+import com.ent.codoa.common.constant.enums.UserStatusEnum;
+import com.ent.codoa.common.exception.DataException;
 import com.ent.codoa.common.exception.TokenException;
 import com.ent.codoa.pojo.resp.token.LoginToken;
 import com.ent.codoa.service.EhcacheService;
@@ -43,6 +46,13 @@ public class TokenTools {
         LoginToken loginToken = ehcacheService.adminTokenCache().get(headerToken);
         if (loginToken == null) {
             throw new TokenException();
+        }
+
+        if (loginToken.getStatus() == SystemClientStatusEnum.EXPIRED){
+            throw new DataException("服务已经到期,请联系平台管理员");
+        }
+        if (loginToken.getStatus() == SystemClientStatusEnum.DISABLE){
+            throw new DataException("账号已禁用,请联系平台管理员");
         }
         return loginToken;
     }

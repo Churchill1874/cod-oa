@@ -3,6 +3,7 @@ package com.ent.codoa.controller.client;
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
+import com.ent.codoa.common.annotation.CustomerAuthCheck;
 import com.ent.codoa.common.annotation.LoginCheck;
 import com.ent.codoa.entity.CustomerWorkOrder;
 import com.ent.codoa.entity.CustomerWorkOrderDialogue;
@@ -34,6 +35,7 @@ public class CustomerWorkOrderApi {
     @Autowired
     private CustomerWorkOrderDialogueService customerWorkOrderDialogueService;
 
+    @CustomerAuthCheck
     @PostMapping("/add")
     @ApiOperation(value = "客户提交工单", notes = "客户提交工单")
     public R add(@RequestBody @Valid CustomerWorkOrderAdd req) {
@@ -41,13 +43,14 @@ public class CustomerWorkOrderApi {
         return R.ok(null);
     }
 
-    @LoginCheck
+    @CustomerAuthCheck
     @PostMapping("/orderWorkPage")
     @ApiOperation(value = "分页客户工单", notes = "分页客户工单")
     public R<IPage<CustomerWorkOrder>> orderWorkPage(@RequestBody PageBase req) {
         return R.ok(customerWorkOrderService.clientPage(req));
     }
 
+    @CustomerAuthCheck
     @PostMapping("/customerReply")
     @ApiOperation(value = "客户指定工单留言", notes = "客户指定工单留言")
     public R customerReply(@RequestBody @Valid CustomerWorkOrderDialogueAdd req) {
@@ -56,7 +59,7 @@ public class CustomerWorkOrderApi {
         return R.ok(null);
     }
 
-    @LoginCheck
+    @CustomerAuthCheck
     @PostMapping("/dialoguePage")
     @ApiOperation(value = "分页客户指定工单留言记录", notes = "分页客户指定工单留言记录")
     public R<IPage<CustomerWorkOrderDialogue>> page(@RequestBody IdPageBase req) {

@@ -2,6 +2,7 @@ package com.ent.codoa.controller.admin;
 
 import com.baomidou.mybatisplus.extension.api.R;
 import com.ent.codoa.common.annotation.LoginCheck;
+import com.ent.codoa.common.annotation.StaffAuthCheck;
 import com.ent.codoa.common.tools.TokenTools;
 import com.ent.codoa.pojo.req.IdBase;
 import com.ent.codoa.pojo.req.training.TrainingAdd;
@@ -27,7 +28,7 @@ public class TrainingController {
     @Autowired
     private TrainingService trainingService;
 
-    @LoginCheck
+    @StaffAuthCheck
     @PostMapping("/trainingList")
     @ApiOperation(value = "培训信息集合查询", notes = "培训信息集合 已经根据类型分组")
     public R<TrainingVO> trainingList() {
@@ -36,6 +37,7 @@ public class TrainingController {
     }
 
 
+    @StaffAuthCheck
     @PostMapping("/add")
     @ApiOperation(value = "新增培训信息", notes = "新增培训信息")
     public R add(@RequestBody @Valid TrainingAdd req) {
@@ -43,7 +45,7 @@ public class TrainingController {
         return R.ok(null);
     }
 
-
+    @StaffAuthCheck
     @PostMapping("/delete")
     @ApiOperation(value = "根据id删除培训信息", notes = "根据id删除培训信息")
     public R delete(@RequestBody @Valid IdBase req) {

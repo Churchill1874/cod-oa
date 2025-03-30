@@ -5,6 +5,7 @@ import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.ent.codoa.common.annotation.LoginCheck;
+import com.ent.codoa.common.annotation.PlatformAuthCheck;
 import com.ent.codoa.common.constant.enums.RoleEnum;
 import com.ent.codoa.common.exception.AccountOrPasswordException;
 import com.ent.codoa.common.tools.CodeTools;
@@ -48,7 +49,7 @@ public class SystemClientController {
     @Autowired
     private StaffService staffService;//人事管理接口
 
-    @LoginCheck
+    @PlatformAuthCheck
     @PostMapping("/page")
     @ApiOperation(value = "分页系统用户", notes = "分页系统用户")
     public R<IPage<SystemClient>> page(@RequestBody SystemClientPage req) {
@@ -56,6 +57,7 @@ public class SystemClientController {
         return R.ok(iPage);
     }
 
+    @PlatformAuthCheck
     @PostMapping("/add")
     @ApiOperation(value = "添加系统用户", notes = "添加系统用户")
     public R add(@RequestBody @Valid SystemClientAdd req) {
@@ -65,6 +67,7 @@ public class SystemClientController {
     }
 
 
+    @PlatformAuthCheck
     @PostMapping("/updateBaseInfo")
     @ApiOperation(value = "修改系统用户基础信息", notes = "修改系统用户基础信息")
     public R updateBaseInfo(@RequestBody @Valid SystemClientBaseUpdate req) {
@@ -96,6 +99,7 @@ public class SystemClientController {
             loginToken.setInventoryMenu(systemClient.getInventoryMenu());
             loginToken.setPaymentMenu(systemClient.getPaymentMenu());
             loginToken.setPlatformMenu(systemClient.getPlatformMenu());
+            loginToken.setStatus(systemClient.getStatus());
             //对比登录密码和正确密码
             checkAccountAndPassword(systemClient.getPassword(), CodeTools.md5AndSalt(password, systemClient.getSalt()));
             return loginToken;
@@ -117,6 +121,7 @@ public class SystemClientController {
             loginToken.setInventoryMenu(systemClient.getInventoryMenu());
             loginToken.setPaymentMenu(systemClient.getPaymentMenu());
             loginToken.setPlatformMenu(systemClient.getPlatformMenu());
+            loginToken.setStatus(systemClient.getStatus());
             return loginToken;
         }
 
@@ -136,6 +141,7 @@ public class SystemClientController {
             loginToken.setInventoryMenu(systemClient.getInventoryMenu());
             loginToken.setPaymentMenu(systemClient.getPaymentMenu());
             loginToken.setPlatformMenu(systemClient.getPlatformMenu());
+            loginToken.setStatus(systemClient.getStatus());
             return loginToken;
         }
 
@@ -165,6 +171,7 @@ public class SystemClientController {
         loginToken.setAccount(req.getAccount());
         loginToken.setLoginTime(LocalDateTime.now());
         loginToken.setTokenId(GenerateTools.createTokenId());
+
         ehcacheService.adminTokenCache().put(loginToken.getTokenId(), loginToken);
 
         //删除使用过的验证码缓存

@@ -1,6 +1,8 @@
 package com.ent.codoa.pojo.resp.token;
 
 import com.ent.codoa.common.constant.enums.RoleEnum;
+import com.ent.codoa.common.constant.enums.SystemClientStatusEnum;
+import com.ent.codoa.common.constant.enums.UserStatusEnum;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -28,6 +30,9 @@ public class LoginToken implements Serializable {
 
     @ApiModelProperty("登录时间")
     private LocalDateTime loginTime;
+
+    @ApiModelProperty("账号状态 true正常 false禁用")
+    private SystemClientStatusEnum status;
 
     @ApiModelProperty("该登陆人 所属系统用户的账号")
     private String systemClientAccount;

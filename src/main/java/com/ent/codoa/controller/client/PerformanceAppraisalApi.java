@@ -2,7 +2,9 @@ package com.ent.codoa.controller.client;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
+import com.ent.codoa.common.annotation.CustomerAuthCheck;
 import com.ent.codoa.common.annotation.LoginCheck;
+import com.ent.codoa.common.annotation.StaffAuthCheck;
 import com.ent.codoa.entity.PerformanceAppraisal;
 import com.ent.codoa.pojo.req.PageBase;
 import com.ent.codoa.service.PerformanceAppraisalService;
@@ -24,7 +26,7 @@ public class PerformanceAppraisalApi {
     @Autowired
     private PerformanceAppraisalService performanceAppraisalService;
 
-    @LoginCheck
+    @StaffAuthCheck
     @PostMapping("/page")
     @ApiOperation(value = "员工分页绩效考核", notes = "员工分页绩效考核")
     public R<IPage<PerformanceAppraisal>> page(@RequestBody PageBase req) {

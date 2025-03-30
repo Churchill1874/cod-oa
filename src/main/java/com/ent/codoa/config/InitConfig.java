@@ -53,6 +53,11 @@ public class InitConfig {
             systemClient.setCreateTime(LocalDateTime.now());
             systemClient.setCreateName("系统初始化");
             systemClient.setPassword(CodeTools.md5AndSalt(PASSWORD, salt));
+            systemClient.setPlatformMenu(true);
+            systemClient.setCustomerMenu(false);
+            systemClient.setInventoryMenu(false);
+            systemClient.setHrMenu(false);
+            systemClient.setPaymentMenu(false);
             systemClientService.add(systemClient);
             log.info("初始化了超级管理员");
         }

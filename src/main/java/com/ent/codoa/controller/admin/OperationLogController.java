@@ -3,6 +3,7 @@ package com.ent.codoa.controller.admin;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.ent.codoa.common.annotation.LoginCheck;
+import com.ent.codoa.common.annotation.PlatformAuthCheck;
 import com.ent.codoa.entity.Customer;
 import com.ent.codoa.entity.OperationLog;
 import com.ent.codoa.pojo.req.PageBase;
@@ -27,7 +28,7 @@ public class OperationLogController {
     @Autowired
     private OperationLogService operationLogService;
 
-    @LoginCheck
+    @PlatformAuthCheck
     @PostMapping("/page")
     @ApiOperation(value = "分页日志", notes = "分页日志")
     public R<IPage<OperationLog>> page(@RequestBody PageBase req) {

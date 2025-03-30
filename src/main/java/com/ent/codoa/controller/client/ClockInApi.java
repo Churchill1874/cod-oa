@@ -2,6 +2,7 @@ package com.ent.codoa.controller.client;
 
 import com.baomidou.mybatisplus.extension.api.R;
 import com.ent.codoa.common.annotation.LoginCheck;
+import com.ent.codoa.common.annotation.StaffAuthCheck;
 import com.ent.codoa.entity.ClockIn;
 import com.ent.codoa.pojo.req.MonthBase;
 import com.ent.codoa.service.ClockInService;
@@ -26,7 +27,7 @@ public class ClockInApi {
     @Autowired
     private ClockInService clockInService;
 
-    @LoginCheck
+    @StaffAuthCheck
     @PostMapping("/findByMonth")
     @ApiOperation(value = "查询某月份记录", notes = "查询某月份记录")
     public R<List<ClockIn>> findByMonth(@RequestBody @Valid MonthBase req) {
@@ -34,6 +35,7 @@ public class ClockInApi {
         return R.ok(list);
     }
 
+    @StaffAuthCheck
     @PostMapping("/clockIn")
     @ApiOperation(value = "打卡", notes = "打卡")
     public R clockIn() {

@@ -4,6 +4,7 @@ package com.ent.codoa.controller.admin;
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
+import com.ent.codoa.common.annotation.CustomerAuthCheck;
 import com.ent.codoa.common.annotation.LoginCheck;
 import com.ent.codoa.entity.PotentialClient;
 import com.ent.codoa.entity.Staff;
@@ -33,7 +34,7 @@ public class PotentialClientController {
     @Autowired
     private PotentialClientService potentialClientService;
 
-    @LoginCheck
+    @CustomerAuthCheck
     @PostMapping("/page")
     @ApiOperation(value = "分页潜在客户", notes = "分页潜在客户")
     public R<IPage<PotentialClient>> page(@RequestBody PotentialClientPage req) {
@@ -41,6 +42,7 @@ public class PotentialClientController {
         return R.ok(iPage);
     }
 
+    @CustomerAuthCheck
     @PostMapping("/add")
     @ApiOperation(value = "添加潜在客户", notes = "添加潜在客户")
     public R add(@RequestBody @Valid PotentialClientAdd req) {
@@ -49,6 +51,7 @@ public class PotentialClientController {
         return R.ok(null);
     }
 
+    @CustomerAuthCheck
     @PostMapping("/updateInfo")
     @ApiOperation(value = "修改潜在客户", notes = "修改潜在客户")
     public R updateInfo(@RequestBody @Valid PotentialClientUpdate req) {
@@ -57,6 +60,7 @@ public class PotentialClientController {
         return R.ok(null);
     }
 
+    @CustomerAuthCheck
     @PostMapping("/delete")
     @ApiOperation(value = "删除潜在客户", notes = "删除潜在客户")
     public R delete(@RequestBody @Valid IdBase req) {

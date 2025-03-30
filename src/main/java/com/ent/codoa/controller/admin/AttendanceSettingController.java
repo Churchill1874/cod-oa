@@ -2,6 +2,7 @@ package com.ent.codoa.controller.admin;
 
 import com.baomidou.mybatisplus.extension.api.R;
 import com.ent.codoa.common.annotation.LoginCheck;
+import com.ent.codoa.common.annotation.StaffAuthCheck;
 import com.ent.codoa.common.tools.TokenTools;
 import com.ent.codoa.entity.AttendanceSetting;
 import com.ent.codoa.pojo.req.attendancesetting.AttendanceSettingUpdate;
@@ -26,7 +27,7 @@ public class AttendanceSettingController {
     @Autowired
     private AttendanceSettingService attendanceSettingService;
 
-    @LoginCheck
+    @StaffAuthCheck
     @PostMapping("/findBySCA")
     @ApiOperation(value = "查询考勤配置", notes = "查询考勤配置")
     public R<AttendanceSetting> findBySCA() {
@@ -34,6 +35,7 @@ public class AttendanceSettingController {
         return R.ok(attendanceSetting);
     }
 
+    @StaffAuthCheck
     @PostMapping("/setting")
     @ApiOperation(value = "考勤设置", notes = "考勤设置")
     public R setting(@RequestBody @Valid AttendanceSettingUpdate req) {

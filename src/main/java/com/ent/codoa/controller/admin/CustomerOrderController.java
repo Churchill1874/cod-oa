@@ -3,6 +3,7 @@ package com.ent.codoa.controller.admin;
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
+import com.ent.codoa.common.annotation.CustomerAuthCheck;
 import com.ent.codoa.common.annotation.LoginCheck;
 import com.ent.codoa.entity.CustomerOrder;
 import com.ent.codoa.pojo.req.IdBase;
@@ -31,7 +32,7 @@ public class CustomerOrderController {
     @Autowired
     private CustomerOrderService customerOrderService;
 
-    @LoginCheck
+    @CustomerAuthCheck
     @PostMapping("/page")
     @ApiOperation(value = "分页客户订单", notes = "分页客户订单")
     public R<IPage<CustomerOrder>> page(@RequestBody CustomerOrderPage req) {
@@ -40,7 +41,7 @@ public class CustomerOrderController {
     }
 
 
-
+    @CustomerAuthCheck
     @PostMapping("/add")
     @ApiOperation(value = "新增", notes = "新增")
     public R add(@RequestBody @Valid CustomerOrderAdd req) {
@@ -50,7 +51,7 @@ public class CustomerOrderController {
     }
 
 
-
+    @CustomerAuthCheck
     @PostMapping("/delete")
     @ApiOperation(value = "删除", notes = "删除")
     public R delete(@RequestBody @Valid IdBase req) {
@@ -59,7 +60,7 @@ public class CustomerOrderController {
     }
 
 
-
+    @CustomerAuthCheck
     @PostMapping("/updateInfo")
     @ApiOperation(value = "修改", notes = "修改")
     public R updateInfo(@RequestBody @Valid CustomerOrderInfoUpdate req) {

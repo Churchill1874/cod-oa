@@ -3,6 +3,7 @@ package com.ent.codoa.controller.admin;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.ent.codoa.common.annotation.LoginCheck;
+import com.ent.codoa.common.annotation.StaffAuthCheck;
 import com.ent.codoa.entity.LeaveManagement;
 import com.ent.codoa.pojo.req.IdBase;
 import com.ent.codoa.pojo.req.leavemanagement.LeaveManagementApproval;
@@ -28,7 +29,7 @@ public class LeaveManagementController {
     @Autowired
     private LeaveManagementService leaveManagementService;
 
-    @LoginCheck
+    @StaffAuthCheck
     @PostMapping("/page")
     @ApiOperation(value = "休假申请分页", notes = "休假申请分页")
     public R<IPage<LeaveManagement>> page(@RequestBody LeaveManagementPage req) {
@@ -36,6 +37,7 @@ public class LeaveManagementController {
         return R.ok(iPage);
     }
 
+    @StaffAuthCheck
     @PostMapping("/delete")
     @ApiOperation(value = "根据休申请id删除", notes = "根据休申请id删除")
     public R delete(@RequestBody @Valid IdBase req) {
@@ -43,6 +45,7 @@ public class LeaveManagementController {
         return R.ok(null);
     }
 
+    @StaffAuthCheck
     @PostMapping("/approval")
     @ApiOperation(value = "根据id审批休假状态", notes = "根据id审批休假状态")
     public R approval(@RequestBody @Valid LeaveManagementApproval req) {

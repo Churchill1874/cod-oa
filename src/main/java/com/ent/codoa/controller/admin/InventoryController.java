@@ -3,6 +3,8 @@ package com.ent.codoa.controller.admin;
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
+import com.ent.codoa.common.annotation.CustomerAuthCheck;
+import com.ent.codoa.common.annotation.InventoryAuthCheck;
 import com.ent.codoa.common.annotation.LoginCheck;
 import com.ent.codoa.entity.Inventory;
 import com.ent.codoa.pojo.req.inventory.*;
@@ -27,7 +29,7 @@ public class InventoryController {
     @Autowired
     private InventoryService inventoryService;
 
-    @LoginCheck
+    @InventoryAuthCheck
     @PostMapping("/page")
     @ApiOperation(value = "分页查询库存", notes  = "分页查询库存")
     public R<IPage<Inventory>> page(@RequestBody @Valid InventoryPage req) {
@@ -35,7 +37,7 @@ public class InventoryController {
         return R.ok(ipage);
     }
 
-
+    @InventoryAuthCheck
     @PostMapping("/stockin")
     @ApiOperation(value = "入库", notes  = "入库")
     public R stockIn(@RequestBody @Valid InventoryStockIn req) {
@@ -44,6 +46,7 @@ public class InventoryController {
         return R.ok(null);
     }
 
+    @InventoryAuthCheck
     @PostMapping("/stockout")
     @ApiOperation(value = "出库", notes = "出库")
     public R stockOut(@RequestBody @Valid InventoryStockOut req) {
@@ -52,6 +55,7 @@ public class InventoryController {
         return R.ok(null);
     }
 
+    @InventoryAuthCheck
     @PostMapping("/stockreturn")
     @ApiOperation(value = "退货", notes = "退货")
     public R stockReturn(@RequestBody @Valid InventoryReturn req) {
@@ -60,7 +64,7 @@ public class InventoryController {
         return R.ok(null);
     }
 
-    @LoginCheck
+    @InventoryAuthCheck
     @PostMapping("/getExpiring")
     @ApiOperation(value = "根据仓库Id获取即将过期的商品库存", notes = "根据仓库Id获取即将过期的商品库存")
     public R<IPage<Inventory>> getExpiring(@RequestBody @Valid InventoryWarehousePage req) {
@@ -68,7 +72,7 @@ public class InventoryController {
         return R.ok(list);
     }
 
-    @LoginCheck
+    @InventoryAuthCheck
     @PostMapping("/getQantityByProduct")
     @ApiOperation(value = "根据商品Id获取商品库存", notes  = "根据商品Id获取商品库存")
     public R<Integer> getQantityByProduct(@RequestBody @Valid InventoryPageByPro req) {

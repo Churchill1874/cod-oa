@@ -97,6 +97,15 @@ public class StaffServiceImpl extends ServiceImpl<StaffMapper, Staff> implements
             || customerService.findByAccount(dto.getAccount()) != null) {
             throw new DataException("账号已经存在,请修改");
         }
+
+        if (StringUtils.isNotBlank(dto.getCode())){
+            QueryWrapper<Staff> queryWrapper = new QueryWrapper<>();
+            queryWrapper.lambda().eq(Staff::getCode, dto.getCode());
+            if (getOne(queryWrapper) != null){
+                throw new DataException("员工编码重复");
+            }
+        }
+
         dto.setSalt(GenerateTools.getUUID());
         dto.setPassword(CodeTools.md5AndSalt(dto.getPassword(), dto.getSalt()));
         dto.setSystemClientAccount(TokenTools.getAccount());

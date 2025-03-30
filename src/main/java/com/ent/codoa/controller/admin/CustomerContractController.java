@@ -2,6 +2,7 @@ package com.ent.codoa.controller.admin;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
+import com.ent.codoa.common.annotation.CustomerAuthCheck;
 import com.ent.codoa.common.annotation.LoginCheck;
 import com.ent.codoa.entity.CustomerContract;
 import com.ent.codoa.pojo.req.IdBase;
@@ -29,13 +30,14 @@ public class CustomerContractController {
     @Autowired
     private CustomerContractService customerContractService;
 
-    @LoginCheck
+    @CustomerAuthCheck
     @PostMapping("/page")
     @ApiOperation(value = "分页", notes = "分页")
     public R<IPage<CustomerContract>> page(@RequestBody CustomerContractPage req) {
         return R.ok(customerContractService.queryPage(req));
     }
 
+    @CustomerAuthCheck
     @PostMapping("/add")
     @ApiOperation(value = "添加客户合同配置", notes = "添加客户合同配置")
     public R add(@RequestBody @Valid CustomerContractAdd req) {
@@ -43,7 +45,7 @@ public class CustomerContractController {
         return R.ok(null);
     }
 
-
+    @CustomerAuthCheck
     @PostMapping("/updateBase")
     @ApiOperation(value = "修改客户合同配置", notes = "修改客户合同配置")
     public R updateBase(@RequestBody @Valid CustomerContractUpdate req) {
@@ -51,7 +53,7 @@ public class CustomerContractController {
         return R.ok(null);
     }
 
-
+    @CustomerAuthCheck
     @PostMapping("/delete")
     @ApiOperation(value = "删除", notes = "删除")
     public R delete(@RequestBody @Valid IdBase req) {
