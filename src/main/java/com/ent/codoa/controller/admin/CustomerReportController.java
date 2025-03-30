@@ -189,16 +189,28 @@ public class CustomerReportController {
 
             MonthStatisticsVO monthStatisticsVO = new MonthStatisticsVO();
             monthStatisticsVO.setDate(key);
-            monthStatisticsVO.setValue(BigDecimalTools.divideK2AndDownStr(totalProfit, totalSales));
+            //小数比例
+            BigDecimal decimalRate = BigDecimalTools.divideK2AndDown(totalProfit, totalSales);
+            monthStatisticsVO.setValue(new BigDecimal("100").multiply(decimalRate).toPlainString());
             monthStatisticsVOList.add(monthStatisticsVO);
         }
+
         //返回前端的类
         CustomerReportVO customerReportVO = new CustomerReportVO();
-        customerReportVO.setThisWeek(BigDecimalTools.divideK2AndDownStr(thisWeekProfit, thisWeekSales));
-        customerReportVO.setLastWeek(BigDecimalTools.divideK2AndDownStr(lastWeekProfit, lastWeekSales));
-        customerReportVO.setThisYear(BigDecimalTools.divideK2AndDownStr(thisYearProfit, thisYearSales));
-        customerReportVO.setLastYear(BigDecimalTools.divideK2AndDownStr(lastYearProfit, lastYearSales));
         customerReportVO.setThisYearMonthList(monthStatisticsVOList);
+
+        BigDecimal thisWeek = BigDecimalTools.divideK2AndDown(thisWeekProfit, thisWeekSales);
+        customerReportVO.setThisWeek(thisWeek.multiply(new BigDecimal("100")).toPlainString());
+
+        BigDecimal lastWeek = BigDecimalTools.divideK2AndDown(lastWeekProfit, lastWeekSales);
+        customerReportVO.setLastWeek(lastWeek.multiply(new BigDecimal("100")).toPlainString());
+
+        BigDecimal thisYear = BigDecimalTools.divideK2AndDown(thisYearProfit, thisYearSales);
+        customerReportVO.setThisYear(thisYear.multiply(new BigDecimal("100")).toPlainString());
+
+        BigDecimal lastYear = BigDecimalTools.divideK2AndDown(lastYearProfit, lastYearSales);
+        customerReportVO.setLastYear(lastYear.multiply(new BigDecimal("100")).toPlainString());
+
         return R.ok(customerReportVO);
     }
 
