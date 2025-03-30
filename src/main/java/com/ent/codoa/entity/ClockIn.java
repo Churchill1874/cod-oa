@@ -27,7 +27,7 @@ public class ClockIn implements Serializable {
     private LocalDateTime endTime;
     @ApiModelProperty("系统管理员账号")
     private String systemClientAccount;
-    @ApiModelProperty("状态 正常 , 迟到打卡 , 早退打卡 , 迟到打卡/早退打卡 ")
+    @ApiModelProperty("状态 正常 , 迟到打卡 , 早退打卡 , 迟到打卡/早退打卡, 缺勤 ")
     private String status;
 
 }
