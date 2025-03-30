@@ -60,7 +60,7 @@ public class CustomerReportController {
         int lastYearInt = thisYearInt - 1;
 
         for (CustomerOrder customerOrder : list) {
-            if (customerOrder.getAmount() == null || customerOrder.getProfit() == null) {
+            if (customerOrder.getAmount() == null) {
                 continue;
             }
             //如果是本周的数据
@@ -179,8 +179,10 @@ public class CustomerReportController {
             BigDecimal totalProfit = BigDecimal.ZERO;
 
             for (CustomerOrder customerOrder : thisYearMap.get(key)) {
-                if (customerOrder.getAmount() == null || customerOrder.getProfit() == null) {
+                if (customerOrder.getAmount() != null) {
                     totalSales = totalSales.add(customerOrder.getAmount());
+                }
+                if (customerOrder.getProfit() != null){
                     totalProfit = totalProfit.add(customerOrder.getProfit());
                 }
             }
