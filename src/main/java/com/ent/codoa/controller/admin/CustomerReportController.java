@@ -246,7 +246,7 @@ public class CustomerReportController {
 
                 BigDecimal rate = BigDecimal.ZERO;
                 if (twoMonthAgoCount == 0){
-                    rate = new BigDecimal(twoMonthAgoCount).multiply(new BigDecimal(100));
+                    rate = increasedCount.multiply(new BigDecimal(100));
                 } else {
                     rate = BigDecimalTools.divideK2AndDown(increasedCount, new BigDecimal(twoMonthAgoCount)).multiply(new BigDecimal(100));
                 }
@@ -255,9 +255,9 @@ public class CustomerReportController {
                 if (rate.intValue() > 30) {
                     //投诉数据对比
                     LossReasonData complaintData = new LossReasonData();
-                    complaintData.setLastMonthDate(lastMonth);
+                    complaintData.setLastMonthDate(lastMonthDate.toString());
                     complaintData.setLastMonthCount(lastMonthCount);
-                    complaintData.setTwoMonthAgoDate(twoMonthAgo);
+                    complaintData.setTwoMonthAgoDate(twoMonthAgoDate.toString());
                     complaintData.setTwoMonthAgoCount(twoMonthAgoCount);
                     //上个月比上上个月比例
                     complaintData.setRate(rate.intValue());
