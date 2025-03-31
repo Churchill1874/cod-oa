@@ -51,6 +51,7 @@ public class TimeTools {
         return false;
     }
 
+
     /**
      * 判断是否是上周时间以内
      *
@@ -58,7 +59,7 @@ public class TimeTools {
      */
     public static boolean isLastWeekBetween(LocalDateTime time) {
         LocalDateTime lastWeekTime = LocalDateTime.now().minusWeeks(1);
-        if (thisWeekStartTime(lastWeekTime).minusWeeks(1).compareTo(time) <= 0 && thisWeekEndTime(lastWeekTime).minusWeeks(1).compareTo(time) >= 0) {
+        if (thisWeekStartTime(lastWeekTime).compareTo(time) <= 0 && thisWeekEndTime(lastWeekTime).compareTo(time) >= 0) {
             return true;
         }
         return false;
