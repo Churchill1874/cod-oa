@@ -15,6 +15,6 @@ public interface CustomerWorkOrderDialogueService extends IService<CustomerWorkO
 
     void customerReply(CustomerWorkOrderDialogue dto);
 
-    IPage<CustomerWorkOrderDialogue> clientPage(IdPageBase dto);
+    IPage<CustomerWorkOrderDialogue> clientPage(CustomerWorkOrderDialoguePage dto);
 
 }

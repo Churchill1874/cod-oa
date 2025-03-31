@@ -11,6 +11,7 @@ import com.ent.codoa.pojo.req.IdPageBase;
 import com.ent.codoa.pojo.req.PageBase;
 import com.ent.codoa.pojo.req.customerworkorder.CustomerWorkOrderAdd;
 import com.ent.codoa.pojo.req.customerworkorderdialogue.CustomerWorkOrderDialogueAdd;
+import com.ent.codoa.pojo.req.customerworkorderdialogue.CustomerWorkOrderDialoguePage;
 import com.ent.codoa.service.CustomerWorkOrderDialogueService;
 import com.ent.codoa.service.CustomerWorkOrderService;
 import io.swagger.annotations.Api;
@@ -62,7 +63,7 @@ public class CustomerWorkOrderApi {
     @CustomerAuthCheck
     @PostMapping("/dialoguePage")
     @ApiOperation(value = "分页客户指定工单留言记录", notes = "分页客户指定工单留言记录")
-    public R<IPage<CustomerWorkOrderDialogue>> page(@RequestBody @Valid IdPageBase req) {
+    public R<IPage<CustomerWorkOrderDialogue>> page(@RequestBody @Valid CustomerWorkOrderDialoguePage req) {
         return R.ok(customerWorkOrderDialogueService.clientPage(req));
     }
 

@@ -50,11 +50,11 @@ public class CustomerWorkOrderDialogueServiceImpl extends ServiceImpl<CustomerWo
     }
 
     @Override
-    public IPage<CustomerWorkOrderDialogue> clientPage(IdPageBase dto) {
+    public IPage<CustomerWorkOrderDialogue> clientPage(CustomerWorkOrderDialoguePage dto) {
         IPage<CustomerWorkOrderDialogue> iPage = new Page<>(dto.getPageNum(), dto.getPageSize());
         QueryWrapper<CustomerWorkOrderDialogue> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda()
-            .eq(CustomerWorkOrderDialogue::getWorkOrderId, dto.getId())
+            .eq(CustomerWorkOrderDialogue::getWorkOrderId, dto.getWorkOrderId())
             .orderByDesc(CustomerWorkOrderDialogue::getCreateTime);
         return page(iPage, queryWrapper);
     }
