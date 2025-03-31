@@ -223,9 +223,11 @@ public class CustomerReportController {
         //当前时间
         LocalDate currentDate = LocalDate.now();
         //上个月
-        String lastMonth = currentDate.minusMonths(1).toString();
+        LocalDate lastMonthDate = currentDate.minusMonths(1);
+        String lastMonth = lastMonthDate.getYear() + "" + lastMonthDate.getMonthValue();
         //上上个月
-        String twoMonthAgo = currentDate.minusMonths(2).toString();
+        LocalDate twoMonthAgoDate = currentDate.minusMonths(2);
+        String twoMonthAgo = twoMonthAgoDate.getYear() + "" + twoMonthAgoDate.getMonthValue();
 
         //近三个月投诉记录数量
         List<Complaint> complaintList = complaintService.withinThreeMonth();
@@ -233,7 +235,7 @@ public class CustomerReportController {
         if (CollectionUtils.isNotEmpty(complaintList)) {
             //上个月投诉记录数量
             long lastMonthCount = complaintList.stream()
-                .filter(dto -> dto.getCreateTime().toLocalDate().toString().equals(lastMonth)).count();
+                .filter(dto -> (dto.getCreateTime().getYear() + "" + dto.getCreateTime().getMonthValue()).equals(lastMonth)).count();
             //上上个月投诉记录数量
             long twoMonthAgoCount = complaintList.stream()
                 .filter(dto -> dto.getCreateTime().toLocalDate().toString().equals(twoMonthAgo)).count();
@@ -263,10 +265,10 @@ public class CustomerReportController {
         if (CollectionUtils.isNotEmpty(customerOrderList)) {
             //上个月交易数量
             long lastMonthCount = customerOrderList.stream()
-                .filter(dto -> dto.getCreateTime().toLocalDate().toString().equals(lastMonth)).count();
+                .filter(dto -> (dto.getCreateTime().getYear() + "" + dto.getCreateTime().getMonthValue()).equals(lastMonth)).count();
             //上上个月交易数量
             long twoMonthAgoCount = customerOrderList.stream()
-                .filter(dto -> dto.getCreateTime().toLocalDate().toString().equals(twoMonthAgo)).count();
+                .filter(dto -> (dto.getCreateTime().getYear() + "" + dto.getCreateTime().getMonthValue()).equals(twoMonthAgo)).count();
 
             //如果上个月比上上个月减少了交易量
             if (lastMonthCount < twoMonthAgoCount){
