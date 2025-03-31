@@ -34,7 +34,7 @@ public class SwaggerConfig {
                 .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
                 .paths(PathSelectors.any())
                 .build()
-                //.pathMapping("/api")
+                .pathMapping("/api")
                 .globalOperationParameters(getPars())
                 .groupName("前台-客户端接口");
     }
@@ -49,7 +49,7 @@ public class SwaggerConfig {
                 .apis(RequestHandlerSelectors.withMethodAnnotation(ApiOperation.class))
                 .paths(PathSelectors.any())
                 .build()
-                //.pathMapping("/api")
+                .pathMapping("/api")
                 .globalOperationParameters(getPars())
                 .groupName("后台-管理接口");
     }

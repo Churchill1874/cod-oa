@@ -243,7 +243,14 @@ public class CustomerReportController {
             if (lastMonthCount > twoMonthAgoCount) {
                 //增加了的数量
                 BigDecimal increasedCount = new BigDecimal(lastMonthCount - twoMonthAgoCount);
-                BigDecimal rate = BigDecimalTools.divideK2AndDown(increasedCount, new BigDecimal(twoMonthAgoCount)).multiply(new BigDecimal(100));
+
+                BigDecimal rate = BigDecimal.ZERO;
+                if (twoMonthAgoCount == 0){
+                    rate = new BigDecimal(twoMonthAgoCount).multiply(new BigDecimal(100));
+                } else {
+                    rate = BigDecimalTools.divideK2AndDown(increasedCount, new BigDecimal(twoMonthAgoCount)).multiply(new BigDecimal(100));
+                }
+
                 //判断上个月投诉是否比上上个月多了百分之30
                 if (rate.intValue() > 30) {
                     //投诉数据对比
