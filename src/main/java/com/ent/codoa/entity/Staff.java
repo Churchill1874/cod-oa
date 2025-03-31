@@ -68,9 +68,9 @@ public class Staff extends BaseInfo implements Serializable {
     private Integer remainingLeave;
 
     @ApiModelProperty("工作日加班费比例")
-    private Integer weekdayOvertimePayRate;
+    private BigDecimal weekdayOvertimePayRate;
     @ApiModelProperty("周末加班费比例")
-    private Integer weekendOvertimePayRate;
+    private BigDecimal weekendOvertimePayRate;
     @ApiModelProperty("所属系统用户账号")
     private String systemClientAccount;
 

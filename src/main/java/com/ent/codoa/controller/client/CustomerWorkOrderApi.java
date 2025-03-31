@@ -62,7 +62,7 @@ public class CustomerWorkOrderApi {
     @CustomerAuthCheck
     @PostMapping("/dialoguePage")
     @ApiOperation(value = "分页客户指定工单留言记录", notes = "分页客户指定工单留言记录")
-    public R<IPage<CustomerWorkOrderDialogue>> page(@RequestBody IdPageBase req) {
+    public R<IPage<CustomerWorkOrderDialogue>> page(@RequestBody @Valid IdPageBase req) {
         return R.ok(customerWorkOrderDialogueService.clientPage(req));
     }
 

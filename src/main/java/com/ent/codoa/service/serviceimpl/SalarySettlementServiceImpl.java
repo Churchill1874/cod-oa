@@ -167,8 +167,8 @@ public class SalarySettlementServiceImpl extends ServiceImpl<SalarySettlementMap
         if (staff.getWeekdayOvertimePayRate() == null || staff.getWeekendOvertimePayRate() == null) {
             throw new DataException("请先配置该员工档案中的加班费用比例数据");
         }
-        salarySettlement.setWeekdayOvertimePayRate(new BigDecimal(staff.getWeekdayOvertimePayRate()));
-        salarySettlement.setWeekendOvertimePayRate(new BigDecimal(staff.getWeekendOvertimePayRate()));
+        salarySettlement.setWeekdayOvertimePayRate(staff.getWeekdayOvertimePayRate());
+        salarySettlement.setWeekendOvertimePayRate(staff.getWeekendOvertimePayRate());
 
         if (staff.getPayTaxesRate() == null) {
             throw new DataException("请先配置该员工档案中的交税比例数据");
