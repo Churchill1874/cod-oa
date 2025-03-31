@@ -1,5 +1,7 @@
 package com.ent.codoa.common.tools;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.time.*;
 import java.time.temporal.TemporalAdjusters;
 import java.util.HashSet;
@@ -8,6 +10,7 @@ import java.util.Set;
 /**
  * 时间工具类
  */
+@Slf4j
 public class TimeTools {
 
     /**
@@ -41,7 +44,8 @@ public class TimeTools {
      * @return
      */
     public static boolean isThisWeekBetween(LocalDateTime time) {
-        if (thisWeekStartTime(time).compareTo(time) <= 0 && thisWeekEndTime(time).compareTo(time) >= 0) {
+        LocalDateTime currentTime = LocalDateTime.now();
+        if (thisWeekStartTime(currentTime).compareTo(time) <= 0 && thisWeekEndTime(currentTime).compareTo(time) >= 0) {
             return true;
         }
         return false;
@@ -53,7 +57,8 @@ public class TimeTools {
      * @return
      */
     public static boolean isLastWeekBetween(LocalDateTime time) {
-        if (thisWeekStartTime(time).minusWeeks(1).compareTo(time) <= 0 && thisWeekEndTime(time).minusWeeks(1).compareTo(time) >= 0) {
+        LocalDateTime lastWeekTime = LocalDateTime.now().minusWeeks(1);
+        if (thisWeekStartTime(lastWeekTime).minusWeeks(1).compareTo(time) <= 0 && thisWeekEndTime(lastWeekTime).minusWeeks(1).compareTo(time) >= 0) {
             return true;
         }
         return false;
