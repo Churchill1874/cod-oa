@@ -238,7 +238,7 @@ public class CustomerReportController {
                 .filter(dto -> (dto.getCreateTime().getYear() + "" + dto.getCreateTime().getMonthValue()).equals(lastMonth)).count();
             //上上个月投诉记录数量
             long twoMonthAgoCount = complaintList.stream()
-                .filter(dto -> dto.getCreateTime().toLocalDate().toString().equals(twoMonthAgo)).count();
+                .filter(dto -> (dto.getCreateTime().getYear() + "" + dto.getCreateTime().getMonthValue()).equals(twoMonthAgo)).count();
             //如果上个月比上上个月增加了投诉量
             if (lastMonthCount > twoMonthAgoCount) {
                 //增加了的数量
