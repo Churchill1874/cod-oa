@@ -3,6 +3,7 @@ package com.ent.codoa.service.serviceimpl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -38,19 +39,32 @@ public class PerformanceAppraisalServiceImpl extends ServiceImpl<PerformanceAppr
 
     @Override
     public void add(PerformanceAppraisalAdd dto) {
-        PerformanceAppraisal performanceAppraisal = BeanUtil.toBean(dto, PerformanceAppraisal.class);
-        performanceAppraisal.setCreateName(TokenTools.getName());
-        performanceAppraisal.setCreateTime(LocalDateTime.now());
-        performanceAppraisal.setSystemClientAccount(TokenTools.getAccount());
-        save(performanceAppraisal);
+        PerformanceAppraisal performanceAppraisal = findByDateAndAccount(dto.getDate(), dto.getAccount());
+        if (performanceAppraisal == null) {
+            performanceAppraisal = BeanUtil.toBean(dto, PerformanceAppraisal.class);
+            performanceAppraisal.setCreateName(TokenTools.getName());
+            performanceAppraisal.setCreateTime(LocalDateTime.now());
+            performanceAppraisal.setSystemClientAccount(TokenTools.getAccount());
+            save(performanceAppraisal);
 
-        LogTools.addLog("绩效考核","新增考核绩效:" + JSONUtil.toJsonStr(performanceAppraisal),TokenTools.getLoginToken(true));
+            LogTools.addLog("绩效考核", "新增考核绩效:" + JSONUtil.toJsonStr(performanceAppraisal), TokenTools.getLoginToken(true));
+        } else {
+            UpdateWrapper<PerformanceAppraisal> updateWrapper = new UpdateWrapper<>();
+            updateWrapper.lambda()
+                .set(PerformanceAppraisal::getAppraisal, dto.getAppraisal())
+                .set(PerformanceAppraisal::getLevel, dto.getLevel())
+                .eq(PerformanceAppraisal::getDate, dto.getDate())
+                .eq(PerformanceAppraisal::getAccount, dto.getAccount());
+            update(updateWrapper);
+        }
+
+        LogTools.addLog("绩效考核", "修改考核绩效:" + JSONUtil.toJsonStr(performanceAppraisal), TokenTools.getLoginToken(true));
     }
 
     @Override
     public void delete(Long id) {
         removeById(id);
-        LogTools.addLog("绩效考核","删除考核绩效:" + id,TokenTools.getLoginToken(true));
+        LogTools.addLog("绩效考核", "删除考核绩效:" + id, TokenTools.getLoginToken(true));
     }
 
     @Override
@@ -60,7 +74,7 @@ public class PerformanceAppraisalServiceImpl extends ServiceImpl<PerformanceAppr
         queryWrapper.lambda()
             .eq(PerformanceAppraisal::getAccount, TokenTools.getAccount())
             .orderByDesc(PerformanceAppraisal::getCreateTime);
-        return page(iPage,queryWrapper);
+        return page(iPage, queryWrapper);
     }
 
     @Override
@@ -72,7 +86,7 @@ public class PerformanceAppraisalServiceImpl extends ServiceImpl<PerformanceAppr
             .orderByDesc(PerformanceAppraisal::getCreateTime);
 
         List<PerformanceAppraisal> list = list(queryWrapper);
-        if (CollectionUtils.isEmpty(list)){
+        if (CollectionUtils.isEmpty(list)) {
             return null;
         }
 
