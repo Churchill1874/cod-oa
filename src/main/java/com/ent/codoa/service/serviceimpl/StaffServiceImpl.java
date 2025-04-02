@@ -142,6 +142,7 @@ public class StaffServiceImpl extends ServiceImpl<StaffMapper, Staff> implements
         queryWrapper.lambda()
             .le(Staff::getEmploymentExpire, LocalDate.now().plusMonths(3))
             .eq(Staff::getWorkStatus, "在职")
+            .eq(Staff::getSystemClientAccount, TokenTools.getAccount())
             .orderByDesc(Staff::getCreateTime);
         return page(iPage, queryWrapper);
     }

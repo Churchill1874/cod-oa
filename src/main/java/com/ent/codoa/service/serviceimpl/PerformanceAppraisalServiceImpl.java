@@ -53,6 +53,7 @@ public class PerformanceAppraisalServiceImpl extends ServiceImpl<PerformanceAppr
             updateWrapper.lambda()
                 .set(PerformanceAppraisal::getAppraisal, dto.getAppraisal())
                 .set(PerformanceAppraisal::getLevel, dto.getLevel())
+                .set(PerformanceAppraisal::getCreateTime, LocalDateTime.now())
                 .eq(PerformanceAppraisal::getDate, dto.getDate())
                 .eq(PerformanceAppraisal::getAccount, dto.getAccount());
             update(updateWrapper);
