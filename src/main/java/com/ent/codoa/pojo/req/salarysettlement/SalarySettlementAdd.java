@@ -69,13 +69,21 @@ public class SalarySettlementAdd implements Serializable {
     @ApiModelProperty("绩效评分")
     private String performanceScore;
 
-    @ApiModelProperty("每月交税比例")
+    @ApiModelProperty("所得税交税比例")
     private Integer payTaxesRate;
 
-    @ApiModelProperty("交税金额")
+    @ApiModelProperty("所得税交税金额")
     private BigDecimal payTaxesAmount;
+
+    @ApiModelProperty("住民税比例")
+    private Integer residentTaxRate;
+
+    @ApiModelProperty("住民税金额")
+    private BigDecimal residentTaxAmount;
 
     @ApiModelProperty("估算工资")
     private BigDecimal estimateSalary;
+
+
 
 }

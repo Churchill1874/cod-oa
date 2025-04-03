@@ -60,8 +60,8 @@ public class Staff extends BaseInfo implements Serializable {
     private String contract;
     @ApiModelProperty("雇佣到期时间")
     private LocalDate employmentExpire;
-    @ApiModelProperty("每月交税比例")
-    private Integer payTaxesRate;
+/*    @ApiModelProperty("每月交税比例")
+    private Integer payTaxesRate;*/
     @ApiModelProperty("年假天数")
     private Integer annualLeave;
     @ApiModelProperty("剩余休假 这里面包括了调休增加的")

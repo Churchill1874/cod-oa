@@ -40,6 +40,8 @@ public class SalarySettlementServiceImpl extends ServiceImpl<SalarySettlementMap
     private PerformanceAppraisalService performanceAppraisalService;
     @Autowired
     private AttendanceSettingService attendanceSettingService;
+    @Autowired
+    private TaxRateService taxRateService;
 
     @Override
     public IPage<SalarySettlement> queryPage(SalarySettlementPage dto) {
@@ -170,10 +172,7 @@ public class SalarySettlementServiceImpl extends ServiceImpl<SalarySettlementMap
         salarySettlement.setWeekdayOvertimePayRate(staff.getWeekdayOvertimePayRate());
         salarySettlement.setWeekendOvertimePayRate(staff.getWeekendOvertimePayRate());
 
-        if (staff.getPayTaxesRate() == null) {
-            throw new DataException("请先配置该员工档案中的交税比例数据");
-        }
-        salarySettlement.setPayTaxesRate(staff.getPayTaxesRate());
+        findTaxRateByYearSalary(salarySettlement);
 
         //查询查询考勤上班时间设置
         AttendanceSetting attendanceSetting = attendanceSettingService.findBySCA(TokenTools.getAccount());
@@ -247,13 +246,46 @@ public class SalarySettlementServiceImpl extends ServiceImpl<SalarySettlementMap
         salarySettlement.setWeekendOvertimeAmount(hourSalary.multiply(salarySettlement.getWeekendsOvertime()).multiply(salarySettlement.getWeekendOvertimePayRate()));
         //加上平日加班费 加上六日加班费
         salarySettlement.setEstimateSalary(estimateSalary.add(salarySettlement.getWeekdayOvertimeAmount()).add(salarySettlement.getWeekendOvertimeAmount()));
-        //税
-        //税的比例
+        //所得税的比例
         BigDecimal payTaxesRate = new BigDecimal(salarySettlement.getPayTaxesRate()).divide(new BigDecimal("100"), 2,RoundingMode.DOWN);
         salarySettlement.setPayTaxesAmount(salarySettlement.getEstimateSalary().multiply(payTaxesRate).setScale(2, RoundingMode.DOWN));
-        //减去税
+        //工资减去所得税
         salarySettlement.setEstimateSalary(salarySettlement.getEstimateSalary().subtract(salarySettlement.getPayTaxesAmount()));
+
+        //如果填写了 住民税具体扣除金额
+        if (salarySettlement.getResidentTaxAmount() != null){
+            //工资减去 住民税金额
+            salarySettlement.setEstimateSalary(salarySettlement.getEstimateSalary().subtract(salarySettlement.getResidentTaxAmount()));
+        }
+        //如果没有写住民税金额 但是填写了住民税比例
+        if (salarySettlement.getResidentTaxRate() != null && salarySettlement.getResidentTaxAmount() == null){
+            //根据比例算出住民税金额并扣减工资
+            BigDecimal residentTaxRate = new BigDecimal(salarySettlement.getResidentTaxRate()).divide(new BigDecimal("100"),2,RoundingMode.DOWN);
+            salarySettlement.setResidentTaxAmount(salarySettlement.getEstimateSalary().multiply(residentTaxRate).setScale(2,RoundingMode.DOWN));
+            salarySettlement.setEstimateSalary(salarySettlement.getEstimateSalary().subtract(salarySettlement.getResidentTaxAmount()));
+        }
         return salarySettlement;
+    }
+
+    //根据年薪查找到
+    private void findTaxRateByYearSalary( SalarySettlement salarySettlement){
+        //所得税比例和金额
+        List<TaxRate> taxRateList = taxRateService.getTaxRateList();
+        if (CollectionUtils.isEmpty(taxRateList)){
+            throw new DataException("请先配置所得税比例");
+        }
+
+        for(TaxRate taxRate: taxRateList){
+            if (taxRate.getUpLimit().compareTo(new BigDecimal("-1")) == 0){
+                if (new BigDecimal("12").multiply(salarySettlement.getBaseSalary()).compareTo(taxRate.getDownLimit()) >= 0){
+                    salarySettlement.setPayTaxesRate(taxRate.getRate());
+                }
+                break;
+            }
+            if (salarySettlement.getBaseSalary().compareTo(taxRate.getDownLimit()) >= 0 && salarySettlement.getBaseSalary().compareTo(taxRate.getUpLimit()) < 0){
+                salarySettlement.setPayTaxesRate(taxRate.getRate());
+            }
+        }
     }
 
     @Override
@@ -274,6 +306,8 @@ public class SalarySettlementServiceImpl extends ServiceImpl<SalarySettlementMap
         SalarySettlement salarySettlement = BeanUtil.toBean(dto, SalarySettlement.class);
         salarySettlement.setBaseSalary(new BigDecimal(staff.getSalary()));
 
+        findTaxRateByYearSalary(salarySettlement);
+
         //计算工资 ( 基本工资 / 应该出勤的天数 * 实际出勤天数 + 平日加班费 + 六日加班费 ) as 税前工作工资 - 税支出
         //日薪资
         BigDecimal daySalary = salarySettlement.getBaseSalary().divide(salarySettlement.getExpectedAttendance(), RoundingMode.DOWN);
@@ -289,11 +323,25 @@ public class SalarySettlementServiceImpl extends ServiceImpl<SalarySettlementMap
         salarySettlement.setWeekendOvertimeAmount(hourSalary.multiply(salarySettlement.getWeekendsOvertime()).multiply(salarySettlement.getWeekendOvertimePayRate()));
         //加上平日加班费 加上六日加班费
         salarySettlement.setEstimateSalary(estimateSalary.add(salarySettlement.getWeekdayOvertimeAmount()).add(salarySettlement.getWeekendOvertimeAmount()));
-        //税
+        //所得税
         BigDecimal payTaxesRate = new BigDecimal(salarySettlement.getPayTaxesRate()).divide(new BigDecimal("100"), 2,RoundingMode.DOWN);
         salarySettlement.setPayTaxesAmount(salarySettlement.getEstimateSalary().multiply(payTaxesRate).setScale(2, RoundingMode.DOWN));
-        //减去税
+        //工资减去所得税
         salarySettlement.setEstimateSalary(salarySettlement.getEstimateSalary().subtract(salarySettlement.getPayTaxesAmount()));
+
+        //如果填写了 住民税具体扣除金额
+        if (salarySettlement.getResidentTaxAmount() != null){
+            //工资减去 住民税金额
+            salarySettlement.setEstimateSalary(salarySettlement.getEstimateSalary().subtract(salarySettlement.getResidentTaxAmount()));
+        }
+        //如果没有写住民税金额 但是填写了住民税比例
+        if (salarySettlement.getResidentTaxRate() != null && salarySettlement.getResidentTaxAmount() == null){
+            //根据比例算出住民税金额并扣减工资
+            BigDecimal residentTaxRate = new BigDecimal(salarySettlement.getResidentTaxRate()).divide(new BigDecimal("100"),2,RoundingMode.DOWN);
+            salarySettlement.setResidentTaxAmount(salarySettlement.getEstimateSalary().multiply(residentTaxRate).setScale(2,RoundingMode.DOWN));
+            salarySettlement.setEstimateSalary(salarySettlement.getEstimateSalary().subtract(salarySettlement.getResidentTaxAmount()));
+        }
+
         return salarySettlement;
     }
 

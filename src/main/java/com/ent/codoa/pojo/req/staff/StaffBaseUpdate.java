@@ -92,9 +92,9 @@ public class StaffBaseUpdate extends IdBase implements Serializable {
     @ApiModelProperty(value = "雇佣到期时间", required = true)
     private LocalDate employmentExpire;
 
-    @NotNull(message = "每月交税比例不能为空")
+/*    @NotNull(message = "每月交税比例不能为空")
     @ApiModelProperty(value = "每月交税比例", required = true)
-    private Integer payTaxesRate;
+    private Integer payTaxesRate;*/
 
     @NotNull(message = "工作日加班费比例不能为空")
     @ApiModelProperty(value = "工作日加班费比例", required = true)
