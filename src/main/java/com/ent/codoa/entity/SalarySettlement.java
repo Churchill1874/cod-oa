@@ -67,11 +67,17 @@ public class SalarySettlement extends BaseInfo implements Serializable {
     @ApiModelProperty("系统用户账号")
     private String systemClientAccount;
 
-    @ApiModelProperty("每月交税比例")
+    @ApiModelProperty("所得税交税比例")
     private Integer payTaxesRate;
 
-    @ApiModelProperty("交税金额")
+    @ApiModelProperty("所得税交税金额")
     private BigDecimal payTaxesAmount;
+
+    @ApiModelProperty("住民税比例")
+    private Integer residentTaxRate;
+
+    @ApiModelProperty("住民税金额")
+    private BigDecimal residentTaxAmount;
 
     @ApiModelProperty("估算工资")
     private BigDecimal estimateSalary;
