@@ -13,14 +13,13 @@ import com.ent.codoa.common.tools.GenerateTools;
 import com.ent.codoa.common.tools.TokenTools;
 import com.ent.codoa.entity.SystemClient;
 import com.ent.codoa.mapper.SystemClientMapper;
-import com.ent.codoa.pojo.req.systemclient.SystemClientPage;
 import com.ent.codoa.pojo.req.systemclient.SystemClientBaseUpdate;
+import com.ent.codoa.pojo.req.systemclient.SystemClientPage;
 import com.ent.codoa.service.SystemClientService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.*;
 
 @Service
 public class SystemClientServiceImpl extends ServiceImpl<SystemClientMapper, SystemClient> implements SystemClientService {
@@ -63,7 +62,11 @@ public class SystemClientServiceImpl extends ServiceImpl<SystemClientMapper, Sys
 
         SystemClient systemClient = findByAccount(dto.getAccount());
         if (systemClient != null){
-            throw new DataException("账号重复已存在");
+            if("cn".equals(TokenTools.getLoginLang())){
+                throw new DataException("账号重复已存在");
+            }else{
+                throw new DataException("アカウントが既に存在しています。");
+            }
         }
 
         dto.setRole(RoleEnum.ADMIN);

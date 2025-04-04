@@ -38,17 +38,17 @@ public class InvoiceItemServiceImpl extends ServiceImpl<InvoiceItemMapper, Invoi
     }
 
     @Override
-    public BigDecimal calculateSubAmount(InvoiceItemAmount dto) {
+    public BigDecimal calculateSubAmount(InvoiceItemAmount dto) {      //计算明细总金额
         return dto.getUnitPrice().multiply(new BigDecimal(dto.getQuantity()));
     }
 
     @Override
-    public BigDecimal calculateSubTax(InvoiceItemTax dto) {
+    public BigDecimal calculateSubTax(InvoiceItemTax dto) {     //辅助申报计算明细消费税
         return dto.getAmount().multiply(new BigDecimal(dto.getTaxRate()).divide(new BigDecimal("100"), 2, RoundingMode.HALF_UP));
     }
 
     @Override
-    public BigDecimal calculateSubTax(InvoiceItem item) {
+    public BigDecimal calculateSubTax(InvoiceItem item) {      //计算明细消费税
         return item.getAmount().multiply(new BigDecimal(item.getTaxRate()).divide(new BigDecimal("100"), 2, RoundingMode.HALF_UP));
     }
 

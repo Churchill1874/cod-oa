@@ -34,25 +34,25 @@ public class InvoiceAdd  implements Serializable {
     @ApiModelProperty(value = "企业的税务登记编号",required = true)
     private String registrationNumber;
 
-    @NotBlank(message = "供应商名称不能为空")
+
     @Length(max = 50, message = "供应商名称必须50字以内")
-    @ApiModelProperty(value = "供应商名称",required = true)
-    private String supplierName;
+    @ApiModelProperty(value = "供应商名称")
+    private String supplierName="";
 
-    @NotBlank(message = "供应商地址不能为空")
+
     @Length(max = 100, message = "供应商地址必须100字以内")
-    @ApiModelProperty(value = "供应商的地址",required = true)
-    private String supplierAddress;
+    @ApiModelProperty(value = "供应商的地址")
+    private String supplierAddress="";
 
-    @NotBlank(message = "供应商电话不能为空")
+
     @Length(max = 20, message = "供应商电话必须20字以内")
-    @ApiModelProperty(value = "供应商的电话号码",required = true)
-    private String supplierPhone;
+    @ApiModelProperty(value = "供应商的电话号码")
+    private String supplierPhone="";
 
-    @NotBlank(message = "供应商邮箱不能为空")
+
     @Length(max = 30, message = "供应商邮箱必须30字以内")
-    @ApiModelProperty(value = "供应商邮箱",required = true)
-    private String supplierEmail;
+    @ApiModelProperty(value = "供应商邮箱")
+    private String supplierEmail="";
 
     @NotBlank(message = "客户名称不能为空")
     @Length(max = 50, message = "客户名称必须50字以内")
@@ -64,9 +64,8 @@ public class InvoiceAdd  implements Serializable {
     @ApiModelProperty(value = "客户地址",required = true)
     private String customerAddress;
 
-    @NotNull(message = "上次请求的金额（含税）不能为空")
-    @ApiModelProperty(value = "上次请求的金额（含税）",required = true)
-    private BigDecimal previousAmount;
+    @ApiModelProperty(value = "上次请求的金额（含税）")
+    private BigDecimal previousAmount=BigDecimal.ZERO;
 
     @NotNull(message = "已支付的金额不能为空")
     @ApiModelProperty(value = "已支付的金额",required = true)

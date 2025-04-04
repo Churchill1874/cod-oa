@@ -20,7 +20,7 @@ public class ProductQantityVO implements Serializable {
     private String category;
 
 
-    @ApiModelProperty("商品单位")
+    @ApiModelProperty("单位名称")
     private String unit;
 
 

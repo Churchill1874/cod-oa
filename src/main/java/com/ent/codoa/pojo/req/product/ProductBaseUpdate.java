@@ -27,9 +27,9 @@ public class ProductBaseUpdate extends IdBase implements Serializable {
     @ApiModelProperty(value = "商品类别",required = true)
     private String category;
 
-    @NotBlank(message = "商品单位不能为空")
-    @Length(max = 10,message = "商品类别长度不能大于10")
-    @ApiModelProperty("商品单位")
+    @NotBlank(message = "单位名称不能为空")
+    @Length(max = 10,message = "单位名称长度不能大于10")
+    @ApiModelProperty("单位名称")
     private String unit;
 
     @NotNull(message = "预警数量不能为空")

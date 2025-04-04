@@ -33,8 +33,6 @@ import java.util.List;
 public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory> implements InventoryService {
     @Autowired
     private StockOperationService stockInService;
-    @Autowired
-    private InventoryMapper inventoryMapper;
 
 
     @Override
@@ -100,7 +98,11 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
         LoginToken loginToken = TokenTools.getLoginToken(true);
         Inventory inventory = getInventory(dto.getWarehouseId(), dto.getProductId(), dto.getBatchNumber());//校验批次库存数量
         if (dto.getQuantity() > inventory.getQuantity()) {
-            throw new DataException("出库数量不能大于现有批次库存数量");
+            if("cn".equals(TokenTools.getLoginLang())){
+                throw new DataException("出库数量不能大于现有批次库存数量");
+            }else{
+                throw new DataException("出庫数量はロット在庫数量を超えることはできません");
+            }
         }
         Integer newQantity = inventory.getQuantity() - dto.getQuantity();
         UpdateWrapper<Inventory> updateWrapper = new UpdateWrapper<>();
@@ -147,7 +149,11 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
         StockOperation stockOperation = new StockOperation();
         Inventory inventory=getInventory(dto.getWarehouseId(),dto.getProductId() ,dto.getBatchNumber());
         if(inventory.getQuantity()==0 || InventoryStatusEnum.SOLDED==inventory.getStatus()){
-            throw new DataException("已销售的库存批次不允许退货");
+            if("cn".equals(TokenTools.getLoginLang())){
+                throw new DataException("已销售的库存批次不允许退货");
+            }else{
+                throw new DataException("出荷済みロットの返品は受領不可");
+            }
         }
         stockOperation.setWarehouseId(dto.getWarehouseId());
         stockOperation.setProductId(dto.getProductId());

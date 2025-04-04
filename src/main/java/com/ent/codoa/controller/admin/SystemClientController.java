@@ -4,7 +4,6 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
-import com.ent.codoa.common.annotation.LoginCheck;
 import com.ent.codoa.common.annotation.PlatformAuthCheck;
 import com.ent.codoa.common.constant.enums.RoleEnum;
 import com.ent.codoa.common.exception.AccountOrPasswordException;
@@ -15,7 +14,10 @@ import com.ent.codoa.common.tools.TokenTools;
 import com.ent.codoa.entity.Customer;
 import com.ent.codoa.entity.Staff;
 import com.ent.codoa.entity.SystemClient;
-import com.ent.codoa.pojo.req.systemclient.*;
+import com.ent.codoa.pojo.req.systemclient.AdminLogin;
+import com.ent.codoa.pojo.req.systemclient.SystemClientAdd;
+import com.ent.codoa.pojo.req.systemclient.SystemClientBaseUpdate;
+import com.ent.codoa.pojo.req.systemclient.SystemClientPage;
 import com.ent.codoa.pojo.resp.systemclient.CaptchaCode;
 import com.ent.codoa.pojo.resp.token.LoginToken;
 import com.ent.codoa.service.CustomerService;
@@ -77,15 +79,19 @@ public class SystemClientController {
 
 
     //对比密码正确与否
-    private void checkAccountAndPassword(String actualPassword, String passwordReq) {
+    private void checkAccountAndPassword(String actualPassword, String passwordReq,String lang) {
         if (!actualPassword.equals(passwordReq)) {
-            throw new AccountOrPasswordException();
+            if(lang=="cn"){
+                throw new AccountOrPasswordException();
+            }else if(lang=="jp"){
+                throw new AccountOrPasswordException("アカウント情報が間違っています");
+            }
         }
     }
 
 
     //判断登录账号与密码是否存在 并正确
-    private LoginToken checkLogin(String account, String password) {
+    private LoginToken checkLogin(String account, String password,String lang) {
         LoginToken loginToken;
 
         //判断登录账号是否存在系统用户中
@@ -101,7 +107,7 @@ public class SystemClientController {
             loginToken.setPlatformMenu(systemClient.getPlatformMenu());
             loginToken.setStatus(systemClient.getStatus());
             //对比登录密码和正确密码
-            checkAccountAndPassword(systemClient.getPassword(), CodeTools.md5AndSalt(password, systemClient.getSalt()));
+            checkAccountAndPassword(systemClient.getPassword(), CodeTools.md5AndSalt(password, systemClient.getSalt()),lang);
             return loginToken;
         }
 
@@ -113,7 +119,7 @@ public class SystemClientController {
             loginToken.setRole(RoleEnum.CUSTOMER);
             loginToken.setSystemClientAccount(customer.getSystemClientAccount());
             //对比登录密码和正确密码
-            checkAccountAndPassword(customer.getPassword(), CodeTools.md5AndSalt(password, customer.getSalt()));
+            checkAccountAndPassword(customer.getPassword(), CodeTools.md5AndSalt(password, customer.getSalt()),lang);
             //获取所属系统用户的权限赋予自己
             systemClient = systemClientService.findByAccount(loginToken.getSystemClientAccount());
             loginToken.setCustomerMenu(systemClient.getCustomerMenu());
@@ -133,7 +139,7 @@ public class SystemClientController {
             loginToken.setRole(RoleEnum.HUMAN_RESOURCE_MANAGEMENT);
             loginToken.setSystemClientAccount(staff.getSystemClientAccount());
             //对比登录密码和正确密码
-            checkAccountAndPassword(staff.getPassword(), CodeTools.md5AndSalt(password, staff.getSalt()));
+            checkAccountAndPassword(staff.getPassword(), CodeTools.md5AndSalt(password, staff.getSalt()),lang);
             //获取所属系统用户的权限赋予自己
             systemClient = systemClientService.findByAccount(loginToken.getSystemClientAccount());
             loginToken.setCustomerMenu(systemClient.getCustomerMenu());
@@ -159,16 +165,26 @@ public class SystemClientController {
         //校验验证码
         String captchaCode = ehcacheService.captchaCodeCache().get(HttpTools.getIp());
         if (captchaCode == null) {
-            return R.failed("验证码有误或已过期");
+            if(req.getLang()=="cn"){
+                return R.failed("验证码有误或已过期");
+            }else if(req.getLang()=="jp"){
+                return R.failed("確認コードが間違っているか、期限切れです");
+            }
+
         }
         if (!captchaCode.equalsIgnoreCase(req.getVerificationCode())) {
-            return R.failed("验证码错误");
+            if(req.getLang()=="cn"){
+                return R.failed("验证码错误");
+            }else if(req.getLang()=="jp"){
+                return R.failed("認証コードが正しくありません");
+            }
         }
 
-        LoginToken loginToken = checkLogin(req.getAccount(), req.getPassword());
+        LoginToken loginToken = checkLogin(req.getAccount(), req.getPassword(),req.getLang());
 
         //生成token并返回
         loginToken.setAccount(req.getAccount());
+        loginToken.setLang(req.getLang());
         loginToken.setLoginTime(LocalDateTime.now());
         loginToken.setTokenId(GenerateTools.createTokenId());
 

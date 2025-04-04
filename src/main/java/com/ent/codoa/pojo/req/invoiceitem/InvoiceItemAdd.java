@@ -25,9 +25,8 @@ public class InvoiceItemAdd implements Serializable {
     private Integer quantity;
 
     @Length(max = 10, message = "单位10字以内")
-    @NotBlank(message = "商品单位不能为空")
-    @ApiModelProperty(value = "商品或服务的单位",required = true)
-    private String unit;
+    @ApiModelProperty(value = "商品或服务的单位")
+    private String unit="";
 
     @NotNull(message = "商品单价不能为空")
     @ApiModelProperty(value = "商品或服务的单价（不含税）",required = true)

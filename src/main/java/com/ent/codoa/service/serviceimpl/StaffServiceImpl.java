@@ -95,14 +95,22 @@ public class StaffServiceImpl extends ServiceImpl<StaffMapper, Staff> implements
         if (findByAccount(dto.getAccount()) != null
             || systemClientService.findByAccount(dto.getAccount()) != null
             || customerService.findByAccount(dto.getAccount()) != null) {
-            throw new DataException("账号已经存在,请修改");
+            if("cn".equals(TokenTools.getLoginLang())){
+                throw new DataException("账号已经存在,请修改");
+            }else{
+                throw new DataException("アカウントは既に存在しています。変更してください");
+            }
         }
 
         if (StringUtils.isNotBlank(dto.getCode())){
             QueryWrapper<Staff> queryWrapper = new QueryWrapper<>();
             queryWrapper.lambda().eq(Staff::getCode, dto.getCode());
             if (getOne(queryWrapper) != null){
-                throw new DataException("员工编码重复");
+                if("cn".equals(TokenTools.getLoginLang())){
+                    throw new DataException("员工编码重复");
+                }else{
+                    throw new DataException("社員コードが重複しています");
+                }
             }
         }
 

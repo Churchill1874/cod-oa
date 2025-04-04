@@ -40,10 +40,15 @@ public class WarehouseServiceImpl extends ServiceImpl<WarehouseMapper, Warehouse
     public void add(Warehouse dto) {
         QueryWrapper<Warehouse> queryWrapper=new QueryWrapper();
         queryWrapper.lambda()
-                .eq(Warehouse::getName,dto.getName());
+                .eq(Warehouse::getName,dto.getName())
+                .eq(Warehouse::getSystemClientAccount,TokenTools.getAccount());
         Warehouse wirehouse=getOne(queryWrapper);
         if(wirehouse!=null){
-            throw new DataException("仓库名称重复");
+            if("cn".equals(TokenTools.getLoginLang())){
+                throw new DataException("仓库名称重复");
+            }else{
+                throw new DataException("倉庫名が重複しています。");
+            }
         }
         LoginToken loginToken=TokenTools.getLoginToken(true);
         dto.setCreateName(TokenTools.getName());
@@ -57,10 +62,15 @@ public class WarehouseServiceImpl extends ServiceImpl<WarehouseMapper, Warehouse
     public void updateBaseInfo(WarehouseBaseUpdate dto) {
         QueryWrapper<Warehouse> queryWrapper=new QueryWrapper();
         queryWrapper.lambda()
-                .eq(Warehouse::getName,dto.getName());
+                .eq(Warehouse::getName,dto.getName())
+                .eq(Warehouse::getSystemClientAccount,TokenTools.getAccount());
         Warehouse wirehouse=getOne(queryWrapper);
         if(wirehouse!=null){
-            throw new DataException("仓库名称重复");
+            if("cn".equals(TokenTools.getLoginLang())){
+                throw new DataException("仓库名称重复");
+            }else{
+                throw new DataException("倉庫名が重複しています。");
+            }
         }
         UpdateWrapper<Warehouse> updateWrapper=new UpdateWrapper<>();
         LoginToken loginToken=TokenTools.getLoginToken(true);

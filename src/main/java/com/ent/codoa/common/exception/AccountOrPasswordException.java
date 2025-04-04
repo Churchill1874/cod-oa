@@ -13,4 +13,8 @@ public class AccountOrPasswordException extends RuntimeException{
 
     private String message = "账号或密码有误";
 
+    public AccountOrPasswordException(String message) {
+        this.message = message;
+    }
+
 }

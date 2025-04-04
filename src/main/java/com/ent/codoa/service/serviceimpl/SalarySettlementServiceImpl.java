@@ -160,25 +160,41 @@ public class SalarySettlementServiceImpl extends ServiceImpl<SalarySettlementMap
         //查询员工基本福利属性
         Staff staff = staffService.findByAccount(account);
         if (staff == null) {
-            throw new DataException("员工不存在");
+            if("cn".equals(TokenTools.getLoginLang())){
+                throw new DataException("员工不存在");
+            }else{
+                throw new DataException("該当する社員が存在しません");
+            }
         }
         salarySettlement.setBaseSalary(new BigDecimal(staff.getSalary()));
 
         if (staff.getWeekdayOvertimePayRate() == null || staff.getWeekendOvertimePayRate() == null) {
-            throw new DataException("请先配置该员工档案中的加班费用比例数据");
+            if("cn".equals(TokenTools.getLoginLang())){
+                throw new DataException("请先配置该员工档案中的加班费用比例数据");
+            }else{
+                throw new DataException("当該社員の残業単価設定が未登録です。人事システムで設定してください");
+            }
         }
         salarySettlement.setWeekdayOvertimePayRate(staff.getWeekdayOvertimePayRate());
         salarySettlement.setWeekendOvertimePayRate(staff.getWeekendOvertimePayRate());
 
         if (staff.getPayTaxesRate() == null) {
-            throw new DataException("请先配置该员工档案中的交税比例数据");
+            if("cn".equals(TokenTools.getLoginLang())){
+                throw new DataException("请先配置该员工档案中的交税比例数据");
+            }else{
+                throw new DataException("当該社員の所得税率設定が未登録です。給与システムで設定してください");
+            }
         }
         salarySettlement.setPayTaxesRate(staff.getPayTaxesRate());
 
         //查询查询考勤上班时间设置
         AttendanceSetting attendanceSetting = attendanceSettingService.findBySCA(TokenTools.getAccount());
         if (attendanceSetting == null) {
-            throw new DataException("缺少上班打开时间配置");
+            if("cn".equals(TokenTools.getLoginLang())){
+                throw new DataException("缺少上班打开时间配置");
+            }else{
+                throw new DataException("出勤打刻時刻の設定が不足しています");
+            }
         }
 
         String[] dateArray = date.split("-");
@@ -191,7 +207,12 @@ public class SalarySettlementServiceImpl extends ServiceImpl<SalarySettlementMap
         clockInStaffQuery.setMonth(date);
         List<ClockIn> clockInList = clockInService.findByMonthAndAccount(clockInStaffQuery);
         if (CollectionUtils.isEmpty(clockInList)) {
-            throw new DataException(date + "无出勤");
+            if("cn".equals(TokenTools.getLoginLang())){
+                throw new DataException(date + "无出勤");
+            }else{
+                throw new DataException(date + "出勤なし");
+            }
+
         }
 
         //实际出勤天数
@@ -261,15 +282,28 @@ public class SalarySettlementServiceImpl extends ServiceImpl<SalarySettlementMap
         //查询查询考勤上班时间设置
         AttendanceSetting attendanceSetting = attendanceSettingService.findBySCA(TokenTools.getAccount());
         if (attendanceSetting == null) {
-            throw new DataException("缺少上班打开时间配置");
+            if("cn".equals(TokenTools.getLoginLang())){
+                throw new DataException("缺少上班打开时间配置");
+            }else{
+                throw new DataException("出勤打刻時刻の設定が不足しています");
+            }
         }
 
         Staff staff = staffService.findByAccount(dto.getAccount());
         if (staff == null) {
-            throw new DataException("员工不存在");
+            if("cn".equals(TokenTools.getLoginLang())){
+                throw new DataException("员工不存在");
+            }else{
+                throw new DataException("該当する社員が存在しません");
+            }
         }
         if (staff.getSalary() == null) {
-            throw new DataException("员工基本工资未配置");
+            if("cn".equals(TokenTools.getLoginLang())){
+                throw new DataException("员工基本工资未配置");
+            }else{
+                throw new DataException("当該社員の基本給が未設定です");
+            }
+
         }
         SalarySettlement salarySettlement = BeanUtil.toBean(dto, SalarySettlement.class);
         salarySettlement.setBaseSalary(new BigDecimal(staff.getSalary()));

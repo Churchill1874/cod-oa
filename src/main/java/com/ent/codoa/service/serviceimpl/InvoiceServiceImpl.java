@@ -94,7 +94,11 @@ public class InvoiceServiceImpl extends ServiceImpl<InvoiceMapper, Invoice> impl
                 .eq(Invoice::getInvoiceNumber,dto.getInvoiceNumber());
         Invoice invoice=getOne(queryWrapper);
         if(invoice!=null){
-            throw new DataException("同一企业下，该发票的请求号码已存在");
+            if("cn".equals(TokenTools.getLoginLang())){
+                throw new DataException("同一企业下，该发票的请求号码已存在");
+            }else{
+                throw new DataException("同一企業内でこの請求番号は既に存在しています");
+            }
         }
         dto.setCreateName(TokenTools.getName());
         dto.setCreateTime(LocalDateTime.now());
@@ -115,7 +119,11 @@ public class InvoiceServiceImpl extends ServiceImpl<InvoiceMapper, Invoice> impl
 //        updateById(dto);
         List<InvoiceItem> items = dto.getItems();
         if(CollectionUtils.isEmpty(items)){
-            throw new DataException("至少需要一条以上的商品或服务明细数据");
+            if("cn".equals(TokenTools.getLoginLang())){
+                throw new DataException("至少需要一条以上的商品或服务明细数据");
+            }else{
+                throw new DataException("商品またはサービス明細が1件以上必要です");
+            }
         }
         for (InvoiceItem item : items) {
             if(item.getDate()==null){
@@ -125,13 +133,11 @@ public class InvoiceServiceImpl extends ServiceImpl<InvoiceMapper, Invoice> impl
             }else if(item.getAmount()==null){
                 throw new DataException("商品或服务明细金额不能为空");
             }else if(item.getDescription()==null){
-                throw new DataException("商品或服务明细金额不能为空");
+                throw new DataException("商品或服务明细内容不能为空");
             }else if(item.getQuantity()==null){
                 throw new DataException("商品或服务数量不能为空");
             }else if(item.getTaxType()==null){
                 throw new DataException("税率标识不能为空");
-            }else if(!StringUtils.isNotBlank(item.getUnit())){
-                throw new DataException("商品或服务明细的单位不能为空");
             }else if(item.getUnitPrice()==null){
                 throw new DataException("商品或服务明细的单价不能为空");
             }else{
@@ -189,7 +195,11 @@ public class InvoiceServiceImpl extends ServiceImpl<InvoiceMapper, Invoice> impl
             invoiceInfoVO.setItems(itemList);
             return invoiceInfoVO;
         }else{
-            throw new DataException("未获取到任何数据");
+            if("cn".equals(TokenTools.getLoginLang())){
+                throw new DataException("未获取到任何数据");
+            }else{
+                throw new DataException("データを取得できませんでした");
+            }
         }
     }
 

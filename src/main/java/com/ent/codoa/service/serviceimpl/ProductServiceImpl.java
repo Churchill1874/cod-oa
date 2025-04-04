@@ -63,7 +63,11 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
                 product.getCategory().equals(dto.getCategory())&&
                 product.getWarehouseId().equals(dto.getWarehouseId())
         ){
-            throw new DataException("同类商品的商品名称重复");
+            if("cn".equals(TokenTools.getLoginLang())){
+                throw new DataException("同类商品的商品名称重复");
+            }else{
+                throw new DataException("同カテゴリ内で商品名が重複しています");
+            }
         }else{
             LoginToken loginToken=TokenTools.getLoginToken(true);
             dto.setCreateName(TokenTools.getName());
@@ -85,7 +89,11 @@ public class ProductServiceImpl extends ServiceImpl<ProductMapper, Product> impl
         if(product!=null&&product.getName().equals(dto.getName())&&
                 product.getCategory().equals(dto.getCategory())
         ){
-            throw new DataException("同类商品的商品名称重复");
+            if("cn".equals(TokenTools.getLoginLang())){
+                throw new DataException("同类商品的商品名称重复");
+            }else{
+                throw new DataException("同カテゴリ内で商品名が重複しています");
+            }
         }
         LoginToken loginToken=TokenTools.getLoginToken(true);
         UpdateWrapper<Product> updateWrapper=new UpdateWrapper();

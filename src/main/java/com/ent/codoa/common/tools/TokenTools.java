@@ -1,8 +1,6 @@
 package com.ent.codoa.common.tools;
 
-import cn.hutool.json.JSONUtil;
 import com.ent.codoa.common.constant.enums.SystemClientStatusEnum;
-import com.ent.codoa.common.constant.enums.UserStatusEnum;
 import com.ent.codoa.common.exception.DataException;
 import com.ent.codoa.common.exception.TokenException;
 import com.ent.codoa.pojo.resp.token.LoginToken;
@@ -82,4 +80,11 @@ public class TokenTools {
         return getLoginToken(true).getSystemClientAccount();
     }
 
+    /**
+     * 获取登录时选择的语言
+     * @return
+     */
+    public static String getLoginLang(){
+        return getLoginToken(true).getLang();
+    }
 }
