@@ -81,11 +81,13 @@ public class SystemClientController {
     //对比密码正确与否
     private void checkAccountAndPassword(String actualPassword, String passwordReq,String lang) {
         if (!actualPassword.equals(passwordReq)) {
-            if(lang=="cn"){
+            if("cn".equals(lang)){
                 throw new AccountOrPasswordException();
-            }else if(lang=="jp"){
+            }
+            if("jp".equals(lang)){
                 throw new AccountOrPasswordException("アカウント情報が間違っています");
             }
+            throw new AccountOrPasswordException("参数不正确");
         }
     }
 
@@ -154,7 +156,13 @@ public class SystemClientController {
         //校验是否已经登录,如果已经登陆过删除之前的tokenId和缓存
         //checkLoginCache(administrators.getAccount());
 
-        throw new AccountOrPasswordException();
+        if("cn".equals(lang)){
+            throw new AccountOrPasswordException();
+        }
+        if("jp".equals(lang)){
+            throw new AccountOrPasswordException("アカウント情報が間違っています");
+        }
+        throw new AccountOrPasswordException("语言参数不正确");
     }
 
 
@@ -165,19 +173,21 @@ public class SystemClientController {
         //校验验证码
         String captchaCode = ehcacheService.captchaCodeCache().get(HttpTools.getIp());
         if (captchaCode == null) {
-            if(req.getLang()=="cn"){
+            if("cn".equals(req.getLang())){
                 return R.failed("验证码有误或已过期");
-            }else if(req.getLang()=="jp"){
+            }if("jp".equals(req.getLang())){
                 return R.failed("確認コードが間違っているか、期限切れです");
             }
-
+            return R.failed("参数不正确");
         }
         if (!captchaCode.equalsIgnoreCase(req.getVerificationCode())) {
-            if(req.getLang()=="cn"){
+            if("cn".equals(req.getLang())){
                 return R.failed("验证码错误");
-            }else if(req.getLang()=="jp"){
+            }
+            if("jp".equals(req.getLang())){
                 return R.failed("認証コードが正しくありません");
             }
+            return R.failed("参数不正确");
         }
 
         LoginToken loginToken = checkLogin(req.getAccount(), req.getPassword(),req.getLang());

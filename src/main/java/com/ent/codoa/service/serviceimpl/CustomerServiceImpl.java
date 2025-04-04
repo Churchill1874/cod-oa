@@ -19,7 +19,6 @@ import com.ent.codoa.pojo.req.customer.CustomerPage;
 import com.ent.codoa.pojo.req.customer.CustomerStatusUpdate;
 import com.ent.codoa.pojo.resp.token.LoginToken;
 import com.ent.codoa.service.CustomerService;
-import com.ent.codoa.service.OperationLogService;
 import com.ent.codoa.service.StaffService;
 import com.ent.codoa.service.SystemClientService;
 import org.apache.commons.lang3.StringUtils;
@@ -59,7 +58,11 @@ public class CustomerServiceImpl extends ServiceImpl<CustomerMapper, Customer> i
         if (findByAccount(dto.getAccount()) != null
             || systemClientService.findByAccount(dto.getAccount()) != null
             || staffService.findByAccount(dto.getAccount()) != null) {
-            throw new DataException("账号已经存在,请修改");
+            if("cn".equals(TokenTools.getLoginLang())){
+                throw new DataException("账号已经存在,请修改");
+            }else{
+                throw new DataException("アカウントは既に存在しています。変更してください");
+            }
         }
 
         LoginToken loginToken = TokenTools.getLoginToken(true);

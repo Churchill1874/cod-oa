@@ -13,9 +13,9 @@ public class InvoiceItemTax implements Serializable {
 
     @NotNull(message = "商品税率不能为空")
     @ApiModelProperty(value = "商品或服务的税率（如8%或10%）",required = true)
-    private Integer taxRate;
+    private Integer taxRate=0;
 
     @NotNull(message = "商品总金额不能为空")
     @ApiModelProperty(value = "商品或服务的总金额（不含税）",required = true)
-    private BigDecimal amount;
+    private BigDecimal amount=BigDecimal.ZERO;
 }

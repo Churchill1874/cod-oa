@@ -22,7 +22,7 @@ public class InvoiceItemAdd implements Serializable {
 
     @NotNull(message = "商品或服务的数量不能为空")
     @ApiModelProperty(value = "商品或服务的数量",required = true)
-    private Integer quantity;
+    private Integer quantity=0;
 
     @Length(max = 10, message = "单位10字以内")
     @ApiModelProperty(value = "商品或服务的单位")
@@ -30,15 +30,15 @@ public class InvoiceItemAdd implements Serializable {
 
     @NotNull(message = "商品单价不能为空")
     @ApiModelProperty(value = "商品或服务的单价（不含税）",required = true)
-    private BigDecimal unitPrice;
+    private BigDecimal unitPrice=BigDecimal.ZERO;
 
     @NotNull(message = "商品税率不能为空")
     @ApiModelProperty(value = "商品或服务的税率（如8%或10%）",required = true)
-    private Integer taxRate;
+    private Integer taxRate=0;
 
     @NotNull(message = "商品总金额不能为空")
     @ApiModelProperty(value = "商品或服务的总金额（不含税）",required = true)
-    private BigDecimal amount;
+    private BigDecimal amount=BigDecimal.ZERO;
 
     @NotNull(message = "税率类型标识不能为空")
     @ApiModelProperty(value = "税率类型：0-一般税率（10%），1-轻减税率（8%）",required = true)

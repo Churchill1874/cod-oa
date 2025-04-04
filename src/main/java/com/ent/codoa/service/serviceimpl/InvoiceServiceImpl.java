@@ -127,23 +127,58 @@ public class InvoiceServiceImpl extends ServiceImpl<InvoiceMapper, Invoice> impl
         }
         for (InvoiceItem item : items) {
             if(item.getDate()==null){
-                throw new DataException("商品或服务提供日期不能为空");
-            }else if(item.getTaxRate()==null){
-                throw new DataException("税率不能为空");
-            }else if(item.getAmount()==null){
-                throw new DataException("商品或服务明细金额不能为空");
-            }else if(item.getDescription()==null){
-                throw new DataException("商品或服务明细内容不能为空");
-            }else if(item.getQuantity()==null){
-                throw new DataException("商品或服务数量不能为空");
-            }else if(item.getTaxType()==null){
-                throw new DataException("税率标识不能为空");
-            }else if(item.getUnitPrice()==null){
-                throw new DataException("商品或服务明细的单价不能为空");
-            }else{
-                item.setInvoiceId(dto.getId()); // 设置关联的发票ID
-                invoiceItemService.add(item);
+                if("cn".equals(TokenTools.getLoginLang())){
+                    throw new DataException("商品或服务提供日期不能为空");
+                }else{
+                    throw new DataException("商品またはサービスの提供日は空欄にできません。");
+                }
             }
+            if(item.getTaxRate()==null){
+                if("cn".equals(TokenTools.getLoginLang())){
+                    throw new DataException("税率不能为空");
+                }else{
+                    throw new DataException("税率は必須です。");
+                }
+
+            }
+            if(item.getAmount()==null){
+                if("cn".equals(TokenTools.getLoginLang())){
+                    throw new DataException("商品或服务明细金额不能为空");
+                }else{
+                    throw new DataException("商品またはサービスの明細金額は空欄にできません。");
+                }
+            }
+            if(item.getDescription() == null || item.getDescription().isEmpty()){
+                if("cn".equals(TokenTools.getLoginLang())){
+                    throw new DataException("商品或服务明细内容不能为空");
+                }else{
+                    throw new DataException("商品またはサービスの明細内容は空欄にできません。");
+                }
+            }
+            if(item.getQuantity()==null){
+                if("cn".equals(TokenTools.getLoginLang())){
+                    throw new DataException("商品或服务数量不能为空");
+                }else{
+                    throw new DataException("商品またはサービスの数量は空欄にできません。");
+                }
+            }
+            if(item.getTaxType()==null){
+                if("cn".equals(TokenTools.getLoginLang())){
+                    throw new DataException("税率标识不能为空");
+                }else{
+                    throw new DataException("税率表示は空欄にできません。");
+                }
+            }
+            if(item.getUnitPrice()==null){
+                if("cn".equals(TokenTools.getLoginLang())){
+                    throw new DataException("商品或服务明细的单价不能为空");
+                }else{
+                    throw new DataException("商品またはサービスの単価は空欄にできません。");
+                }
+            }
+            item.setInvoiceId(dto.getId()); // 设置关联的发票ID
+            invoiceItemService.add(item);
+
         }
         LogTools.addLog("支付管理-电子发票", "新增了一条发票信息，信息：" + JSONUtil.toJsonStr(dto), TokenTools.getLoginToken(true));
 
