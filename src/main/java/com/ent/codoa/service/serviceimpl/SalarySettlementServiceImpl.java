@@ -289,7 +289,11 @@ public class SalarySettlementServiceImpl extends ServiceImpl<SalarySettlementMap
         //所得税比例和金额
         List<TaxRate> taxRateList = taxRateService.getTaxRateList();
         if (CollectionUtils.isEmpty(taxRateList)){
-            throw new DataException("请先配置所得税比例");
+            if("cn".equals(TokenTools.getLoginLang())){
+                throw new DataException("请先配置所得税比例");
+            }else {
+                throw new DataException("所得税率を設定してください。");
+            }
         }
 
         for(TaxRate taxRate: taxRateList){
