@@ -1,5 +1,7 @@
 package com.ent.codoa.service.serviceimpl;
 
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+import com.ent.codoa.common.constant.SystemConstant;
 import com.ent.codoa.pojo.resp.token.LoginToken;
 import com.ent.codoa.service.EhcacheService;
 import com.ent.codoa.common.exception.DataException;
@@ -11,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * 该类对ehcache.xml配置文件里面已经配置的缓存容器进行实现获取，方便使用
@@ -28,13 +32,13 @@ public class EhcacheServiceImpl implements EhcacheService {
 
 
     @Override
-    public Cache<String, String> captchaCodeCache() {
-        return cacheManager.getCache(CAPTCHA_CODE, String.class, String.class);
+    public Cache<String, Set<String>> captchaCodeCache() {
+        return cacheManager.getCache(CAPTCHA_CODE, String.class, (Class<Set<String>>) (Class<?>) Set.class);
     }
 
 
     @Override
-    public String getVC(String key, Integer limitCount, String remarks) {
+    public String getVC( Integer limitCount, String remarks) {
         //添加频繁点击校验 3秒内点击超过30次 检查警告日志 如果该ip已经存在警告则拉黑 不存在则新加警告日志
         //todo 待更新新校验黑名单
         //this.checkIp3SecondsClick(limitCount, remarks);
@@ -50,7 +54,14 @@ public class EhcacheServiceImpl implements EhcacheService {
             throw new DataException(e.getMessage());
         }
 
-        captchaCodeCache().put(key, code);
+
+        Set<String> set = captchaCodeCache().get(SystemConstant.CAPTCHA_CODE);
+        if (CollectionUtils.isEmpty(set)){
+            set = new HashSet<>();
+        }
+        set.add(code);
+
+        captchaCodeCache().put(SystemConstant.CAPTCHA_CODE, set);
         return codeImageStream;
     }
 

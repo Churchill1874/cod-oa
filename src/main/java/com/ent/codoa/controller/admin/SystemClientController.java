@@ -3,8 +3,10 @@ package com.ent.codoa.controller.admin;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.ent.codoa.common.annotation.PlatformAuthCheck;
+import com.ent.codoa.common.constant.SystemConstant;
 import com.ent.codoa.common.constant.enums.RoleEnum;
 import com.ent.codoa.common.exception.AccountOrPasswordException;
 import com.ent.codoa.common.tools.CodeTools;
@@ -35,7 +37,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import javax.xml.bind.annotation.adapters.CollapsedStringAdapter;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Slf4j
 @RestController
@@ -171,8 +175,8 @@ public class SystemClientController {
     public R<LoginToken> login(@RequestBody @Valid AdminLogin req) {
         log.info("登录接口入参:{}====>ip:{}", JSONUtil.toJsonStr(req), HttpTools.getIp());
         //校验验证码
-        String captchaCode = ehcacheService.captchaCodeCache().get(HttpTools.getIp());
-        if (captchaCode == null) {
+        Set<String> captchaCodeSet = ehcacheService.captchaCodeCache().get(SystemConstant.CAPTCHA_CODE);
+        if (CollectionUtils.isEmpty(captchaCodeSet)) {
             if("cn".equals(req.getLang())){
                 return R.failed("验证码有误或已过期");
             }if("jp".equals(req.getLang())){
@@ -180,7 +184,17 @@ public class SystemClientController {
             }
             return R.failed("参数不正确");
         }
-        if (!captchaCode.equalsIgnoreCase(req.getVerificationCode())) {
+
+        boolean confirm = false;
+        for(String key: captchaCodeSet){
+            if (key.equalsIgnoreCase(req.getVerificationCode())){
+                confirm = true;
+                captchaCodeSet.remove(key);
+                break;
+            }
+        }
+
+        if (!confirm) {
             if("cn".equals(req.getLang())){
                 return R.failed("验证码错误");
             }
@@ -201,7 +215,8 @@ public class SystemClientController {
         ehcacheService.adminTokenCache().put(loginToken.getTokenId(), loginToken);
 
         //删除使用过的验证码缓存
-        ehcacheService.captchaCodeCache().remove(HttpTools.getIp());
+        captchaCodeSet.remove(req.getVerificationCode());
+        ehcacheService.captchaCodeCache().put(SystemConstant.CAPTCHA_CODE, captchaCodeSet);
         return R.ok(loginToken);
     }
 
@@ -225,10 +240,7 @@ public class SystemClientController {
     @PostMapping("/getCaptchaCode")
     @ApiOperation(value = "获取验证码", notes = "获取验证码")
     public synchronized R<CaptchaCode> get() {
-        String ip = HttpTools.getIp();
-        log.info("ip:{}请求图片验证码", ip);
-
-        String codeImageStream = ehcacheService.getVC(ip, 30, "每3秒超过30次点击验证码");
+        String codeImageStream = ehcacheService.getVC( 30, "每3秒超过30次点击验证码");
 
         CaptchaCode captchaCode = new CaptchaCode();
         captchaCode.setCaptchaImage("data:image/png;base64," + codeImageStream);

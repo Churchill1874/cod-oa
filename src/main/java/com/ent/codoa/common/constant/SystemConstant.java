@@ -5,6 +5,7 @@ package com.ent.codoa.common.constant;
  */
 public interface SystemConstant {
 
-
+    //验证码
+    String CAPTCHA_CODE = "CAPTCHA_CODE";
 
 }

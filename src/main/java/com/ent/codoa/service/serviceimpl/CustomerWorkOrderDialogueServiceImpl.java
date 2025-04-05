@@ -25,7 +25,7 @@ public class CustomerWorkOrderDialogueServiceImpl extends ServiceImpl<CustomerWo
         QueryWrapper<CustomerWorkOrderDialogue> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda()
             .eq(CustomerWorkOrderDialogue::getWorkOrderId, dto.getWorkOrderId())
-            .orderByDesc(CustomerWorkOrderDialogue::getCreateTime);
+            .orderByAsc(CustomerWorkOrderDialogue::getCreateTime);
         return page(iPage, queryWrapper);
     }
 
@@ -55,7 +55,7 @@ public class CustomerWorkOrderDialogueServiceImpl extends ServiceImpl<CustomerWo
         QueryWrapper<CustomerWorkOrderDialogue> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda()
             .eq(CustomerWorkOrderDialogue::getWorkOrderId, dto.getWorkOrderId())
-            .orderByDesc(CustomerWorkOrderDialogue::getCreateTime);
+            .orderByAsc(CustomerWorkOrderDialogue::getCreateTime);
         return page(iPage, queryWrapper);
     }
 
