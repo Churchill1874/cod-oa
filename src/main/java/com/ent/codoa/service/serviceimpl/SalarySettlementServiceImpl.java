@@ -19,6 +19,7 @@ import com.ent.codoa.pojo.req.clockin.ClockInStaffQuery;
 import com.ent.codoa.pojo.req.salarysettlement.SalarySettlementAdd;
 import com.ent.codoa.pojo.req.salarysettlement.SalarySettlementPage;
 import com.ent.codoa.service.*;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,7 +29,7 @@ import java.math.RoundingMode;
 import java.time.*;
 import java.util.List;
 import java.util.Set;
-
+@Slf4j
 @Service
 public class SalarySettlementServiceImpl extends ServiceImpl<SalarySettlementMapper, SalarySettlement> implements SalarySettlementService {
 
@@ -338,6 +339,7 @@ public class SalarySettlementServiceImpl extends ServiceImpl<SalarySettlementMap
 
         }
         SalarySettlement salarySettlement = BeanUtil.toBean(dto, SalarySettlement.class);
+        log.warn("请求对象转换薪资结算对象：{}", JSONUtil.toJsonStr(salarySettlement));
         salarySettlement.setBaseSalary(new BigDecimal(staff.getSalary()));
 
         //计算工资 ( 基本工资 / 应该出勤的天数 * 实际出勤天数 + 平日加班费 + 六日加班费 ) as 税前工作工资 - 税支出
@@ -350,6 +352,7 @@ public class SalarySettlementServiceImpl extends ServiceImpl<SalarySettlementMap
         long hours = Duration.between(LocalTime.parse(attendanceSetting.getStartWorkTime()),LocalTime.parse(attendanceSetting.getEndWorkTime())).toHours();
         //每小时的基本工资
         BigDecimal hourSalary = daySalary.divide(new BigDecimal(hours), 2, RoundingMode.DOWN);
+        log.warn("小时薪资:{},平日加班时间:{},平日加班费比例:{}",hourSalary,salarySettlement.getWeekdaysOvertime(),salarySettlement.getWeekdayOvertimePayRate());
         salarySettlement.setWeekdayOvertimeAmount(hourSalary.multiply(salarySettlement.getWeekdaysOvertime()).multiply(salarySettlement.getWeekdayOvertimePayRate()));
         //六日加班费
         salarySettlement.setWeekendOvertimeAmount(hourSalary.multiply(salarySettlement.getWeekendsOvertime()).multiply(salarySettlement.getWeekendOvertimePayRate()));

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.math.BigDecimal;
 
 @Slf4j
 @RestController
@@ -50,6 +51,7 @@ public class SalarySettlementController {
     @PostMapping("/specifyDataStatistics")
     @ApiOperation(value = "修改后的指定数据查询 薪资统计", notes = "修改后的指定数据查询 薪资统计")
     public R<SalarySettlement> specifyDataStatistics(@RequestBody @Valid SalarySettlementAdd req) {
+        initData(req);
         SalarySettlement salarySettlement = salarySettlementService.specifyDataStatistics(req);
         return R.ok(salarySettlement);
     }
@@ -58,8 +60,51 @@ public class SalarySettlementController {
     @PostMapping("/add")
     @ApiOperation(value = "新增薪资结算记录", notes = "新增薪资结算记录")
     public R add(@RequestBody @Valid SalarySettlementAdd req) {
+        initData(req);
         salarySettlementService.add(req);
         return R.ok(null);
+    }
+
+    private void initData(SalarySettlementAdd dto){
+        if (dto.getWeekdayOvertimePayRate() == null){
+            dto.setWeekdayOvertimePayRate(BigDecimal.ZERO);
+        }
+        if (dto.getWeekdayOvertimeAmount() == null){
+            dto.setWeekdayOvertimeAmount(BigDecimal.ZERO);
+        }
+        if (dto.getWeekdaysOvertime() == null){
+            dto.setWeekdaysOvertime(BigDecimal.ZERO);
+        }
+        if (dto.getWeekendOvertimePayRate() == null){
+            dto.setWeekendOvertimePayRate(BigDecimal.ZERO);
+        }
+        if (dto.getWeekendOvertimeAmount() == null){
+            dto.setWeekendOvertimeAmount(BigDecimal.ZERO);
+        }
+        if (dto.getWeekendsOvertime() == null){
+            dto.setWeekendsOvertime(BigDecimal.ZERO);
+        }
+        if (dto.getAbsenceDays() == null){
+            dto.setAbsenceDays(BigDecimal.ZERO);
+        }
+        if (dto.getLateHours() == null){
+            dto.setLateHours(BigDecimal.ZERO);
+        }
+        if (dto.getLeaveEarly() == null){
+            dto.setLeaveEarly(BigDecimal.ZERO);
+        }
+        if (dto.getExtraCalculationAmount() == null){
+            dto.setExtraCalculationAmount(BigDecimal.ZERO);
+        }
+        if (dto.getPayTaxesRate() == null){
+            dto.setPayTaxesRate(0);
+        }
+        if (dto.getResidentTaxRate() == null){
+            dto.setResidentTaxRate(0);
+        }
+        if (dto.getResidentTaxAmount() == null){
+            dto.setResidentTaxAmount(BigDecimal.ZERO);
+        }
     }
 
 }
