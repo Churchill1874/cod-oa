@@ -22,7 +22,13 @@ public class InventoryAuthAspect {
     public void beforeCut(JoinPoint joinPoint){
         LoginToken loginToken = TokenTools.getLoginToken(true);
         if (!loginToken.getInventoryMenu()){
-            throw new DataException("库存管理操作权限受限,请联系管理员");
+            if("cn".equals(loginToken.getLang())){
+                throw new DataException("库存管理操作权限受限,请联系管理员");
+            }
+            if("jp".equals(loginToken.getLang())){
+                throw new DataException("在庫管理操作の権限が制限されています。管理者にご連絡ください。");
+            }
+            throw new DataException("参数异常");
         }
     }
 

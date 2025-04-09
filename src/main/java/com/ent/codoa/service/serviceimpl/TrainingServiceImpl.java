@@ -39,16 +39,16 @@ public class TrainingServiceImpl extends ServiceImpl<TrainingMapper, Training> i
         TrainingVO trainingVO = new TrainingVO();
 
         map.forEach((key, trainings) -> {
-            if ("规章制度".equals(key)) {
+            if ("规章制度".equals(key) || "規則".equals(key)) {
                 trainingVO.setRulesList(trainings);
             }
-            if ("业务文档".equals(key)) {
+            if ("业务文档".equals(key) || "業務資料".equals(key)) {
                 trainingVO.setBusinessList(trainings);
             }
-            if ("技术相关".equals(key)) {
+            if ("技术相关".equals(key) || "技術関連".equals(key)) {
                 trainingVO.setTechnologyList(trainings);
             }
-            if ("学习视频".equals(key)) {
+            if ("学习视频".equals(key) || "学習動画".equals(key)) {
                 trainingVO.setVideoList(trainings);
             }
         });
@@ -59,6 +59,18 @@ public class TrainingServiceImpl extends ServiceImpl<TrainingMapper, Training> i
     @Override
     public void add(TrainingAdd dto) {
         Training training = BeanUtil.toBean(dto, Training.class);
+        if("jp".equals(TokenTools.getLoginLang()) && "规章制度".equals(dto.getType())){
+            training.setType("規則");
+        }
+        if("jp".equals(TokenTools.getLoginLang()) && "业务文档".equals(dto.getType())){
+            training.setType("業務資料");
+        }
+        if("jp".equals(TokenTools.getLoginLang()) && "技术相关".equals(dto.getType())){
+            training.setType("技術関連");
+        }
+        if("jp".equals(TokenTools.getLoginLang()) && "学习视频".equals(dto.getType())){
+            training.setType("学習動画");
+        }
         training.setSystemClientAccount(TokenTools.getAccount());
         training.setCreateName(TokenTools.getName());
         training.setCreateTime(LocalDateTime.now());
